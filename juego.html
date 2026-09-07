@@ -1,0 +1,1676 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CALABOZOS &amp; PYTHON · Pip el Ayudante</title>
+<meta name="description" content="Campaña RPG educativa de Python. 9º EBI / 1º EMS.">
+<meta name="author" content="Braian Mosqueira">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+:root {
+  --bg:#1e1e2f; --bg2:#252540; --panel:#2a2a45; --panel2:#1e1e35;
+  --line:#5a5a8a; --text:#f0e6d0; --dim:#b8a990;
+  --gold:#d4a017; --gold2:#b8860b; --blue:#4fc3f7;
+  --ok:#66bb6a; --warn:#ffca28; --bad:#ef5350;
+  --serif:'EB Garamond',Georgia,serif;
+  --display:'Cinzel',serif;
+  --mono:'JetBrains Mono',Consolas,monospace;
+  --radius:10px; --font-scale:1;
+  --z-chat:40; --z-side:60; --z-tour:80; --z-modal:90;
+}
+
+
+
+
+
+html[data-clase="Mago"]{--gold:#a78bfa;--blue:#c4b5fd}
+html[data-clase="Guerrero"]{--gold:#f87171;--blue:#fca5a5}
+html[data-clase="Arquero"]{--gold:#34d399;--blue:#6ee7b7}
+html[data-clase="Explorador"]{--gold:#fbbf24;--blue:#fcd34d}
+html[data-theme="light"] body{background-color:#f5e6c8;background-image:none;color:#2c1e0f}
+html[data-theme="light"]{
+  --bg:#f5e6c8;--bg2:#e8d5b0;--panel:#fff8e7;--panel2:#f0e0c0;
+  --line:#c2a878;--text:#2c1e0f;--dim:#6b5435;
+  --gold:#1a56db;--gold2:#1e40af;--blue:#1d4ed8;
+  --ok:#15803d;--warn:#a16207;--bad:#b91c1c;
+}
+html[data-contrast="high"]{
+  --bg:#000;--bg2:#111;--panel:#1a1a1a;--panel2:#222;
+  --line:#fff;--text:#fff;--dim:#ddd;
+  --gold:#ff0;--gold2:#ff0;--blue:#0af;
+  --ok:#0f0;--warn:#ff0;--bad:#f33;
+}
+html[data-dyslexia="on"]{--serif:'Comic Sans MS',Verdana,sans-serif;--display:'Comic Sans MS',Verdana,sans-serif;--mono:'Comic Sans MS',monospace}
+html[data-font-size="sm"]{--font-scale:.9}
+html[data-font-size="md"]{--font-scale:1}
+html[data-font-size="lg"]{--font-scale:1.15}
+html[data-font-size="xl"]{--font-scale:1.3}
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background-color:#1e1e2f;
+  background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" opacity="0.15"><g fill="none" stroke="%23c9a84c" stroke-width="1.5"><polygon points="22 12 25 18.5 32 19.5 27 24 28 31 22 27.5 16 31 17 24 12 19.5 19 18.5"/><polygon points="73 22 63 34 72 34 71 42 81 30 72 30 73 22"/><polygon points="42 62 52 68.5 52 75.5 42 82 32 75.5 32 68.5"/><circle cx="85" cy="80" r="1.5" fill="%23c9a84c"/><circle cx="15" cy="75" r="1" fill="%23c9a84c"/></g></svg>');
+  background-repeat:repeat;
+  background-size:100px 100px;
+  color:var(--text);
+  font-family:var(--serif);
+  font-size:calc(16px*var(--font-scale));
+  line-height:1.55;
+  min-height:100vh;
+}
+html[data-reduce-motion="on"] *,html[data-reduce-motion="on"] *::before,html[data-reduce-motion="on"] *::after{animation:none!important;transition:none!important}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(56,189,248,.45)}50%{box-shadow:0 0 0 10px transparent}}
+
+.topbar{position:sticky;top:0;z-index:50;display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 12px;background:#1a1a30;border-bottom:1px solid var(--line)}
+html[data-theme="light"] .topbar{background:rgba(248,250,252,.94)}
+.brand{font-family:var(--display);font-weight:800;font-size:calc(14px*var(--font-scale));color:var(--gold)}
+.brand small{display:block;font-family:var(--serif);font-weight:400;font-size:calc(10px*var(--font-scale));color:var(--dim);font-style:italic}
+.stats{margin-left:auto;display:flex;gap:14px;font-family:var(--mono);font-size:calc(11px*var(--font-scale))}
+.stat b{color:var(--gold);display:block;font-size:calc(13px*var(--font-scale))}
+.stat span{color:var(--dim);font-size:calc(9px*var(--font-scale));text-transform:uppercase}
+.topbtns{display:flex;gap:6px;flex-wrap:wrap}
+.iconbtn{background:var(--panel2);border:1px solid var(--line);color:var(--text);border-radius:6px;padding:6px 10px;font-size:calc(12px*var(--font-scale));cursor:pointer;font-family:var(--serif)}
+.iconbtn:hover{border-color:var(--gold);color:var(--gold)}
+.iconbtn.hidden{display:none}
+
+main{max-width:920px;margin:0 auto;padding:20px 14px 110px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px;margin-bottom:16px;animation:fadeUp .35s ease;opacity:1}
+h1{font-family:var(--display);color:var(--gold);font-size:clamp(22px,4vw,34px);margin-bottom:4px}
+.subtitle{color:var(--dim);font-style:italic;margin-bottom:12px}
+.tag{display:inline-block;font-family:var(--mono);font-size:calc(10px*var(--font-scale));color:var(--blue);border:1px solid var(--blue);border-radius:99px;padding:2px 10px;margin-bottom:10px}
+
+label{display:block;font-family:var(--mono);font-size:calc(10px*var(--font-scale));color:var(--dim);margin-bottom:3px;text-transform:uppercase}
+input[type=text]{width:100%;max-width:360px;background:var(--bg2);border:1px solid var(--line);color:var(--text);padding:9px 12px;border-radius:6px;font-family:var(--serif);font-size:calc(14px*var(--font-scale))}
+.clase-row{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 12px}
+.clase-btn{background:var(--panel2);border:1px solid var(--line);color:var(--text);border-radius:6px;padding:7px 12px;cursor:pointer;font-size:calc(13px*var(--font-scale))}
+.clase-btn[aria-pressed="true"]{border-color:var(--gold);color:var(--gold);background:var(--bg2)}
+
+.btn{font-family:var(--display);font-weight:700;font-size:calc(12px*var(--font-scale));padding:9px 16px;border-radius:6px;border:1px solid transparent;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
+.btn-primary{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#1a1a2e}
+.btn-ghost{background:transparent;border-color:var(--line);color:var(--text)}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+.btn-danger{background:transparent;border-color:var(--bad);color:var(--bad)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btnrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+
+.zonegrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.zonecard{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px;position:relative;transition:transform .2s,border-color .2s}
+.zonecard:not(.locked):hover{transform:translateY(-2px);border-color:var(--gold)}
+.zonecard.done{border-color:var(--ok)}
+.zonecard.locked{opacity:.5}
+.seal{position:absolute;top:10px;right:10px;width:24px;height:24px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;color:var(--dim)}
+.zonecard.done .seal{border-color:var(--ok);color:var(--ok)}
+.zone-eyebrow{font-family:var(--mono);font-size:calc(9px*var(--font-scale));color:var(--blue)}
+.zonecard h3{font-family:var(--display);font-size:calc(14px*var(--font-scale));margin:4px 0 2px;padding-right:28px}
+.zonecard p{color:var(--dim);font-size:calc(12px*var(--font-scale));margin-bottom:6px}
+.zone-xp{font-family:var(--mono);font-size:calc(10px*var(--font-scale));color:var(--gold)}
+.zone-status{font-family:var(--mono);font-size:calc(10px*var(--font-scale));margin:4px 0}
+.zone-status.done{color:var(--ok)}.zone-status.open{color:var(--warn)}.zone-status.locked{color:var(--dim)}
+.bonus-card{margin-top:14px;border:1px solid var(--gold);border-radius:var(--radius);padding:14px;background:linear-gradient(135deg,rgba(56,189,248,.08),transparent)}
+.bonus-card h3{color:var(--gold);font-family:var(--display);margin-bottom:4px}
+
+.editor-wrap{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-bottom:10px}
+.editor-bar{background:var(--panel2);padding:5px 12px;font-family:var(--mono);font-size:calc(10px*var(--font-scale));color:var(--dim);display:flex;justify-content:space-between}
+.CodeMirror{height:240px;font-size:calc(13px*var(--font-scale));font-family:var(--mono)}
+.CodeMirror-gutters{background:var(--panel2);border-right:1px solid var(--line)}
+
+.checklist{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:12px;margin-bottom:10px}
+.checklist h4{font-family:var(--display);font-size:calc(11px*var(--font-scale));color:var(--dim);margin-bottom:6px;text-transform:uppercase}
+.check-item{display:flex;gap:8px;padding:4px 0;font-size:calc(13px*var(--font-scale));border-bottom:1px solid var(--line)}
+.check-item:last-child{border-bottom:none}
+.check-item .mark{font-family:var(--mono);width:16px}
+.check-item.pass .mark{color:var(--ok)}.check-item.fail .mark{color:var(--bad)}.check-item.pending .mark{color:var(--dim)}
+.check-item.highlight{background:rgba(56,189,248,.18);border-radius:4px;animation:pulse 1.2s ease 2}
+
+.pista,.solucion{display:none;margin-top:8px;padding:10px 12px;border-radius:8px;font-size:calc(13px*var(--font-scale))}
+.pista{background:rgba(15,40,70,.9);border:1px solid var(--blue)}
+.pista.vis,.solucion.vis{display:block}
+.pista h4{color:var(--blue);font-family:var(--display);margin-bottom:4px}
+.solucion{background:rgba(50,15,15,.9);border:1px solid var(--bad)}
+.solucion h4{color:var(--bad);font-family:var(--display);margin-bottom:4px}
+.solucion pre{background:#000;color:var(--warn);padding:8px;border-radius:4px;overflow-x:auto;font-family:var(--mono);font-size:calc(12px*var(--font-scale))}
+
+.console-wrap{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-bottom:10px}
+.console-bar{background:var(--panel2);padding:4px 12px;font-family:var(--mono);font-size:calc(10px*var(--font-scale));color:var(--dim)}
+.console{background:#0a0a0a;color:#a5d6a7;font-family:var(--mono);font-size:calc(12px*var(--font-scale));padding:8px 12px;max-height:150px;overflow:auto;min-height:60px}
+.console .err{color:#ef9a9a}.console .empty{color:#555;font-style:italic}
+
+
+.hero-card{display:none}
+.hero-card.visible{display:flex}
+.hero-avatar{width:72px;height:72px;border-radius:50%;border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:36px;background:var(--panel2);position:relative;box-shadow:0 0 16px rgba(212,160,23,0.25)}
+.hero-avatar .aura{position:absolute;inset:-6px;border-radius:50%;border:2px dashed var(--blue);opacity:0;animation:spin 12s linear infinite}
+.hero-card.rank-high .hero-avatar .aura{opacity:.7}
+.hero-card.rank-legend .hero-avatar{box-shadow:0 0 22px var(--gold)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hero-info{flex:1;min-width:160px}
+.hero-info h3{font-family:var(--display);color:var(--gold);font-size:calc(15px*var(--font-scale));margin:0 0 2px}
+.hero-info .rank{font-family:var(--mono);font-size:calc(11px*var(--font-scale));color:var(--blue)}
+.hero-info .bar{height:8px;background:var(--panel2);border-radius:99px;overflow:hidden;border:1px solid var(--line);margin-top:6px}
+.hero-info .bar>span{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--blue));width:0%;transition:width .4s}
+.hero-gear{font-size:calc(12px*var(--font-scale));color:var(--dim);margin-top:4px}
+.inventario{
+  position:fixed;bottom:14px;left:14px;z-index:30;
+  background:#2a2a45;border:1px solid var(--line);border-radius:12px;
+  padding:12px 14px;width:min(280px,92vw);
+  font-size:calc(12px*var(--font-scale));
+  box-shadow:0 8px 28px rgba(0,0,0,.5);
+  display:none;color:var(--text);
+}
+.inventario.visible{display:block}
+.inventario h4{color:var(--gold);font-family:var(--display);margin:0 0 6px;font-size:calc(13px*var(--font-scale))}
+.inventario .pj-row{display:flex;gap:10px;align-items:center;margin-bottom:6px}
+.inventario .pj-av{
+  width:52px;height:52px;border-radius:50%;border:2px solid var(--gold);
+  display:flex;align-items:center;justify-content:center;font-size:26px;
+  background:#1e1e35;flex-shrink:0;
+}
+.inventario .pj-meta b{display:block;color:var(--text);font-size:calc(13px*var(--font-scale))}
+.inventario .pj-meta span{color:var(--dim);font-size:calc(11px*var(--font-scale))}
+.inventario .pj-bar{height:8px;background:#1e1e35;border-radius:99px;overflow:hidden;border:1px solid var(--line);margin:6px 0}
+.inventario .pj-bar>span{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--blue));width:0%;transition:width .35s}
+.inventario .pj-stats{color:var(--dim);font-family:var(--mono);font-size:calc(10px*var(--font-scale));margin-bottom:8px}
+.inventario .inv-title{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px}
+.inventario ul{list-style:none;color:var(--dim);max-height:110px;overflow-y:auto;margin:0;padding:0}
+.inventario ul li{padding:3px 0;border-bottom:1px solid rgba(90,90,138,.35)}
+.inventario ul li:last-child{border-bottom:none}
+.inventario .inv-empty{color:var(--dim);font-style:italic}
+.inv-toast{
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:#2a2a45;border:1px solid var(--gold);color:var(--text);
+  padding:10px 16px;border-radius:10px;z-index:95;opacity:0;pointer-events:none;
+  transition:opacity .3s,transform .3s;font-family:var(--serif);font-size:calc(14px*var(--font-scale));
+  box-shadow:0 8px 24px rgba(0,0,0,.4);
+}
+.inv-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.btn-inv{
+  background:var(--panel2);border:1px solid var(--line);color:var(--text);
+  border-radius:6px;padding:6px 10px;font-size:calc(12px*var(--font-scale));
+  cursor:pointer;font-family:var(--serif);
+}
+.btn-inv:hover{border-color:var(--gold);color:var(--gold)}
+.pip-fab{position:fixed;bottom:16px;right:16px;z-index:var(--z-chat);width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#4fc3f7,#1565c0);border:2px solid var(--gold);color:#fff;font-size:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 18px rgba(79,195,247,.4)}
+.pip-chat{position:fixed;bottom:78px;right:14px;z-index:var(--z-chat);width:min(350px,94vw);max-height:min(500px,72vh);background:var(--panel);border:1px solid var(--line);border-radius:12px;display:none;flex-direction:column;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.4)}
+.pip-chat.open{display:flex}
+.pip-head{background:var(--panel2);padding:9px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--line)}
+.pip-head strong{font-family:var(--display);color:var(--gold);font-size:calc(13px*var(--font-scale))}
+.pip-head span{display:block;font-size:calc(10px*var(--font-scale));color:var(--dim)}
+.pip-close{margin-left:auto;background:none;border:none;color:var(--dim);font-size:18px;cursor:pointer}
+.pip-msgs{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:6px}
+.pip-bubble{max-width:92%;padding:7px 11px;border-radius:10px;font-size:calc(13px*var(--font-scale));line-height:1.4;white-space:pre-wrap}
+.pip-bubble.bot{background:var(--panel2);align-self:flex-start}
+.pip-bubble.user{background:var(--blue);color:#fff;align-self:flex-end}
+.pip-bubble.code-frag{border:2px solid var(--warn);background:rgba(251,191,36,.12)}
+.pip-sugs{display:flex;flex-wrap:wrap;gap:5px;padding:0 10px 8px}
+.pip-sugs button{background:var(--bg2);border:1px solid var(--line);color:var(--text);border-radius:99px;padding:4px 10px;font-size:calc(11px*var(--font-scale));cursor:pointer}
+.pip-input{display:flex;gap:5px;padding:8px 10px;border-top:1px solid var(--line)}
+.pip-input input{flex:1;background:var(--bg2);border:1px solid var(--line);color:var(--text);border-radius:6px;padding:7px 10px;font-family:var(--serif)}
+.pip-input button{background:var(--blue);color:#fff;border:none;border-radius:6px;padding:7px 12px;font-weight:700;cursor:pointer}
+
+.side{position:fixed;top:56px;right:10px;z-index:var(--z-side);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;width:min(300px,92vw);max-height:calc(100vh - 80px);overflow-y:auto;display:none;box-shadow:0 8px 30px rgba(0,0,0,.45)}
+.side.open{display:block}
+.side h3{color:var(--gold);font-family:var(--display);margin-bottom:10px;font-size:calc(13px*var(--font-scale))}
+.a11y-group{margin-bottom:10px}
+.a11y-group button{background:var(--panel2);border:1px solid var(--line);color:var(--text);border-radius:5px;padding:4px 8px;margin:2px;font-size:calc(11px*var(--font-scale));cursor:pointer}
+.a11y-group button[aria-pressed="true"]{border-color:var(--gold);color:var(--gold)}
+
+.tour-ov{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:var(--z-tour);display:none;align-items:center;justify-content:center;padding:16px}
+.tour-ov.open{display:flex}
+.tour-box{background:var(--panel);border:2px solid var(--gold);border-radius:14px;padding:22px;max-width:400px;width:100%;text-align:center}
+.tour-box h3{color:var(--gold);font-family:var(--display);margin-bottom:8px}
+.tour-box p{color:var(--dim);margin-bottom:14px;font-size:calc(14px*var(--font-scale))}
+.tour-dots{display:flex;justify-content:center;gap:6px;margin-bottom:12px}
+.tour-dot{width:8px;height:8px;border-radius:50%;background:var(--line)}
+.tour-dot.on{background:var(--gold)}
+
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:var(--z-modal);display:flex;align-items:center;justify-content:center;padding:16px}
+.overlay.hidden{display:none}
+.modal{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:24px;max-width:420px;width:100%;text-align:center}
+.modal h3{color:var(--gold);font-family:var(--display);margin-bottom:6px}
+.modal p{color:var(--dim);margin-bottom:12px}
+.codebox{font-family:var(--mono);background:var(--bg2);border:1px dashed var(--gold);border-radius:6px;padding:10px;color:var(--gold);margin-bottom:12px;word-break:break-all}
+
+.hidden{display:none!important}
+footer{text-align:center;padding:16px;color:var(--dim);font-family:var(--mono);font-size:calc(10px*var(--font-scale))}
+footer a{color:var(--gold);text-decoration:none}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">CALABOZOS &amp; PYTHON<small>Pip el Ayudante</small></div>
+  <div class="stats" id="statsBar" style="display:none">
+    <div class="stat"><b id="statName">—</b><span>Estudiante</span></div>
+    <div class="stat"><b id="statClase">—</b><span>Clase</span></div>
+    <div class="stat"><b id="statXP">0</b><span>XP</span></div>
+    <div class="stat"><b id="statNota">0</b><span>Nota /10</span></div>
+  </div>
+  <div class="topbtns">
+    <a class="iconbtn" href="index.html" title="Volver al inicio">🏠 Inicio</a>
+    <button class="iconbtn" id="btnHelp">❓ Ayuda</button>
+    <button class="iconbtn" id="btnA11y">♿ Accesibilidad</button>
+    <button class="iconbtn" id="btnTheme">◐ Tema</button>
+    <button class="iconbtn hidden" id="btnMap">🗺 Mapa</button>
+    <button class="iconbtn hidden" id="btnInv" title="Ficha e inventario">🎒 Ficha</button>
+    <button class="iconbtn hidden" id="btnPDF">📜 PDF</button>
+    <button class="iconbtn hidden" id="btnReset">🗑 Reiniciar</button>
+  </div>
+</div>
+
+<div class="side" id="helpPanel">
+  <h3>Ayuda rápida</h3>
+  <p style="font-size:calc(13px*var(--font-scale));color:var(--dim)">
+    1. Escribí tu <strong>nombre y apellido</strong>.<br>
+    2. Elegí una clase.<br>
+    3. Completá los sub-niveles.<br>
+    4. Preguntale a <strong>Pip</strong> cualquier concepto (variable, algoritmo, int, float, try/except…).
+  </p>
+</div>
+
+<div class="side" id="a11yPanel">
+  <h3>Accesibilidad</h3>
+  <div class="a11y-group"><label>Tamaño de letra</label>
+    <button data-font="sm">Pequeño</button><button data-font="md" aria-pressed="true">Normal</button>
+    <button data-font="lg">Grande</button><button data-font="xl">Muy grande</button>
+  </div>
+  <div class="a11y-group"><label>Contraste</label>
+    <button data-contrast="normal" aria-pressed="true">Normal</button><button data-contrast="high">Alto</button>
+  </div>
+  <div class="a11y-group"><label>Dislexia</label>
+    <button data-dyslexia="off" aria-pressed="true">Off</button><button data-dyslexia="on">On</button>
+  </div>
+  <div class="a11y-group"><label>Reducir movimiento (epilepsia)</label>
+    <button data-motion="off" aria-pressed="true">Animaciones on</button><button data-motion="on">Animaciones off</button>
+  </div>
+</div>
+
+<div class="inventario" id="inventario">
+  <h4>🧙 Ficha del héroe</h4>
+  <div class="pj-row">
+    <div class="pj-av" id="pjAv">🔮</div>
+    <div class="pj-meta"><b id="pjName">—</b><span id="pjRank">Aprendiz</span></div>
+  </div>
+  <div class="pj-bar"><span id="pjBar"></span></div>
+  <div class="pj-stats" id="pjStats">XP 0 · Nota 0/10</div>
+  <div class="inv-title"><h4>🎒 Inventario</h4><span id="invCount" style="color:var(--dim);font-family:var(--mono);font-size:10px">0 objs</span></div>
+  <ul id="invList"><li class="inv-empty">(vacío — completá temas)</li></ul>
+</div>
+<div class="inv-toast" id="invToast" role="status"></div>
+
+<button class="pip-fab" id="pipFab" title="Hablar con Pip el Ayudante">🦉</button>
+<div class="pip-chat" id="pipChat">
+  <div class="pip-head">
+    <div style="font-size:26px">🦉</div>
+    <div><strong>Pip el Ayudante</strong><span id="pipSub">NPC de ayuda</span></div>
+    <button class="pip-close" id="pipClose">×</button>
+  </div>
+  <div class="pip-msgs" id="pipMsgs"></div>
+  <div class="pip-sugs" id="pipSugs"></div>
+  <div class="pip-input">
+    <input type="text" id="pipIn" placeholder="Preguntame un concepto o mandame código…" maxlength="200">
+    <button id="pipSend">Enviar</button>
+  </div>
+</div>
+
+<div class="tour-ov" id="tourOv">
+  <div class="tour-box">
+    <div class="tour-dots" id="tourDots"></div>
+    <h3 id="tourTitle">¡Bienvenido/a!</h3>
+    <p id="tourText">Pip el Ayudante te va a guiar.</p>
+    <div class="btnrow" style="justify-content:center">
+      <button class="btn btn-ghost" id="tourSkip">Saltar</button>
+      <button class="btn btn-primary" id="tourNext">Siguiente →</button>
+    </div>
+  </div>
+</div>
+
+<main>
+  <section id="viewBrief" class="panel">
+    <span class="tag">✦ 9º EBI / 1º EMS</span>
+    <h1>CALABOZOS &amp; PYTHON</h1>
+    <p class="subtitle">Campaña RPG · Pip el Ayudante · DUA</p>
+    <p style="margin-bottom:10px">Las misiones son situaciones de rol. Pip sabe explicar conceptos (variable, algoritmo, int, float, try/except, lista…) y analiza código incompleto sin regalar la solución.</p>
+
+    <label for="nameIn">Nombre y apellido del estudiante</label>
+    <input type="text" id="nameIn" placeholder="Ej: Luna Rodríguez" maxlength="50">
+
+    <label style="margin-top:12px">Elegí tu clase</label>
+    <div class="clase-row">
+      <button class="clase-btn" data-clase="Mago">🧙 Mago</button>
+      <button class="clase-btn" data-clase="Guerrero">⚔ Guerrero</button>
+      <button class="clase-btn" data-clase="Arquero">🏹 Arquero</button>
+      <button class="clase-btn" data-clase="Explorador">🗺 Explorador</button>
+    </div>
+
+    <div class="btnrow">
+      <button class="btn btn-primary" id="btnStart">⚔ Entrar al Calabozo</button>
+    </div>
+
+    <div style="margin-top:18px;padding-top:14px;border-top:1px dashed var(--line)">
+      <label>🔑 Sello de guardado</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
+        <input type="text" id="recoverIn" placeholder="PY-XXXX-XXXX-XXXX" style="text-transform:uppercase;max-width:220px">
+        <button class="btn btn-ghost" id="btnRecover">Restaurar</button>
+      </div>
+      <p id="recoverMsg" style="font-size:calc(12px*var(--font-scale));margin-top:4px"></p>
+    </div>
+  </section>
+
+  <section id="viewMap" class="hidden">
+  
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:10px;margin-bottom:14px">
+      <div>
+        <h2 style="font-family:var(--display);color:var(--gold);font-size:calc(20px*var(--font-scale))">MAPA DEL CALABOZO</h2>
+        <p style="color:var(--dim);font-size:calc(13px*var(--font-scale))">Cada tema tiene varios sub-niveles. Incluye tipos numéricos y manejo de errores.</p>
+      </div>
+      <div style="text-align:right">
+        <div style="height:8px;width:160px;background:var(--panel2);border-radius:99px;overflow:hidden;border:1px solid var(--line)">
+          <div id="progFill" style="height:100%;width:0%;background:linear-gradient(90deg,var(--blue),var(--gold));transition:width .3s"></div>
+        </div>
+        <div id="progLabel" style="font-family:var(--mono);font-size:calc(10px*var(--font-scale));color:var(--dim);margin-top:2px">0%</div>
+      </div>
+    </div>
+    <div class="zonegrid" id="zoneGrid"></div>
+    <div id="bonusArea"></div>
+  </section>
+
+  <section id="viewZone" class="hidden">
+    <button class="btn btn-ghost" id="btnBack" style="margin-bottom:10px">← Volver al Mapa</button>
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:6px">
+      <h2 id="zTitle" style="font-family:var(--display);color:var(--gold);font-size:calc(18px*var(--font-scale))"></h2>
+      <span id="zXP" style="font-family:var(--mono);color:var(--blue);border:1px solid var(--blue);border-radius:99px;padding:2px 10px;font-size:calc(11px*var(--font-scale))"></span>
+    </div>
+    <p id="zBrief" style="color:var(--dim);font-style:italic;margin-bottom:12px"></p>
+
+    <details open style="background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);margin-bottom:10px;padding:10px 14px">
+      <summary style="font-family:var(--display);cursor:pointer;font-size:calc(13px*var(--font-scale))">🎲 Concepto</summary>
+      <div id="zTheory" style="margin-top:8px;color:var(--dim);font-size:calc(14px*var(--font-scale))"></div>
+    </details>
+
+    <div style="background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:12px;margin-bottom:10px">
+      <h4 style="font-family:var(--display);color:var(--blue);font-size:calc(12px*var(--font-scale));margin-bottom:6px">⚔ Misión</h4>
+      <ul id="zProtocol" style="padding-left:18px;color:var(--dim);font-size:calc(13px*var(--font-scale))"></ul>
+    </div>
+
+    <div class="editor-wrap">
+      <div class="editor-bar"><span id="zFile">conjuro.py</span><span>Python</span></div>
+      <div id="editorBox"></div>
+      <textarea id="fallbackEditor" class="hidden" style="width:100%;height:220px;background:var(--bg2);border:none;color:var(--text);padding:12px;font-family:var(--mono);font-size:calc(13px*var(--font-scale))"></textarea>
+    </div>
+
+    <div class="btnrow">
+      <button class="btn btn-primary" id="btnRun">⚔ Lanzar Conjuro</button>
+      <button class="btn btn-ghost" id="btnConsole">🔮 Consola</button>
+      <button class="btn btn-danger" id="btnClear">↺ Borrar</button>
+    </div>
+
+    <div class="pista" id="pistaBox"><h4>💡 Pista precisa</h4><p id="pistaText"></p></div>
+    <div class="solucion" id="solBox"><h4>🔓 Ejemplo conceptual (no copies tal cual)</h4><pre id="solText"></pre></div>
+
+    <div class="console-wrap hidden" id="consoleWrap">
+      <div class="console-bar">// Consola Skulpt //</div>
+      <div class="console" id="consoleOut"><div class="empty">Silencio…</div></div>
+    </div>
+
+    <div class="checklist">
+      <h4>Diagnóstico</h4>
+      <div id="checkList"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  Calabozos &amp; Python · Braian Mosqueira · 
+  <a href="index.html">Inicio</a> · 
+  <a href="LICENSE">Licencia CC BY 4.0</a>
+</footer>
+
+<div class="overlay hidden" id="winModal">
+  <div class="modal">
+    <div style="font-size:32px;margin-bottom:6px">⚔</div>
+    <h3>¡Sub-nivel superado!</h3>
+    <p id="winMsg"></p>
+    <div class="codebox" id="winCode"></div>
+    <button class="btn btn-primary" id="winOk">Continuar</button>
+  </div>
+</div>
+
+<div class="overlay hidden" id="dragonModal">
+  <div class="modal">
+    <div style="font-size:32px">🐉</div>
+    <h3>¿Enfrentar al Dragón?</h3>
+    <p>Completaste todos los temas principales.</p>
+    <div class="btnrow" style="justify-content:center">
+      <button class="btn btn-primary" id="dragonYes">Sí</button>
+      <button class="btn btn-ghost" id="dragonNo">Después</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay hidden" id="finalModal">
+  <div class="modal">
+    <div style="font-size:32px">👑</div>
+    <h3>¡Derrotaste al Dragón!</h3>
+    <p>Sos un Dungeon Master de Python.</p>
+    <div class="codebox" id="finalCode"></div>
+    <div class="btnrow" style="justify-content:center">
+      <button class="btn btn-primary" id="finalPDF">📜 Descargar PDF</button>
+      <button class="btn btn-ghost" id="finalOk">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt.min.js" onerror="window.SKULPT_FAIL=true"></script>
+<script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js" onerror="window.SKULPT_FAIL=true"></script>
+
+<script>
+(function(){
+"use strict";
+
+
+function stripPyNoise(code){
+  return String(code||"")
+    .replace(/"""[\s\S]*?"""/g,"")
+    .replace(/'''[\s\S]*?'''/g,"")
+    .replace(/#.*/g,"");
+}
+function hasIncompleteBlocks(code){
+  var lines=stripPyNoise(code).split(/\r?\n/);
+  for(var i=0;i<lines.length;i++){
+    var line=lines[i].trim();
+    if(!line)continue;
+    if(/^(if|elif|else|for|while|def|try|except|and|or|not)$/.test(line))return true;
+    if(/^if\s+(and|or)\b/.test(line))return true;
+    if(/^(if|elif|for|while|def|try|except)\b/.test(line)&&!/:\s*$/.test(line))return true;
+    if(/^else\b/.test(line)&&!/^else\s*:\s*$/.test(line)&&!/^else\s*:/.test(line))return true;
+  }
+  return false;
+}
+function hasCompleteIf(code){
+  var c=stripPyNoise(code);
+  if(hasIncompleteBlocks(c))return false;
+  if(!/\bif\s+\S[^:\n]*:\s*$/m.test(c)&&!/\bif\s+\S[^:\n]*:\s*\n/.test(c)){
+    if(!/\bif\s+.+:/.test(c))return false;
+  }
+  if(!/\bif\s+.+:/.test(c))return false;
+  if(/\bif\s*:\s*$/m.test(c))return false;
+  return hasProperIndentation(c);
+}
+function hasCompleteWhile(code){
+  var c=stripPyNoise(code);
+  if(hasIncompleteBlocks(c))return false;
+  if(!/\bwhile\s+\S[^:\n]*:/.test(c))return false;
+  return hasProperIndentation(c);
+}
+function hasCompleteFor(code){
+  var c=stripPyNoise(code);
+  if(hasIncompleteBlocks(c))return false;
+  if(!/\bfor\s+\w+\s+in\s+\S[^:\n]*:/.test(c))return false;
+  return hasProperIndentation(c);
+}
+function hasCompleteDef(code){
+  var c=stripPyNoise(code);
+  if(hasIncompleteBlocks(c))return false;
+  if(!/\bdef\s+\w+\s*\([^)]*\)\s*:/.test(c))return false;
+  return hasProperIndentation(c);
+}
+function printUsesDefinedName(code){
+  var c=stripPyNoise(code);
+  var defs={};
+  var re=/^\s*([A-Za-z_]\w*)\s*=/gm,m;
+  while((m=re.exec(c)))defs[m[1]]=true;
+  var prints=c.match(/print\s*\(([^)]*)\)/g)||[];
+  for(var i=0;i<prints.length;i++){
+    var inside=prints[i].replace(/^print\s*\(/,"").replace(/\)$/,"");
+    if(/^[A-Za-z_]\w*$/.test(inside.trim())&&!defs[inside.trim()]&&!/^(True|False|None)$/.test(inside.trim()))return false;
+  }
+  return true;
+}
+function hasProperIndentation(code){
+
+  var lines=code.split(/\r?\n/);
+  for(var i=0;i<lines.length-1;i++){
+    var line=lines[i];
+    if(/:\s*(#.*)?$/.test(line)&&!/^\s*#/.test(line)){
+      for(var j=i+1;j<lines.length;j++){
+        var next=lines[j];
+        if(next.trim()==="")continue;
+        if(!/^\s+/.test(next))return false;
+        break;
+      }
+    }
+  }
+  return true;
+}
+
+var TOPICS=[
+{id:"print",order:1,title:"LA TABERNA DEL INICIO",subtitle:"print()",item:"Antorcha de Print",
+ challenges:[
+  {id:"print-1",title:"El cartel de la taberna",xp:35,
+   brief:"El tabernero te pide un mensaje de bienvenida. Usá print() con un texto real.",
+   theory:"<p><strong>print()</strong> muestra información en pantalla.</p><p>Texto entre comillas:</p><pre>print(\"Hola mundo\")</pre><p>Números sin comillas: <code>print(42)</code></p>",
+   protocol:["print() con texto no vacío"],
+   starter:"# Mensaje del cartel\n",
+   solucion:"# Ejemplo de forma (no copies):\nprint(\"Bienvenidos\")",
+   checks:[
+    {label:"print() con contenido",test:function(c){return /print\s*\(\s*[^)]+\)/.test(c)},hint:"print() no puede estar vacío."},
+    {label:"Texto entre comillas",test:function(c){return /print\s*\(\s*[\"'][^\"']+[\"']/.test(c)},hint:"Usá comillas: print(\"hola\")"}
+   ]},
+  {id:"print-2",title:"El menú del día",xp:35,
+   brief:"Mostrá dos ítems del menú con dos print().",
+   theory:"<p>Cada print muestra una línea distinta.</p>",
+   protocol:["Dos print() con texto"],
+   starter:"# Menú del día\n",
+   solucion:"# Ejemplo:\nprint(\"Guiso\")\nprint(\"Jugo\")",
+   checks:[
+    {label:"Al menos dos print() con contenido",test:function(c){return (c.match(/print\s*\(\s*[^)]+\)/g)||[]).length>=2},hint:"Necesitás dos print() con algo adentro."},
+    {label:"Textos entre comillas",test:function(c){return (c.match(/print\s*\(\s*[\"'][^\"']+[\"']/g)||[]).length>=2},hint:"Cada print debe tener texto entre comillas."}
+   ]}
+ ]},
+{id:"input",order:2,title:"LA PUERTA DEL CALABOZO",subtitle:"input() y datos del jugador",item:"Llave de Input",
+ challenges:[
+  {id:"input-1",title:"El guardián pregunta",xp:40,
+   brief:"El guardián no deja pasar a cualquiera. Pedí el nombre del héroe con input() usando un mensaje que diga exactamente la palabra guardián o nombre (en el texto del prompt). Guardalo en una variable llamada heroe y mostralo.",
+   theory:"<p><strong>input()</strong> pide un dato. Siempre devuelve texto.</p><pre>dato = input(\"Escribí algo: \")\nprint(dato)</pre><p>En este desafío el nombre de la variable y la idea del prompt importan: no alcanza con copiar cualquier ejemplo.</p>",
+   protocol:["variable heroe","input() con mensaje","print(heroe)"],
+   starter:"# El guardián te detiene\n",
+   solucion:"# Forma orientativa:\nheroe = input(\"Nombre del héroe: \")\nprint(heroe)",
+   checks:[
+    {label:"Variable llamada heroe",test:function(c){return /\bheroe\s*=/.test(c)},hint:"La variable debe llamarse heroe (sin tilde)."},
+    {label:"heroe = input(...)",test:function(c){return /\bheroe\s*=\s*input\s*\(/.test(c)},hint:"Asigná: heroe = input(\"...\")"},
+    {label:"Prompt con texto",test:function(c){return /input\s*\(\s*[\"'][^\"']{3,}[\"']/.test(c)},hint:"El mensaje de input debe tener texto entre comillas."},
+    {label:"print(heroe)",test:function(c){return /print\s*\(\s*heroe\s*\)/.test(c)},hint:"Mostrá solo la variable: print(heroe)"},
+    {label:"Sin nombres inventados en print",test:function(c){return printUsesDefinedName(c)},hint:"Solo imprimí variables que existen."}
+   ]},
+  {id:"input-2",title:"Monedas del peaje",xp:50,
+   brief:"El peaje cobra monedas. Pedí cuántas monedas trae el héroe con input(), convertí a int y guardalo en monedas. Luego calculá el resto después de pagar 3 monedas (monedas - 3) y mostrá el resultado.",
+   theory:"<p>input() devuelve texto. Para números enteros usá <code>int(input(...))</code>.</p><p>Después podés hacer cuentas con ese número.</p>",
+   protocol:["monedas = int(input(...))","restar 3","print del resultado"],
+   starter:"# Peaje del calabozo\n",
+   solucion:"# Orientativo:\nmonedas = int(input(\"¿Cuántas monedas? \"))\nprint(monedas - 3)",
+   checks:[
+    {label:"Variable monedas",test:function(c){return /\bmonedas\s*=/.test(c)},hint:"Usá la variable monedas."},
+    {label:"int(input(...))",test:function(c){return /\bint\s*\(\s*input\s*\(/.test(c)},hint:"Convertí con int(input(\"...\"))"},
+    {label:"Resta 3 monedas",test:function(c){return /monedas\s*-\s*3|-\s*3/.test(c)},hint:"Restá 3 al valor (peaje)."},
+    {label:"print del cálculo",test:function(c){return /print\s*\(/.test(c)&&(/-/.test(c)||/\+/.test(c))},hint:"Mostrá el resultado de la cuenta."}
+   ]},
+  {id:"input-3",title:"Peso de la mochila (float)",xp:50,
+   brief:"La mochila no puede pesar de más. Pedí el peso con input(), convertí a float, guardalo en peso y mostrá si es razonable imprimiendo peso * 2 (el guardián duplica el valor para asustar).",
+   theory:"<p>Para decimales usá <code>float(input(...))</code>.</p><pre>peso = float(input(\"Peso kg: \"))\nprint(peso * 2)</pre>",
+   protocol:["peso = float(input(...))","multiplicar por 2","print"],
+   starter:"# Peso de la mochila\n",
+   solucion:"# Orientativo:\npeso = float(input(\"Peso: \"))\nprint(peso * 2)",
+   checks:[
+    {label:"Variable peso",test:function(c){return /\bpeso\s*=/.test(c)},hint:"Usá la variable peso."},
+    {label:"float(input(...))",test:function(c){return /\bfloat\s*\(\s*input\s*\(/.test(c)},hint:"Convertí con float(input(...))"},
+    {label:"Multiplica por 2",test:function(c){return /\*\s*2|2\s*\*/.test(c)},hint:"Multiplicá el peso por 2."},
+    {label:"print con cuenta",test:function(c){return /print\s*\(/.test(c)},hint:"Mostrá el resultado."}
+   ]}
+ ]},
+{id:"variables",order:3,title:"LA FICHA DEL HÉROE",subtitle:"Variables y tipos numéricos",item:"Escudo de Variables",
+ challenges:[
+  {id:"var-1",title:"Crear tu ficha",xp:45,
+   brief:"Creá nivel (int), nombre (texto) y vivo (bool). Mostrá al menos uno.",
+   theory:"<p>Una <strong>variable</strong> es una cajita con nombre.</p><ul><li>Texto → comillas</li><li><strong>int</strong> (entero) → 15, 0, -3</li><li><strong>float</strong> (decimal) → 3.14, 2.5</li><li>True / False → booleanos</li></ul><pre>edad = 15          # int\naltura = 1.72      # float\nnombre = \"Luna\"    # str\nvivo = True        # bool</pre>",
+   protocol:["nivel (número entero)","nombre (texto)","vivo (True/False)","print"],
+   starter:"# Ficha del personaje\n",
+   solucion:"# Ejemplo de forma:\nnivel = 2\nnombre = \"Aventurero\"\nvivo = True\nprint(nombre)",
+   checks:[
+    {label:"nivel numérico (int)",test:function(c){return /\bnivel\s*=\s*-?\d+/.test(c)},hint:"nivel = 1 (número entero sin comillas)"},
+    {label:"nombre con texto",test:function(c){return /\bnombre\s*=\s*[\"'][^\"']+[\"']/.test(c)},hint:"nombre = \"TuNombre\""},
+    {label:"vivo booleano",test:function(c){return /\bvivo\s*=\s*(True|False)\b/.test(c)},hint:"vivo = True o False"},
+    {label:"print con contenido",test:function(c){return /print\s*\(\s*[^)]+\)/.test(c)},hint:"Mostrá alguna variable"}
+   ]},
+  {id:"var-2",title:"Puntos de vida con decimal",xp:45,
+   brief:"Tu personaje tiene 100.5 de vida (float). Creá la variable y mostrala. Luego restale 12.25 y mostrá el resultado.",
+   theory:"<p>Los <strong>float</strong> permiten decimales. Podés hacer cuentas con ellos.</p><pre>vida = 100.5\nvida = vida - 12.25\nprint(vida)</pre>",
+   protocol:["variable float","operación aritmética","print"],
+   starter:"# Vida con decimal\n",
+   solucion:"# Ejemplo de forma:\nvida = 100.5\nvida = vida - 12.25\nprint(vida)",
+   checks:[
+    {label:"Variable con decimal (float)",test:function(c){return /\b\w+\s*=\s*-?\d+\.\d+/.test(c)},hint:"Usá un número con punto decimal, ej: 100.5"},
+    {label:"Hay una operación",test:function(c){return /[\+\-\*\/]/.test(c)},hint:"Restá o sumá algo"},
+    {label:"print con contenido",test:function(c){return /print\s*\(\s*[^)]+\)/.test(c)},hint:"Mostrá el resultado"}
+   ]}
+ ]},
+{id:"operadores",order:4,title:"LA BALANZA DEL CALABOZO",subtitle:"Operadores y tipos",item:"Balanza de Operadores",
+ challenges:[
+  {id:"op-1",title:"Puntos de daño",xp:45,
+   brief:"Un orco tiene 40 de vida. Tu ataque quita 12. Calculá vida_restante = 40 - 12 y mostrala. Usá las variables vida y ataque (números enteros).",
+   theory:"<p>Operadores aritméticos: <code>+</code> <code>-</code> <code>*</code> <code>/</code> <code>%</code> (resto).</p><pre>vida = 40\nataque = 12\nprint(vida - ataque)</pre>",
+   protocol:["vida y ataque numéricos","resta","print"],
+   starter:"# Combate simple\n",
+   solucion:"# Orientativo:\nvida = 40\nataque = 12\nprint(vida - ataque)",
+   checks:[
+    {label:"Variable vida numérica",test:function(c){return /\bvida\s*=\s*-?\d+/.test(c)},hint:"vida = 40"},
+    {label:"Variable ataque numérica",test:function(c){return /\bataque\s*=\s*-?\d+/.test(c)},hint:"ataque = 12"},
+    {label:"Operación de resta",test:function(c){return /\-/.test(c)},hint:"Restá ataque a vida."},
+    {label:"print del resultado",test:function(c){return /print\s*\(/.test(c)},hint:"Mostrá el resultado."}
+   ]},
+  {id:"op-2",title:"¿Es par el dado?",xp:50,
+   brief:"Tiraste un 14. Usá el operador % (módulo) para saber el resto de dividir 14 por 2. Guardalo en resto y mostralo. (Si resto es 0, el número es par.)",
+   theory:"<p><code>%</code> da el resto de una división.</p><pre>resto = 14 % 2\nprint(resto)</pre>",
+   protocol:["operador %","variable resto","print"],
+   starter:"# ¿Par o impar?\n",
+   solucion:"# Orientativo:\nresto = 14 % 2\nprint(resto)",
+   checks:[
+    {label:"Usa operador %",test:function(c){return /%/.test(c)},hint:"Usá el operador módulo %."},
+    {label:"Variable resto",test:function(c){return /\bresto\s*=/.test(c)},hint:"Guardá el resultado en resto."},
+    {label:"print(resto) o print de la cuenta",test:function(c){return /print\s*\(/.test(c)},hint:"Mostrá el resto."}
+   ]},
+  {id:"op-3",title:"Comparar fuerzas",xp:50,
+   brief:"Tu fuerza es 8 y la del orco es 10. Creá fuerza_heroe y fuerza_orco. Mostrá el resultado de la comparación fuerza_heroe > fuerza_orco (True o False).",
+   theory:"<p>Operadores de comparación: <code>==</code> <code>!=</code> <code>&gt;</code> <code>&lt;</code> <code>&gt;=</code> <code>&lt;=</code>.</p><p>Devuelven <strong>True</strong> o <strong>False</strong>.</p>",
+   protocol:["dos variables numéricas","comparación >","print"],
+   starter:"# Comparación de fuerza\n",
+   solucion:"# Orientativo:\nfuerza_heroe = 8\nfuerza_orco = 10\nprint(fuerza_heroe > fuerza_orco)",
+   checks:[
+    {label:"fuerza_heroe numérica",test:function(c){return /\bfuerza_heroe\s*=\s*-?\d+/.test(c)},hint:"fuerza_heroe = 8"},
+    {label:"fuerza_orco numérica",test:function(c){return /\bfuerza_orco\s*=\s*-?\d+/.test(c)},hint:"fuerza_orco = 10"},
+    {label:"Comparación con >",test:function(c){return />/.test(c)},hint:"Compará con el operador >"},
+    {label:"print de la comparación",test:function(c){return /print\s*\(/.test(c)},hint:"Mostrá True o False con print"}
+   ]}
+ ]},
+{id:"condicionales",order:5,title:"LA ENCRUCIJADA",subtitle:"if / else + booleanos",item:"Dado de Condicionales",
+ challenges:[
+  {id:"if-1",title:"¿Huís o luchás?",xp:50,
+   brief:"Si tu vida > 20 luchás, si no huís. Usá if y else.",
+   theory:"<p>Un <strong>condicional</strong> permite tomar decisiones.</p><pre>if edad >= 18:\n    print(\"Mayor\")\nelse:\n    print(\"Menor\")</pre><p>El código de adentro va <strong>indentado</strong>.</p>",
+   protocol:["if","else","indentación","print"],
+   starter:"# Decisión frente al orco\n",
+   solucion:"# Ejemplo de forma:\nvida = 25\nif vida > 20:\n    print(\"Lucho\")\nelse:\n    print(\"Huyo\")",
+   checks:[
+    {label:"if completo",test:function(c){return hasCompleteIf(c)},hint:"if necesita condición y dos puntos. Ej: if vida > 20:"},
+    {label:"else completo",test:function(c){return /\belse\s*:/.test(c)},hint:"Agregá else:"},
+    {label:"Indentación correcta",test:function(c){return hasProperIndentation(c)},hint:"Después de los : el código debe tener espacios al inicio."},
+    {label:"Al menos 2 print",test:function(c){return (c.match(/print\s*\(/g)||[]).length>=2},hint:"Necesitás print en el if y en el else"},
+    {label:"Sin bloques incompletos",test:function(c){return !hasIncompleteBlocks(c)},hint:"Completá if/else"}
+   ]},
+  {id:"bool-1",title:"Llave y antorcha (and)",xp:55,
+   brief:"Solo abrís la puerta si tenés llave Y antorcha. Usá and.",
+   theory:"<p><code>and</code> exige que las dos condiciones sean verdaderas.</p>",
+   protocol:["and","if","indentación"],
+   starter:"# Puerta secreta\n",
+   solucion:"# Ejemplo:\ntiene_llave = True\ntiene_antorcha = True\nif tiene_llave and tiene_antorcha:\n    print(\"Abierta\")",
+   checks:[
+    {label:"if completo (condición + :)",test:function(c){return hasCompleteIf(c)},hint:"Escribí if condicion: con una condición real, no solo «if and»."},
+    {label:"Usa and entre condiciones",test:function(c){return /\bif\s+.+\band\b.+/.test(c)},hint:"Ejemplo de forma: if tiene_llave and tiene_antorcha:"},
+    {label:"Variables booleanas o condiciones",test:function(c){return /=\s*(True|False)/.test(c)||/[<>!=]=|[<>]/.test(c)},hint:"Definí variables True/False o comparaciones."},
+    {label:"print con contenido",test:function(c){return /print\s*\(\s*["'][^"']+["']/.test(c)},hint:"Dentro del if, print con un mensaje de texto."},
+    {label:"Sin bloques incompletos",test:function(c){return !hasIncompleteBlocks(c)},hint:"No dejes if/else/and solos en una línea."}
+   ]}
+ ]},
+{id:"bucles",order:6,title:"EL ATAQUE MÚLTIPLE",subtitle:"for / while",item:"Espada de Bucles",
+ challenges:[
+  {id:"loop-1",title:"Golpear 4 veces",xp:50,
+   brief:"Atacás 4 veces. Usá for + range.",
+   theory:"<p>Un <strong>bucle</strong> repite instrucciones.</p><pre>for i in range(4):\n    print(i)</pre>",
+   protocol:["for + range","indentación","print"],
+   starter:"# Cuatro golpes\n",
+   solucion:"# Ejemplo:\nfor i in range(4):\n    print(i)",
+   checks:[
+    {label:"for + range",test:function(c){return /\bfor\b/.test(c)&&/\brange\s*\(/.test(c)},hint:"for i in range(4):"},
+    {label:"Indentación correcta",test:function(c){return hasProperIndentation(c)},hint:"El print debe estar indentado"},
+    {label:"print con contenido",test:function(c){return /print\s*\(\s*[^)]+\)/.test(c)},hint:"Mostrá algo dentro del for"}
+   ]},
+  {id:"loop-2",title:"Antorcha que se apaga",xp:50,
+   brief:"while que resta hasta 0.",
+   theory:"<p><code>while</code> se usa cuando no sabés de antemano cuántas veces. La variable debe cambiar adentro.</p>",
+   protocol:["while","modificar variable","indentación"],
+   starter:"# Antorcha que se apaga\n# Tip: la variable del while DEBE cambiar adentro\n",
+   solucion:"# Orientativo:\nt = 3\nwhile t > 0:\n    print(t)\n    t = t - 1",
+   checks:[
+    {label:"while completo",test:function(c){return hasCompleteWhile(c)},hint:"while + condición + :"},
+    {label:"Modifica la variable",test:function(c){return /\w+\s*=\s*\w+\s*[\+\-]|[\+\-]=/.test(c)},hint:"Restá 1 dentro del while"},
+    {label:"Indentación correcta",test:function(c){return hasProperIndentation(c)},hint:"Indentá el código del while"},
+    {label:"print con contenido",test:function(c){return /print\s*\(\s*[^)]+\)/.test(c)},hint:"Mostrá el valor"}
+   ]}
+ ]},
+{id:"listas",order:7,title:"LA MOCHILA",subtitle:"Listas",item:"Mochila de Listas",
+ challenges:[
+  {id:"list-1",title:"Crear y recorrer el inventario",xp:50,
+   brief:"Creá una lista con ≥3 objetos y recorrela con for.",
+   theory:"<p>Una <strong>lista</strong> guarda varios valores en orden.</p><pre>objetos = [\"poción\", \"cuerda\", \"mapa\"]\nfor obj in objetos:\n    print(obj)</pre>",
+   protocol:["lista ≥3","for","indentación","print"],
+   starter:"# Inventario\n",
+   solucion:"# Ejemplo:\nmochila = [\"poción\", \"cuerda\", \"antorcha\"]\nfor objeto in mochila:\n    print(objeto)",
+   checks:[
+    {label:"Existe una lista",test:function(c){return /=\s*\[/.test(c)},hint:"Creá una lista con [ ]"},
+    {label:"for ... in",test:function(c){return /\bfor\b/.test(c)&&/\bin\b/.test(c)},hint:"for objeto in tu_lista:"},
+    {label:"Indentación correcta",test:function(c){return hasProperIndentation(c)},hint:"El print debe estar indentado"},
+    {label:"print con contenido",test:function(c){return /print\s*\(\s*[^)]+\)/.test(c)},hint:"Mostrá cada objeto"}
+   ]},
+  {id:"list-2",title:"Agregar un objeto",xp:50,
+   brief:"Usá .append() para agregar una llave y mostrá la lista.",
+   theory:"<p><code>.append()</code> agrega un elemento al final.</p>",
+   protocol:["lista","append","print"],
+   starter:"# Agregar llave\n",
+   solucion:"# Ejemplo:\nobjetos = [\"mapa\"]\nobjetos.append(\"llave\")\nprint(objetos)",
+   checks:[
+    {label:"Existe lista",test:function(c){return /=\s*\[/.test(c)},hint:"Creá una lista"},
+    {label:"Usa append",test:function(c){return /\.append\s*\(/.test(c)},hint:"Usá .append(\"algo\")"},
+    {label:"print con contenido",test:function(c){return /print\s*\(\s*[^)]+\)/.test(c)},hint:"Mostrá la lista"}
+   ]}
+ ]},
+{id:"diccionarios",order:8,title:"EL GRIMORIO DE DATOS",subtitle:"Diccionarios",item:"Libro de Diccionarios",
+ challenges:[
+  {id:"dict-1",title:"Ficha del monstruo",xp:50,
+   brief:"Creá un diccionario con nombre y vida de un monstruo. Mostrá uno de los valores.",
+   theory:"<p>Un <strong>diccionario</strong> guarda pares clave-valor.</p><pre>monstruo = {\"nombre\": \"Orco\", \"vida\": 40}\nprint(monstruo[\"nombre\"])</pre>",
+   protocol:["diccionario","acceso por clave","print"],
+   starter:"# Datos del monstruo\n",
+   solucion:"# Ejemplo:\nmonstruo = {\"nombre\": \"Orco\", \"vida\": 40}\nprint(monstruo[\"nombre\"])",
+   checks:[
+    {label:"Diccionario",test:function(c){return /=\s*\{/.test(c)},hint:"Creá un diccionario con { }"},
+    {label:"Acceso a clave",test:function(c){return /\[['\"][^'\"]+['\"]\]/.test(c)},hint:"Usá diccionario[\"clave\"]"},
+    {label:"print con contenido",test:function(c){return /print\s*\(\s*[^)]+\)/.test(c)},hint:"Mostrá el valor"}
+   ]},
+  {id:"dict-2",title:"Agregar un dato nuevo",xp:50,
+   brief:"Creá un diccionario y agregale una clave nueva. Mostralo.",
+   theory:"<p>Podés agregar claves después: ficha[\"clase\"] = \"Mago\"</p>",
+   protocol:["diccionario","asignar clave","print"],
+   starter:"# Ficha ampliada\n",
+   solucion:"# Ejemplo:\nficha = {\"nombre\": \"Luna\"}\nficha[\"clase\"] = \"Exploradora\"\nprint(ficha)",
+   checks:[
+    {label:"Diccionario",test:function(c){return /=\s*\{/.test(c)},hint:"Creá un diccionario"},
+    {label:"Asignación a una clave",test:function(c){return /\w+\s*\[['\"][^'\"]+['\"]\]\s*=/.test(c)},hint:"ficha[\"clave\"] = valor"},
+    {label:"print con contenido",test:function(c){return /print\s*\(\s*[^)]+\)/.test(c)},hint:"Mostrá el diccionario"}
+   ]}
+ ]},
+{id:"funciones",order:9,title:"EL LIBRO DE HECHIZOS",subtitle:"Funciones personalizadas",item:"Grimorio de Funciones",
+ challenges:[
+  {id:"func-1",title:"Hechizo de curación",xp:55,
+   brief:"Creá una función que reciba la vida y devuelva vida + 15. Llamala y mostrá el resultado.",
+   theory:"<p>Una <strong>función</strong> es un bloque reutilizable.</p><pre>def curar(vida):\n    return vida + 15\nprint(curar(40))</pre>",
+   protocol:["def con parámetro","return","indentación","llamar + print"],
+   starter:"# Hechizo de curación\n",
+   solucion:"# Ejemplo:\ndef curar(vida):\n    return vida + 15\nprint(curar(40))",
+   checks:[
+    {label:"def con parámetro",test:function(c){return /\bdef\s+\w+\s*\([^)]+\)/.test(c)},hint:"def nombre(parametro):"},
+    {label:"Usa return",test:function(c){return /\breturn\b/.test(c)},hint:"return valor"},
+    {label:"Indentación correcta",test:function(c){return hasProperIndentation(c)},hint:"El return debe estar indentado"},
+    {label:"print con contenido",test:function(c){return /print\s*\(\s*[^)]+\)/.test(c)},hint:"Llamá la función dentro de print()"}
+   ]},
+  {id:"func-2",title:"Grito de batalla",xp:45,
+   brief:"Función sin parámetros que haga print de un grito. Después llamala.",
+   theory:"<p>Una función puede solo mostrar algo, sin return.</p>",
+   protocol:["def","print dentro","llamar","indentación"],
+   starter:"# Grito\n",
+   solucion:"# Ejemplo:\ndef grito():\n    print(\"¡Por el calabozo!\")\ngrito()",
+   checks:[
+    {label:"Usa def",test:function(c){return /\bdef\s+\w+\s*\(/.test(c)},hint:"Definí la función"},
+    {label:"print con contenido",test:function(c){return /print\s*\(\s*[^)]+\)/.test(c)},hint:"Dentro de la función debe haber print"},
+    {label:"Indentación correcta",test:function(c){return hasProperIndentation(c)},hint:"Indentá el print"},
+    {label:"Se llama la función",test:function(c){return /\n\s*\w+\s*\(\s*\)/.test(c)},hint:"Después de definirla, llamala"}
+   ]}
+ ]},
+{id:"modulos",order:10,title:"EL DADO MÁGICO",subtitle:"random + try/except",item:"Orbe de Random",
+ challenges:[
+  {id:"mod-1",title:"Tirar el dado",xp:55,
+   brief:"Importá random y tirás un d20. Mostrá el resultado.",
+   theory:"<p>Un <strong>módulo</strong> trae herramientas ya hechas.</p><pre>import random\nprint(random.randint(1, 20))</pre>",
+   protocol:["import random","randint","print"],
+   starter:"# Tirada de dado\n",
+   solucion:"# Ejemplo:\nimport random\nprint(random.randint(1, 20))",
+   checks:[
+    {label:"import random",test:function(c){return /import\s+random/.test(c)},hint:"import random"},
+    {label:"randint",test:function(c){return /random\.randint/.test(c)},hint:"random.randint(1, 20)"},
+    {label:"print con contenido",test:function(c){return /print\s*\(\s*[^)]+\)/.test(c)},hint:"Mostrá el resultado"}
+   ]},
+  {id:"err-1",title:"Proteger el hechizo (try/except)",xp:60,
+   brief:"Intentá convertir un texto a número. Si falla, mostrá un mensaje de error usando try/except.",
+   theory:"<p>Cuando algo puede fallar usamos <strong>try/except</strong>.</p><pre>try:\n    n = int(\"hola\")\nexcept:\n    print(\"Eso no es un número\")</pre><p>Así el programa no se rompe.</p>",
+   protocol:["try","except","print en el except","indentación"],
+   starter:"# Manejo de errores\n",
+   solucion:"# Ejemplo de forma:\ntry:\n    n = int(\"abc\")\nexcept:\n    print(\"Error: no es un número\")",
+   checks:[
+    {label:"Usa try",test:function(c){return /\btry\b/.test(c)},hint:"Escribí try:"},
+    {label:"Usa except",test:function(c){return /\bexcept\b/.test(c)},hint:"Agregá except:"},
+    {label:"Indentación correcta",test:function(c){return hasProperIndentation(c)},hint:"Indentá el código dentro de try y except"},
+    {label:"print con contenido",test:function(c){return /print\s*\(\s*[^)]+\)/.test(c)},hint:"Mostrá un mensaje de error"}
+   ]}
+ ]}
+];
+
+var FIZZ_BONUS={id:"bonus-fizz",title:"Misión Secreta: FizzBuzz del Dragón",subtitle:"while + if + %",item:"Runa FizzBuzz",xp:120,
+ brief:"Imprimí del 1 al 100: Fizz si múltiplo de 3, Buzz si de 5, FizzBuzz si de ambos, si no el número. Usá while e if/elif/else.",
+ theory:"<p>Clásico de lógica: bucle + condicionales + módulo <code>%</code>.</p><p>Orden: primero ambos (3 y 5), después solo 3, después solo 5.</p>",
+ protocol:["while","% 3 y % 5","Fizz/Buzz/FizzBuzz","incrementar contador"],
+ starter:"# FizzBuzz del calabozo\nnumero = 1\n",
+ solucion:"# Orientativo:\nnumero = 1\nwhile numero <= 100:\n    if numero % 3 == 0 and numero % 5 == 0:\n        print(\"FizzBuzz\")\n    elif numero % 3 == 0:\n        print(\"Fizz\")\n    elif numero % 5 == 0:\n        print(\"Buzz\")\n    else:\n        print(numero)\n    numero = numero + 1",
+ checks:[
+  {label:"while completo",test:function(c){return hasCompleteWhile(c)},hint:"while numero <= 100: con condición y dos puntos."},
+  {label:"Operador % con 3 y 5",test:function(c){return /%\s*3/.test(c)&&/%\s*5/.test(c)},hint:"Usá % 3 y % 5."},
+  {label:"print FizzBuzz",test:function(c){return /print\s*\(\s*["']FizzBuzz["']/.test(c)},hint:"print(\"FizzBuzz\") cuando sea múltiplo de ambos."},
+  {label:"print Fizz",test:function(c){return /print\s*\(\s*["']Fizz["']/.test(c)},hint:"print(\"Fizz\") para múltiplos de 3."},
+  {label:"print Buzz",test:function(c){return /print\s*\(\s*["']Buzz["']/.test(c)},hint:"print(\"Buzz\") para múltiplos de 5."},
+  {label:"if/elif con and",test:function(c){return /\bif\b/.test(c)&&/\band\b/.test(c)},hint:"Usá if con and para el caso 3 y 5."},
+  {label:"Incremento del contador",test:function(c){return /numero\s*=\s*numero\s*\+\s*1|numero\s*\+=\s*1/.test(c)},hint:"Al final del while: numero = numero + 1"},
+  {label:"Sin bloques incompletos",test:function(c){return !hasIncompleteBlocks(c)},hint:"No dejes while/if a medias."}
+ ]
+};
+
+var CHATBOT_BONUS={id:"bonus-chatbot",title:"Misión Secreta: Mini Chatbot 9000",subtitle:"Chatbot",item:"Cristal del Chatbot",xp:100,
+ brief:"Creá un chatbot simple que responda a varias palabras clave con if/elif/else.",
+ theory:"<p>Un chatbot básico usa condicionales para detectar palabras.</p>",
+ protocol:["if/elif","else","indentación","print"],
+ starter:"# Mini Chatbot\nmensaje = \"hola\"\n",
+ solucion:"# Ejemplo de forma:\nmensaje = \"hola\"\nif \"hola\" in mensaje.lower():\n    print(\"¡Hola!\")\nelif \"nombre\" in mensaje.lower():\n    print(\"Me llamo PipBot\")\nelse:\n    print(\"No entendí\")",
+ checks:[
+  {label:"Variable de mensaje",test:function(c){return /\b\w+\s*=\s*["'][^"']+["']/.test(c)},hint:"Creá una variable con el texto del mensaje, ej: mensaje = \"hola\""},
+  {label:"if completo",test:function(c){return hasCompleteIf(c)},hint:"if necesita condición y : — no solo la palabra if"},
+  {label:"elif completo",test:function(c){return /\belif\s+\S[^:\n]*:/.test(c)},hint:"elif condicion:"},
+  {label:"else completo",test:function(c){return /\belse\s*:/.test(c)},hint:"else:"},
+  {label:"Al menos 2 print con texto",test:function(c){return (c.match(/print\s*\(\s*["'][^"']+["']/g)||[]).length>=2},hint:"Cada rama debería responder con print(\"...\")"},
+  {label:"Sin bloques incompletos",test:function(c){return !hasIncompleteBlocks(c)},hint:"Completá if/elif/else, no los dejes solos."}
+ ]};
+
+var DRAGON={id:"dragon-1",title:"EL DRAGÓN ROJO",xp:150,
+ brief:"Combiná variable numérica, función def completa, import random, una lista con elementos, y print. Todo debe poder ejecutarse.",
+ theory:"<p>Usá lo aprendido con estructuras <strong>completas</strong> (con : e indentación).</p>",
+ protocol:["variable","def completo","random","lista","print"],
+ starter:"# COMBATE FINAL\n",
+ solucion:"# Orientativo:\nimport random\nhp = 100\ndef golpe():\n    return random.randint(5, 15)\nhits = [1, 2]\nprint(golpe())\nprint(hp)",
+ checks:[
+  {label:"Variable numérica",test:function(c){return /\b\w+\s*=\s*-?\d+/.test(c)},hint:"Ej: hp = 100"},
+  {label:"def completo",test:function(c){return hasCompleteDef(c)},hint:"def golpe(): con cuerpo indentado"},
+  {label:"import random",test:function(c){return /import\s+random/.test(c)},hint:"import random"},
+  {label:"Lista con elementos",test:function(c){return /\[[^\]]+\]/.test(c)},hint:"Lista no vacía: [1, 2]"},
+  {label:"print con contenido",test:function(c){return /print\s*\(\s*[^)]+\)/.test(c)},hint:"Mostrá resultados"},
+  {label:"Sin bloques incompletos",test:function(c){return !hasIncompleteBlocks(c)},hint:"Completá def/if/for/while"}
+ ]};
+
+/* ========== MOTOR ========== */
+var STORAGE="calabozos-py-v7";
+var state={agent:"",clase:"",completed:{},drafts:{},xpParcial:{},err:{},maxChecks:{},inventory:[],invOpen:true,tourSeen:false,dragonSeen:false};
+var currentId=null,editor=null,useFallback=false,lastFails=[],pipOpen=false,tourStep=0;
+var TEMA_ALIASES={print:"print",salida:"print",input:"input",entrada:"input",variables:"variables",variable:"variables",vars:"variables",tipos:"variables",condicionales:"condicionales",condicional:"condicionales",if:"condicionales",booleanos:"condicionales",bucles:"bucles",bucle:"bucles",for:"bucles",while:"bucles",listas:"listas",lista:"listas",diccionarios:"diccionarios",diccionario:"diccionarios",dict:"diccionarios",funciones:"funciones",funcion:"funciones",def:"funciones",operadores:"operadores",operador:"operadores",tipos:"operadores",modulos:"modulos",random:"modulos",errores:"modulos",try:"modulos",except:"modulos",bonus:"bonus-chatbot",chatbot:"bonus-chatbot",fizz:"bonus-fizz",fizzbuzz:"bonus-fizz",dragon:"dragon-1",jefe:"dragon-1"};
+var temaFiltro=null,modoTema=false;
+function parseTemaFromURL(){try{var search=window.location.search||"",raw="",m;if(window.URLSearchParams){var q=new URLSearchParams(search);raw=(q.get("tema")||q.get("topic")||"").toLowerCase().trim()}else{m=search.match(/[?&]tema=([^&]*)/i)||search.match(/[?&]topic=([^&]*)/i);raw=m?decodeURIComponent(m[1]).toLowerCase().trim():""}if(!raw)return null;if(TEMA_ALIASES[raw])return TEMA_ALIASES[raw];for(var i=0;i<TOPICS.length;i++)if(TOPICS[i].id===raw)return raw;if(raw==="bonus-chatbot"||raw==="dragon-1"||raw==="bonus-fizz")return raw;return raw;}catch(e){return null;}}
+function findTopicById(id){for(var i=0;i<TOPICS.length;i++)if(TOPICS[i].id===id)return TOPICS[i];return null;}
+function scopedTopics(){if(!modoTema||!temaFiltro)return TOPICS;if(temaFiltro==="bonus-chatbot"||temaFiltro==="dragon-1")return [];var tp=findTopicById(temaFiltro);return tp?[tp]:[];}
+function scopedChallenges(){if(!modoTema||!temaFiltro)return getAll();if(temaFiltro==="bonus-chatbot")return [CHATBOT_BONUS];if(temaFiltro==="dragon-1")return [DRAGON];var tp=findTopicById(temaFiltro);return tp?tp.challenges.slice():getAll();}
+function temaTitulo(){if(temaFiltro==="bonus-chatbot")return CHATBOT_BONUS.title;if(temaFiltro==="dragon-1")return DRAGON.title;var tp=findTopicById(temaFiltro);return tp?(tp.title+" · "+tp.subtitle):String(temaFiltro);}
+
+
+function $(s){return document.querySelector(s)}
+function $$(s){return document.querySelectorAll(s)}
+function save(){try{localStorage.setItem(STORAGE,JSON.stringify(state))}catch(e){}}
+function load(){try{var r=localStorage.getItem(STORAGE);if(r){var p=JSON.parse(r);for(var k in p)if(p.hasOwnProperty(k))state[k]=p[k];return true}}catch(e){}return false}
+function getAll(){var l=[];TOPICS.forEach(function(t){t.challenges.forEach(function(c){l.push(c)})});l.push(CHATBOT_BONUS);l.push(FIZZ_BONUS);l.push(DRAGON);return l}
+function findCh(id){var a=getAll();for(var i=0;i<a.length;i++)if(a[i].id===id)return a[i];return null}
+function xpTotal(){var t=0;scopedChallenges().forEach(function(c){if(state.completed[c.id])t+=(typeof state.xpParcial[c.id]==="number"?state.xpParcial[c.id]:c.xp)});return t}
+function maxXP(){var t=0;scopedChallenges().forEach(function(c){t+=c.xp});return t||1}
+function nota(){return Math.min(10,Math.round((xpTotal()/maxXP())*100)/10)}
+function topicsDone(){var list=scopedTopics();var n=0;list.forEach(function(t){var ok=true;t.challenges.forEach(function(c){if(!state.completed[c.id])ok=false});if(ok)n++});return n}
+function genSeal(){var m=0;TOPICS.forEach(function(t,i){var ok=true;t.challenges.forEach(function(c){if(!state.completed[c.id])ok=false});if(ok)m|=(1<<i)});if(state.completed["bonus-chatbot"])m|=1024;if(state.completed["bonus-fizz"])m|=4096;if(state.completed["dragon-1"])m|=2048;var h=0,s=(state.agent||"").toLowerCase().replace(/\s+/g,"");for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))%46656;var chk=(m*17+h*29+41)%1296;function b36(n,l){var x=n.toString(36).toUpperCase();while(x.length<l)x="0"+x;return x}return "PY-"+b36(m,3)+"-"+b36(h,3)+"-"+b36(chk,3)}
+function updateInventory(){
+  var list=[];
+  TOPICS.forEach(function(tp){
+    var ok=true;
+    tp.challenges.forEach(function(c){if(!state.completed[c.id])ok=false});
+    if(ok&&tp.item)list.push({name:tp.item,from:tp.title});
+  });
+  if(state.completed["bonus-chatbot"])list.push({name:CHATBOT_BONUS.item,from:"Bonus Chatbot"});
+  if(state.completed["bonus-fizz"])list.push({name:FIZZ_BONUS.item,from:"Bonus FizzBuzz"});
+  if(state.completed["dragon-1"])list.push({name:"Corona del Dragón",from:"Jefe final"});
+  state.inventory=list.map(function(x){return x.name});
+  var ul=$("#invList");
+  if(ul){
+    ul.innerHTML="";
+    if(!list.length){
+      ul.innerHTML='<li class="inv-empty">(vacío — completá temas para ganar objetos)</li>';
+    } else {
+      list.forEach(function(it){
+        var li=document.createElement("li");
+        li.innerHTML="• <strong style=\"color:var(--text)\">"+it.name+"</strong> <span style=\"opacity:.7\">("+it.from+")</span>";
+        ul.appendChild(li);
+      });
+    }
+  }
+  var cnt=$("#invCount");if(cnt)cnt.textContent=list.length+" obj"+(list.length===1?"":"s");
+  var inv=$("#inventario");
+  if(inv){
+    if(!state.agent){inv.classList.remove("visible");}
+    else if(state.invOpen!==false){inv.classList.add("visible");}
+  }
+  if(state.agent){
+    var lv=heroLevel();
+    var av=$("#pjAv");if(av)av.textContent=heroEmoji(state.clase,lv);
+    var nm=$("#pjName");if(nm)nm.textContent=state.agent;
+    var rk=$("#pjRank");if(rk)rk.textContent=(state.clase||"—")+" · Nv "+Math.max(1,lv)+" · "+heroRankName(lv);
+    var pct=Math.min(100,Math.round((xpTotal()/maxXP())*100));
+    var bar=$("#pjBar");if(bar)bar.style.width=pct+"%";
+    var st=$("#pjStats");if(st)st.textContent="XP "+xpTotal()+"/"+maxXP()+" · Nota "+nota()+"/10";
+  }
+}
+function showInvToast(msg){
+  var el=$("#invToast");if(!el)return;
+  el.textContent=msg;el.classList.add("show");
+  clearTimeout(window._invToastT);
+  window._invToastT=setTimeout(function(){el.classList.remove("show")},2800);
+}
+function checkNewItems(prevNames){
+  var before=prevNames||[];
+  updateInventory();
+  (state.inventory||[]).forEach(function(name){
+    if(before.indexOf(name)<0){
+      showInvToast("🎒 Objeto desbloqueado: "+name);
+    }
+  });
+}
+
+function show(id){["viewBrief","viewMap","viewZone"].forEach(function(v){var e=$("#"+v);if(e)e.classList.toggle("hidden",v!==id)})}
+function refreshTop(){var has=!!state.agent;$("#statsBar").style.display=has?"flex":"none";["btnMap","btnInv","btnPDF","btnReset"].forEach(function(id){var el=$("#"+id);if(el)el.classList.toggle("hidden",!has)});if(has){$("#statName").textContent=state.agent;$("#statClase").textContent=state.clase||"—";$("#statXP").textContent=xpTotal();$("#statNota").textContent=nota();document.documentElement.setAttribute("data-clase",state.clase||"");var sub={Mago:"Ayudante del Mago",Guerrero:"Compañero de batalla",Arquero:"Ojo del Arquero",Explorador:"Guía del Explorador"};$("#pipSub").textContent=sub[state.clase]||"NPC de ayuda"}updateInventory()}
+
+
+function heroLevel(){return topicsDone() + (state.completed["bonus-chatbot"]?1:0) + (state.completed["bonus-fizz"]?1:0) + (state.completed["dragon-1"]?1:0);}
+function heroRankName(lv){var ranks=["Aprendiz","Aventurero","Especialista","Veterano","Héroe","Maestro","Campeón","Leyenda","Dungeon Master","Campeón del Calabozo","Soberano del Código"];return ranks[Math.min(lv,ranks.length-1)];}
+function heroEmoji(clase,lv){
+  var base={Mago:["🔮","🧙","🧙✨","🧙‍♂️","🌟🧙"],Guerrero:["⚔","🛡","🗡","🪓","👑⚔"],Arquero:["🏹","🎯","🏹✨","🏹🔥","🦅"],Explorador:["🗺","🧭","⛺","🏔","🌟🧭"]};
+  var list=base[clase]||base.Mago;
+  var i=Math.min(Math.floor(lv/2),list.length-1);
+  return list[i];
+}
+function updateHeroCard(){updateInventory();}
+function renderMap(){show("viewMap");refreshTop();updateHeroCard();var grid=$("#zoneGrid");grid.innerHTML="";var done=topicsDone();var totalT=Math.max(1,scopedTopics().length);var pct=Math.round((done/totalT)*100);$("#progFill").style.width=pct+"%";$("#progLabel").textContent=modoTema?(pct+"% · "+temaTitulo()):(pct+"% explorado");
+scopedTopics().forEach(function(t,i){var comp=0;t.challenges.forEach(function(c){if(state.completed[c.id])comp++});var isDone=comp===t.challenges.length;var listT=scopedTopics();var prevDone=i===0;if(i>0){prevDone=true;listT[i-1].challenges.forEach(function(c){if(!state.completed[c.id])prevDone=false})}var locked=modoTema?false:(!prevDone&&!isDone);
+var card=document.createElement("div");card.className="zonecard"+(isDone?" done":locked?" locked":"");
+card.innerHTML='<div class="seal">'+(isDone?"✔":(i+1))+'</div><div class="zone-eyebrow">TEMA 0'+t.order+'</div><h3>'+t.title+'</h3><p>'+t.subtitle+'</p><div class="zone-xp">+'+t.challenges.reduce(function(s,c){return s+c.xp},0)+' XP · '+t.challenges.length+' sub-niveles</div><div class="zone-status '+(isDone?"done":locked?"locked":"open")+'">'+(isDone?"✔ Completado":locked?"🔒 Bloqueado":"▶ "+comp+"/"+t.challenges.length)+'</div>';
+var btn=document.createElement("button");btn.className="btn "+(isDone?"btn-ghost":"btn-primary");btn.style.width="100%";btn.style.marginTop="8px";btn.textContent=isDone?"Revisar":locked?"Bloqueado":"Entrar";btn.disabled=locked;
+btn.onclick=function(){var next=null;for(var n=0;n<t.challenges.length;n++)if(!state.completed[t.challenges[n].id]){next=t.challenges[n];break}if(!next)next=t.challenges[0];openChallenge(next.id)};
+card.appendChild(btn);grid.appendChild(card)});
+var area=$("#bonusArea");area.innerHTML="";
+if(modoTema){
+  if(temaFiltro==="bonus-chatbot"){var cb=document.createElement("div");cb.className="bonus-card";cb.innerHTML="<h3>🤖 "+CHATBOT_BONUS.title+(state.completed["bonus-chatbot"]?" · HECHO":"")+"</h3>";var b1=document.createElement("button");b1.className="btn btn-primary";b1.textContent="Entrar";b1.onclick=function(){openChallenge("bonus-chatbot")};cb.appendChild(b1);area.appendChild(cb);}
+  else if(temaFiltro==="dragon-1"){var dg=document.createElement("div");dg.className="bonus-card";dg.innerHTML="<h3>🐉 EL DRAGÓN ROJO</h3>";var b2=document.createElement("button");b2.className="btn btn-primary";b2.textContent="Entrar";b2.onclick=function(){openChallenge("dragon-1")};dg.appendChild(b2);area.appendChild(dg);}
+} else {
+var condOk=true;var ct=findTopicById("condicionales");if(ct){ct.challenges.forEach(function(c){if(!state.completed[c.id])condOk=false})}else condOk=false;
+if(condOk){var cb=document.createElement("div");cb.className="bonus-card";cb.innerHTML="<h3>🤖 "+CHATBOT_BONUS.title+(state.completed["bonus-chatbot"]?" · HECHO":"")+"</h3><p style='color:var(--dim);font-size:13px;margin-bottom:8px'>"+CHATBOT_BONUS.brief+"</p>";
+var b1=document.createElement("button");b1.className="btn "+(state.completed["bonus-chatbot"]?"btn-ghost":"btn-primary");b1.textContent=state.completed["bonus-chatbot"]?"Revisar":"Aceptar misión";b1.onclick=function(){openChallenge("bonus-chatbot")};cb.appendChild(b1);area.appendChild(cb)}
+var buclesOk=true;var bt=findTopicById("bucles");if(bt){bt.challenges.forEach(function(c){if(!state.completed[c.id])buclesOk=false})}else buclesOk=false;
+if(buclesOk){var fz=document.createElement("div");fz.className="bonus-card";fz.innerHTML="<h3>🍀 FizzBuzz del Dragón"+(state.completed["bonus-fizz"]?" · HECHO":"")+"</h3><p style='color:var(--dim);font-size:13px;margin-bottom:8px'>while + if + módulo %</p>";
+var bf=document.createElement("button");bf.className="btn "+(state.completed["bonus-fizz"]?"btn-ghost":"btn-primary");bf.textContent=state.completed["bonus-fizz"]?"Revisar":"Aceptar FizzBuzz";bf.onclick=function(){openChallenge("bonus-fizz")};fz.appendChild(bf);area.appendChild(fz)}
+if(done>=TOPICS.length){var dg=document.createElement("div");dg.className="bonus-card";dg.innerHTML="<h3>🐉 EL DRAGÓN ROJO"+(state.completed["dragon-1"]?" · DERROTADO":"")+"</h3><p style='color:var(--dim);font-size:13px;margin-bottom:8px'>Combate final · +150 XP</p>";
+var b2=document.createElement("button");b2.className="btn "+(state.completed["dragon-1"]?"btn-ghost":"btn-primary");b2.textContent=state.completed["dragon-1"]?"Revisar":"Enfrentar";
+b2.onclick=function(){if(!state.completed["dragon-1"]&&!state.dragonSeen){state.dragonSeen=true;save();$("#dragonModal").classList.remove("hidden")}else openChallenge("dragon-1")};dg.appendChild(b2);area.appendChild(dg)}
+}}
+
+function initEditor(code){var box=$("#editorBox"),fb=$("#fallbackEditor");if(typeof CodeMirror!=="undefined"){try{if(editor){editor.toTextArea();editor=null}box.innerHTML="";var ta=document.createElement("textarea");ta.value=code||"";box.appendChild(ta);editor=CodeMirror.fromTextArea(ta,{mode:"python",theme:document.documentElement.getAttribute("data-theme")==="light"?"default":"dracula",lineNumbers:true,indentUnit:4,matchBrackets:true,autoCloseBrackets:true});editor.on("change",function(){clearTimeout(window._deb);window._deb=setTimeout(liveCheck,1200)});useFallback=false;fb.classList.add("hidden");box.classList.remove("hidden");return}catch(e){}}useFallback=true;box.classList.add("hidden");fb.classList.remove("hidden");fb.value=code||"";fb.oninput=function(){clearTimeout(window._deb);window._deb=setTimeout(liveCheck,1200)}}
+function getCode(){return (editor&&!useFallback)?editor.getValue():$("#fallbackEditor").value}
+function setCode(c){if(editor&&!useFallback)editor.setValue(c);else $("#fallbackEditor").value=c}
+function openChallenge(id){
+  currentId=id;
+  var ch=findCh(id);
+  if(!ch){
+    if(typeof pipSay==="function")pipSay("No encontré ese desafío.",true);
+    return;
+  }
+  show("viewZone");
+  refreshTop();
+  var zt=$("#zTitle");if(zt)zt.textContent=ch.title||id;
+  var zx=$("#zXP");if(zx)zx.textContent="+"+(ch.xp||0)+" XP";
+  var zb=$("#zBrief");if(zb)zb.textContent=ch.brief||"";
+  var zth=$("#zTheory");if(zth)zth.innerHTML=ch.theory||"";
+  var zf=$("#zFile");if(zf)zf.textContent=id+".py";
+  var ul=$("#zProtocol");
+  if(ul){
+    ul.innerHTML="";
+    (ch.protocol||[]).forEach(function(p){
+      var li=document.createElement("li");
+      li.textContent=p;
+      ul.appendChild(li);
+    });
+  }
+  var code=(state.drafts&&state.drafts[id]!==undefined)?state.drafts[id]:(ch.starter||"");
+  initEditor(code);
+  var cw=$("#consoleWrap");if(cw)cw.classList.remove("hidden");
+  var co=$("#consoleOut");if(co)co.innerHTML='<div class="empty">Escribí código: el checklist se actualiza solo…</div>';
+  var pb=$("#pistaBox");if(pb)pb.classList.remove("vis");
+  var sb=$("#solBox");if(sb)sb.classList.remove("vis");
+  var errs=(state.err&&state.err[id])||0;
+  if(errs>=1)showHint(ch);
+  if(errs>=5&&ch.solucion){
+    var st=$("#solText");if(st)st.textContent=ch.solucion;
+    if(sb)sb.classList.add("vis");
+  }
+  try{liveCheck()}catch(e){}
+  if(typeof pipSay==="function"){
+    pipSay("Entraste a «"+ch.title+"». Preguntame qué es un if, while, variable… o mandame código incompleto.",true);
+    if(typeof pipDefaultSugs==="function")pipDefaultSugs();
+  }
+}
+
+
+/* —— Límites para PCs lentas / evitar cuelgues por while infinito —— */
+var SK_EXEC_LIMIT = 20000;
+var SK_RUNNING = false;
+
+function looksLikeInfiniteLoop(code){
+  var c = stripPyNoise(code || "");
+  var lines = c.split(/\r?\n/);
+  var i, line, low;
+  for(i=0;i<lines.length;i++){
+    line = lines[i].trim();
+    if(!line) continue;
+    low = line.toLowerCase();
+    // while True: / while 1: sin ver cambio simple en las siguientes líneas
+    if(/^while\s+(true|1)\s*:/.test(low)){
+      var body = "", j;
+      for(j=i+1;j<lines.length;j++){
+        if(/^\S/.test(lines[j]) && lines[j].trim()!=="") break;
+        body += lines[j] + "\n";
+      }
+      // si no hay break ni return, es sospechoso para el aula
+      if(!/\bbreak\b/.test(body) && !/\breturn\b/.test(body)){
+        return "Cuidado: while True o while 1 sin break puede colgar el navegador. Usá una condición que cambie, por ejemplo while t > 0: y restá 1 adentro.";
+      }
+    }
+    // while var > 0 without any assignment to var in body
+    var wm = line.match(/^while\s+([A-Za-z_]\w*)\s*([<>]=?|==|!=)\s*.*:/);
+    if(wm){
+      var v = wm[1];
+      var body2 = "", k;
+      for(k=i+1;k<lines.length;k++){
+        if(/^\S/.test(lines[k]) && lines[k].trim()!=="") break;
+        body2 += lines[k] + "\n";
+      }
+      var reChange = new RegExp("\\b"+v+"\\s*=|\\b"+v+"\\s*[+\\-]=");
+      if(body2.trim() && !reChange.test(body2) && !/\bbreak\b/.test(body2)){
+        return "El while usa «"+v+"» pero adentro no cambia esa variable. El bucle no va a terminar. Ejemplo: "+v+" = "+v+" - 1";
+      }
+    }
+  }
+  return null;
+}
+
+function configureSkulpt(outCollector, inputList){
+  var idx = 0;
+  var list = inputList || null;
+  try { Sk.execLimit = SK_EXEC_LIMIT; } catch(e1){}
+  try { Sk.yieldLimit = 100; } catch(e2){}
+  Sk.configure({
+    output: function(txt){ outCollector.out += txt; },
+    inputfun: function(prompt){
+      if(list && list.length){
+        var r = list[Math.min(idx, list.length-1)];
+        idx++;
+        return r === undefined || r === null ? "" : String(r);
+      }
+      var ans = window.prompt(prompt || "");
+      return ans === null ? "" : ans;
+    },
+    inputfunTakesPrompt: true,
+    read: function(x){
+      if(Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined){
+        throw "File not found: '" + x + "'";
+      }
+      return Sk.builtinFiles["files"][x];
+    },
+    __future__: Sk.python3
+  });
+}
+
+function runPy(code, cb){
+  runPyWithInput(code, null, cb);
+}
+
+function runPyWithInput(code, inputs, cb){
+  if(window.SKULPT_FAIL || typeof Sk === "undefined"){
+    cb({ok:false, out:"", err:"Intérprete no disponible"});
+    return;
+  }
+  if(SK_RUNNING){
+    cb({ok:false, out:"", err:"Ya hay una ejecución en curso. Esperá un momento."});
+    return;
+  }
+  var danger = looksLikeInfiniteLoop(code);
+  if(danger){
+    cb({ok:false, out:"", err:danger});
+    return;
+  }
+  SK_RUNNING = true;
+  var box = {out:""};
+  var finished = false;
+  var timer = setTimeout(function(){
+    if(finished) return;
+    finished = true;
+    SK_RUNNING = false;
+    try { Sk.execLimit = 1; } catch(e){}
+    cb({ok:false, out:box.out, err:"Tiempo de ejecución agotado (posible bucle infinito). Revisá el while/for."});
+  }, 2500);
+
+  try {
+    configureSkulpt(box, inputs);
+    Sk.misceval.asyncToPromise(function(){
+      return Sk.importMainWithBody("<stdin>", false, code, true);
+    }).then(function(){
+      if(finished) return;
+      finished = true;
+      clearTimeout(timer);
+      SK_RUNNING = false;
+      try { Sk.execLimit = SK_EXEC_LIMIT; } catch(e3){}
+      cb({ok:true, out:box.out, err:null});
+    }, function(e){
+      if(finished) return;
+      finished = true;
+      clearTimeout(timer);
+      SK_RUNNING = false;
+      try { Sk.execLimit = SK_EXEC_LIMIT; } catch(e4){}
+      var msg = e ? e.toString() : "Error";
+      if(/TimeLimit|execution limit|exceeded/i.test(msg)){
+        msg = "Límite de ejecución: el bucle hizo demasiadas vueltas. ¿Falta restar 1 a la variable del while?";
+      }
+      cb({ok:false, out:box.out, err:msg});
+    });
+  } catch(e){
+    if(finished) return;
+    finished = true;
+    clearTimeout(timer);
+    SK_RUNNING = false;
+    cb({ok:false, out:box.out, err:e.toString()});
+  }
+}
+
+function liveCheck(){
+  var ch=findCh(currentId);if(!ch)return;
+  var code=getCode();state.drafts[currentId]=code;save();
+  var results=[];
+  ch.checks.forEach(function(ck){try{results.push(!!ck.test(code))}catch(e){results.push(false)}});
+  renderChecks(ch,results);
+  // Consola siempre visible con feedback en vivo
+  var w=$("#consoleWrap");if(w)w.classList.remove("hidden");
+  var out=$("#consoleOut");if(!out)return;
+  var ok=results.filter(Boolean).length,tot=results.length;
+  var html="";
+  html+='<div class="'+(ok===tot?"ok":"")+'">Checklist: '+ok+'/'+tot+' requisitos</div>';
+  results.forEach(function(r,i){
+    html+='<div class="'+(r?"":"err")+'">'+(r?"✔":"✘")+' '+ch.checks[i].label+'</div>';
+  });
+  if(hasIncompleteBlocks(code))html+='<div class="err">⚠ Hay if/for/while/def incompletos (faltan : o condición).</div>';
+  out.innerHTML=html;
+}
+function renderChecks(ch,results){var box=$("#checkList");box.innerHTML="";lastFails=[];ch.checks.forEach(function(ck,i){var pass=results?results[i]:null;var div=document.createElement("div");div.className="check-item "+(pass===true?"pass":pass===false?"fail":"pending");div.innerHTML='<span class="mark">'+(pass===true?"✔":pass===false?"✘":"○")+'</span><span>'+ck.label+'</span>';box.appendChild(div);if(pass===false)lastFails.push({idx:i,check:ck})})}
+function showHint(ch){var code=getCode();for(var i=0;i<ch.checks.length;i++){var pass=false;try{pass=!!ch.checks[i].test(code)}catch(e){}if(!pass&&ch.checks[i].hint){$("#pistaText").textContent=ch.checks[i].hint;$("#pistaBox").classList.add("vis");var items=$$("#checkList .check-item");if(items[i]){items[i].classList.add("highlight");setTimeout(function(){items[i].classList.remove("highlight")},2500)}return}}}
+function runAnalysis(){
+  var ch=findCh(currentId);if(!ch)return;
+  var code=getCode();state.drafts[currentId]=code;save();
+  var results=[];
+  ch.checks.forEach(function(ck){try{results.push(!!ck.test(code))}catch(e){results.push(false)}});
+  renderChecks(ch,results);
+  var allPass=results.every(Boolean);
+  if(hasIncompleteBlocks(code))allPass=false;
+  var w=$("#consoleWrap");if(w)w.classList.remove("hidden");
+  var out=$("#consoleOut");
+  if(out){
+    out.innerHTML='<div class="empty">Ejecutando…</div>';
+  }
+  // Inputs de prueba según el desafío (números cuando hace falta int/float)
+  var mockInputs=["10","10","10"];
+  if(ch.id&&/input-2|monedas|peaje/.test(ch.id+ch.title))mockInputs=["12"];
+  if(ch.id&&/input-3|peso|float/.test(ch.id+ch.title))mockInputs=["3.5"];
+  if(ch.id&&/input-1|heroe|guardián|guardian/i.test(ch.id+ch.title))mockInputs=["Luna"];
+  var mockIdx=0;
+  runPyWithInput(code,mockInputs,function(res){
+    if(out){
+      var html="";
+      var okc=results.filter(Boolean).length;
+      html+='<div>Checklist: '+okc+'/'+results.length+(allPass?" ✔":" — faltan requisitos")+'</div>';
+      if(res.out){res.out.split("\n").forEach(function(l){if(l)html+='<div>⚔ '+l.replace(/</g,"&lt;")+'</div>';});}
+      if(res.err){html+='<div class="err">⚠ Error al ejecutar: '+String(res.err).replace(/</g,"&lt;")+'</div>';allPass=false;}
+      if(!res.out&&!res.err)html+='<div class="empty">(sin salida de ejecución)</div>';
+      if(!allPass)html+='<div class="err">No se puede avanzar: corregí los requisitos marcados.</div>';
+      out.innerHTML=html;
+    }
+    // Solo ganar si checks OK y sin error de ejecución
+    if(allPass&&!res.err)winChallenge(ch,results.length);
+    else{
+      if(!state.completed[currentId]){
+        state.err[currentId]=(state.err[currentId]||0)+1;
+        state.maxChecks[currentId]=Math.max(state.maxChecks[currentId]||0,results.filter(Boolean).length);
+        save();
+        showHint(ch);
+        if(state.err[currentId]>=5&&ch.solucion){$("#solText").textContent=ch.solucion;$("#solBox").classList.add("vis")}
+        pipOnFail(ch);
+      }
+    }
+  });
+}
+function winChallenge(ch,total){
+  var prevInv=(state.inventory||[]).slice();
+  var ya=!!state.completed[ch.id];
+  state.completed[ch.id]=true;
+  var intentos=state.err[ch.id]||0;
+  var xp=ch.xp;
+  if(intentos>=3){var m=state.maxChecks[ch.id]||0;xp=Math.round((ch.xp*0.5)*(m/total));if(m===0)xp=0}
+  state.xpParcial[ch.id]=xp;
+  save();
+  checkNewItems(prevInv);
+  refreshTop();
+  if(ch.id==="dragon-1"){
+    $("#finalCode").textContent=genSeal();
+    $("#finalModal").classList.remove("hidden");
+    pipSay("¡Increíble! Derrotaste al Dragón.",true);
+    return;
+  }
+  $("#winMsg").textContent=ch.title+" superado."+(ya?"":" +"+xp+" XP");
+  $("#winCode").textContent=genSeal();
+  $("#winModal").classList.remove("hidden");
+  pipSay("¡Bien hecho! "+ch.title+" listo.",true);
+}
+
+/* ========== PIP ========== */
+function pipSay(txt,bot,isCode){var box=$("#pipMsgs");var d=document.createElement("div");d.className="pip-bubble "+(bot?"bot":"user")+(isCode?" code-frag":"");d.textContent=txt;box.appendChild(d);box.scrollTop=box.scrollHeight}
+function pipClearSugs(){$("#pipSugs").innerHTML=""}
+function pipSug(label,fn){var b=document.createElement("button");b.textContent=label;b.onclick=fn;$("#pipSugs").appendChild(b)}
+function pipDefaultSugs(){pipClearSugs();pipSug("¿Qué me falta?",function(){pipHelp()});pipSug("Revisá mi código",function(){pipRespond("revisá mi código")});pipSug("Qué es un while",function(){pipRespond("qué es un while")});pipSug("Qué es un if",function(){pipRespond("qué es un if")});pipSug("Bucle infinito",function(){pipRespond("bucle infinito")})}
+function pipHelp(){var ch=findCh(currentId);if(!ch){pipSay("Primero entrá a un sub-nivel.",true);return}if(!lastFails.length){pipSay("¡Parece que está todo bien! Probá lanzar el conjuro (botón de ejecutar).",true);return}var f=lastFails[0];var extra=explainHint(f.check.label,f.check.hint);pipSay("El requisito que más te cuesta es: «"+f.check.label+"».\n\n"+f.check.hint+(extra?"\n\n"+extra:""),true);var items=$$("#checkList .check-item");if(items[f.idx]){items[f.idx].classList.add("highlight");setTimeout(function(){items[f.idx].classList.remove("highlight")},2800)}}
+function explainHint(label,hint){
+  var L=(label+" "+hint).toLowerCase();
+  if(/llamar|llamada|llamar a la función/.test(L))return "Llamar una función es escribir su nombre con paréntesis después de definirla.\nEjemplo:\ndef saludo():\n    print(\"hola\")\nsaludo()  ← esto es la llamada";
+  if(/if completo|condicional/.test(L))return "Un if completo se ve así:\nif vida > 20:\n    print(\"ok\")\nOjo: tiene condición, dos puntos : e indentación.";
+  if(/while completo/.test(L))return "while completo:\nnumero = 1\nwhile numero <= 5:\n    print(numero)\n    numero = numero + 1";
+  if(/for completo/.test(L))return "for completo:\nfor i in range(3):\n    print(i)";
+  if(/def completo|función/.test(L))return "Función completa:\ndef golpe():\n    return 10\nprint(golpe())";
+  if(/int\(input|convert/.test(L))return "input() da texto. Si necesitás número:\nedad = int(input(\"Edad: \"))";
+  if(/float\(input/.test(L))return "Para decimales:\npeso = float(input(\"Peso: \"))";
+  if(/indent/.test(L))return "Indentación = espacios al inicio de la línea, debajo de un :";
+  if(/módulo|%|fizz/.test(L))return "El operador % da el resto.\n10 % 3 vale 1.\n15 % 5 vale 0 (múltiplo exacto).";
+  if(/and/.test(L))return "and une dos condiciones:\nif tiene_llave and tiene_antorcha:\n    print(\"pasa\")";
+  return "";
+}
+function pipPoint(){if(!lastFails.length){pipSay("No veo errores ahora.",true);return}var f=lastFails[0];pipSay("Mirá el checklist: resalto → «"+f.check.label+"».\n\n"+f.check.hint,true);var items=$$("#checkList .check-item");if(items[f.idx]){items[f.idx].scrollIntoView({behavior:"smooth",block:"center"});items[f.idx].classList.add("highlight");setTimeout(function(){items[f.idx].classList.remove("highlight")},3000)}}
+function pipEncourage(){var frases=["Está bien trabarse. Probá preguntarme: qué es un if, o qué es un while.","Mandame el código aunque esté incompleto y te digo qué le falta.","Contame qué querías que haga el programa, en una frase."];pipSay(frases[Math.floor(Math.random()*frases.length)],true)}
+function pipMap(){var d=topicsDone();if(d===0)pipSay("Todavía no empezaste. Tocá el primer tema.",true);else if(d<TOPICS.length)pipSay("Vas "+d+" de "+TOPICS.length+" temas.",true);else pipSay("¡Completaste los temas principales!",true)}
+function pipOnFail(ch){if(!lastFails.length)return;var f=lastFails[0];var extra=explainHint(f.check.label,f.check.hint);pipSay("Casi… Falta: «"+f.check.label+"».\n\n"+f.check.hint+(extra?"\n\n"+extra:""),true);pipClearSugs();pipSug("Señalá el error",function(){pipPoint()});pipSug("Otra pista",function(){pipHelp()});pipSug("Explicame eso",function(){var e=explainHint(f.check.label,f.check.hint);pipSay(e||f.check.hint,true)});pipSug("Estoy frustrado",function(){pipEncourage()})}
+
+function normalize(txt){return (txt||"").toLowerCase().replace(/randon|rnadom/g,"random").replace(/pritn|pirnt/g,"print").replace(/defn|deff|fucnion/g,"def").replace(/variabel|varible/g,"variable")}
+function analyzeCodeFragment(raw){
+  var src=String(raw||"").replace(/\r\n/g,"\n").trim();
+  if(!src)return null;
+  var low=src.toLowerCase();
+  var lines=src.split("\n");
+  var msgs=[];
+
+  // —— Por líneas: estructuras incompletas ——
+  for(var i=0;i<lines.length;i++){
+    var line=lines[i].replace(/#.*$/,"").trim();
+    if(!line)continue;
+    var ll=line.toLowerCase();
+
+    // palabras sueltas
+    if(/^(if|elif|else|for|while|def|try|except|and|or|not|print|input|return|class|import)$/.test(ll)){
+      if(ll==="print")msgs.push("Línea "+(i+1)+": escribiste solo print. Falta print(\"texto\") o print(variable).");
+      else if(ll==="if")msgs.push("Línea "+(i+1)+": if solo no sirve. Forma: if condicion:");
+      else if(ll==="elif")msgs.push("Línea "+(i+1)+": elif necesita condición y : → elif condicion:");
+      else if(ll==="else")msgs.push("Línea "+(i+1)+": else lleva dos puntos → else:");
+      else if(ll==="for")msgs.push("Línea "+(i+1)+": for incompleto. Forma: for i in range(5):");
+      else if(ll==="while")msgs.push("Línea "+(i+1)+": while incompleto. Forma: while numero <= 10:");
+      else if(ll==="def")msgs.push("Línea "+(i+1)+": def incompleto. Forma: def nombre():");
+      else if(ll==="try")msgs.push("Línea "+(i+1)+": try lleva : y código indentado. Después except:");
+      else if(ll==="except")msgs.push("Línea "+(i+1)+": except lleva : → except:");
+      else if(ll==="and"||ll==="or"||ll==="not")msgs.push("Línea "+(i+1)+": \""+ll+"\" no puede ir solo. Va dentro de una condición de if/while.");
+      else if(ll==="import")msgs.push("Línea "+(i+1)+": import incompleto. Ejemplo: import random");
+      else if(ll==="input")msgs.push("Línea "+(i+1)+": input va así: nombre = input(\"mensaje\")");
+      else if(ll==="return")msgs.push("Línea "+(i+1)+": return va dentro de una función, indentado.");
+      continue;
+    }
+
+    // if and / if or sin condición real
+    if(/^if\s+(and|or)\b/.test(ll)){
+      msgs.push("Línea "+(i+1)+": «if and» no es válido. and une dos condiciones.\nEjemplo: if tiene_llave and tiene_antorcha:");
+      continue;
+    }
+
+    // palabras clave de control sin dos puntos
+    if(/^(if|elif|for|while|def|try|except)\b/.test(ll) && !/:\s*$/.test(line)){
+      if(/^if\b/.test(ll))msgs.push("Línea "+(i+1)+": al if le faltan los dos puntos : al final.\nEjemplo: if vida > 20:");
+      else if(/^while\b/.test(ll))msgs.push("Línea "+(i+1)+": al while le faltan los dos puntos :\nEjemplo: while numero <= 100:");
+      else if(/^for\b/.test(ll))msgs.push("Línea "+(i+1)+": al for le faltan los dos puntos :\nEjemplo: for i in range(4):");
+      else if(/^def\b/.test(ll))msgs.push("Línea "+(i+1)+": a def le faltan () y/o los dos puntos :\nEjemplo: def golpe():");
+      else if(/^elif\b/.test(ll))msgs.push("Línea "+(i+1)+": elif necesita condición y :");
+      else if(/^try\b/.test(ll))msgs.push("Línea "+(i+1)+": try lleva : al final → try:");
+      else if(/^except\b/.test(ll))msgs.push("Línea "+(i+1)+": except lleva : al final → except:");
+      continue;
+    }
+
+    // else sin :
+    if(/^else\b/.test(ll) && !/^else\s*:\s*$/.test(ll) && !/^else\s*:/.test(ll)){
+      msgs.push("Línea "+(i+1)+": else debe ser exactamente: else:");
+      continue;
+    }
+
+    // while true sin :
+    if(/^while\s+true\b/.test(ll) && !/:\s*$/.test(line)){
+      msgs.push("Línea "+(i+1)+": while True necesita : y además True con mayúscula en Python.\nCuidado: un while True sin cambiar nada puede ser infinito.");
+      continue;
+    }
+
+    // def sin paréntesis
+    if(/^def\s+\w+\s*:/.test(ll)){
+      msgs.push("Línea "+(i+1)+": después del nombre de la función van paréntesis.\nForma: def nombre():");
+    }
+    if(/^def\s+\w+\s*$/.test(ll)){
+      msgs.push("Línea "+(i+1)+": def incompleto. Falta () y : → def nombre():");
+    }
+
+    // for sin in
+    if(/^for\s+\w+\s*:/.test(ll) || /^for\s+\w+\s*$/.test(ll)){
+      msgs.push("Línea "+(i+1)+": for necesita in. Forma: for i in range(5):");
+    }
+
+    // print vacío
+    if(/^print\s*\(\s*\)\s*$/.test(ll)){
+      msgs.push("Línea "+(i+1)+": print() está vacío. Poné algo adentro: print(\"hola\")");
+    }
+
+    // print sin paréntesis
+    if(/^print\s+[^=\(\n]+$/.test(ll) && !/^print\s*\(/.test(ll)){
+      msgs.push("Línea "+(i+1)+": en Python 3 print usa paréntesis: print(\"hola\")");
+    }
+
+    // asignación rota: numero = numero %
+    if(/=\s*\w+\s*%\s*$/.test(line) || /%\s*$/.test(line)){
+      msgs.push("Línea "+(i+1)+": el operador % está incompleto. Ejemplo: numero % 3 == 0");
+    }
+    if(/=\s*$/.test(line)){
+      msgs.push("Línea "+(i+1)+": hay un = sin valor a la derecha.");
+    }
+  }
+
+  // —— Paréntesis y comillas globales ——
+  var opens=(src.match(/\(/g)||[]).length, closes=(src.match(/\)/g)||[]).length;
+  if(opens>closes)msgs.push("Faltan cerrar "+(opens-closes)+" paréntesis ).");
+  if(closes>opens)msgs.push("Sobran paréntesis de cierre ).");
+  var single=(src.match(/'/g)||[]).length, double=(src.match(/"/g)||[]).length;
+  if(single%2!==0)msgs.push("Hay comillas simples ' sin cerrar.");
+  if(double%2!==0)msgs.push("Hay comillas dobles \" sin cerrar.");
+
+  // —— print(nombre) con nombre no definido en el fragmento ——
+  if(typeof printUsesDefinedName==="function" && /print\s*\(\s*[A-Za-z_]/.test(src) && !printUsesDefinedName(src)){
+    msgs.push("En un print usás una variable que no veo definida en este código. Primero asignala: nombre = \"...\"");
+  }
+
+  // —— Indentación tras : ——
+  if(typeof hasProperIndentation==="function" && /:\s*$/m.test(src) && !hasProperIndentation(src)){
+    msgs.push("Después de una línea con : el bloque de abajo tiene que ir indentado (espacios al inicio).");
+  }
+
+  // —— if/while/for/def incompletos vía helper ——
+  if(typeof hasIncompleteBlocks==="function" && hasIncompleteBlocks(src) && !msgs.length){
+    msgs.push("Hay estructuras incompletas (if/for/while/def/else). Revisá que tengan condición cuando corresponde y dos puntos :");
+  }
+
+  if(!msgs.length){
+    // pistas suaves si parece código a medias
+    if(/^\s*while\b/m.test(src) && !/while\s+.+:/.test(src))return "El while está incompleto. Forma:\nwhile numero <= 100:\n    print(numero)\n    numero = numero + 1";
+    if(/^\s*if\b/m.test(src) && !/if\s+.+:/.test(src))return "El if está incompleto. Forma:\nif condicion:\n    print(\"ok\")";
+    if(/^\s*for\b/m.test(src) && !/for\s+\w+\s+in\s+.+:/.test(src))return "El for está incompleto. Forma:\nfor i in range(5):\n    print(i)";
+    if(/^\s*def\b/m.test(src) && !/def\s+\w+\s*\([^)]*\)\s*:/.test(src))return "La función está incompleta. Forma:\ndef nombre():\n    print(\"hola\")";
+    return null;
+  }
+
+  // devolver hasta 3 mensajes para no abrumar
+  var unique=[];
+  msgs.forEach(function(m){if(unique.indexOf(m)<0)unique.push(m)});
+  return unique.slice(0,3).join("\n\n");
+}
+function isCodeFragment(txt){
+  var t=String(txt||"").trim();
+  var low=t.toLowerCase();
+  if(!t)return false;
+  if(/qu[eé]\s+es|para\s+qu[eé]|c[oó]mo\s+(se\s+)?(usa|hace|funciona)|explic[aá]|definici[oó]n|significado|ayuda\s+con|por\s+qu[eé]/.test(low))return false;
+  if(/^(el\s+)?concepto$|^ejemplo$|^gracias$|^hola$/.test(low))return false;
+  // multilínea con keywords de Python
+  if(/\n/.test(t) && /\b(if|for|while|def|print|input|elif|else|try|except|import)\b/.test(low))return true;
+  if(/^(print|def|if|elif|else|for|while|import|return|try|except|and|or)\b/.test(low))return true;
+  if(/print\s*\(|def\s+\w+|if\s+\w+|if\s+and|for\s+\w+|while\s+\w+|try\s*:/.test(low))return true;
+  if(t.length<120 && /[=()\[\]{}:]/.test(t) && /[a-zA-Z]/.test(t) && !/\?/.test(t))return true;
+  // fragmento incompleto típico
+  if(/\b(if|while|for|def)\b/.test(low) && !/:\s*$/m.test(t))return true;
+  return false;
+}
+
+function pipRespond(raw){
+  var original=raw||"",txt=normalize(original);
+  if(!txt)return;
+  var isQuestion=/qu[eé]\s+es|para\s+qu[eé]|c[oó]mo\s+(se\s+)?(usa|hace|funciona)|explic[aá]|definici[oó]n|significado|ayuda\s+con/.test(txt);
+  var codeLike=!isQuestion && isCodeFragment(original);
+  pipSay(original,false,codeLike);
+
+  // 0b) Revisar el código del editor
+  if(/qu[eé] tiene mal|revis[aá] (mi )?c[oó]digo|mir[aá] (mi )?c[oó]digo|analiz[aá]|qu[eé] me falta en el c[oó]digo|est[aá] mal (mi )?c[oó]digo/.test(txt)){
+    var ed=(typeof getCode==="function")?getCode():"";
+    var a=analyzeCodeFragment(ed);
+    if(a){pipSay("Miré tu editor:\n\n"+a,true);return;}
+    if(typeof lastFails!=="undefined" && lastFails.length){pipHelp();return;}
+    pipSay("No veo errores de sintaxis obvios. Si el checklist tiene ✘, preguntame «qué me falta».",true);return;
+  }
+  // 0) Frases cortas / seguimiento
+  if(/^(el\s+)?concepto$|^explica(me)?$|^ejemplo$|^cómo$|^como$|^y eso$|^eso$|^más$|^mas$/.test(txt)){
+    if(lastFails.length){var f=lastFails[0];var extra=explainHint(f.check.label,f.check.hint);pipSay("Me refería a esto: «"+f.check.label+"».\n\n"+f.check.hint+(extra?"\n\n"+extra:""),true);return;}
+    pipSay("Podés preguntarme por ejemplo:\n• qué es una variable\n• qué es un if\n• qué es un while\n• cómo se llama una función",true);return;
+  }
+  if(/cómo funciona|como funciona|explic(á|a) (eso|eso más)|qué significa eso|que significa eso/.test(txt)){
+    if(lastFails.length){var f=lastFails[0];pipSay(explainHint(f.check.label,f.check.hint)||f.check.hint,true);return;}
+    pipSay("Decime el tema: if, while, def, input, lista… y te lo explico con un ejemplo corto.",true);return;
+  }
+  if(/llamar (a )?(la )?funci|cómo se llama|como se llama una funci/.test(txt)){
+    pipSay(explainHint("llamar función","llamar"),true);return;
+  }
+
+  // 1) Conceptos PRIMERO
+
+  // —— Conceptos amplios (prioridad) ——
+  if(/qu[eé]\s+es\s+(una?\s+)?variable|para\s+qu[eé]\s+sirve\s+(una?\s+)?variable/.test(txt)){
+    pipSay("Una variable es un nombre que guarda un valor.\n\nejemplo:\nnombre = \"Luna\"\nvida = 100\n\nDespués podés usar ese nombre en print o en cuentas:\nprint(nombre)\nprint(vida + 5)",true);return}
+  if(/qu[eé]\s+es\s+(un\s+)?(int|entero)|tipo\s+int/.test(txt)){
+    pipSay("int es un número entero (sin decimales): 0, 1, 42, -3.\n\nedad = 15\nmonedas = int(input(\"¿Cuántas? \"))",true);return}
+  if(/qu[eé]\s+es\s+(un\s+)?float|decimal/.test(txt)){
+    pipSay("float es un número con decimales.\n\npeso = 3.5\npeso = float(input(\"Peso: \"))",true);return}
+  if(/qu[eé]\s+es\s+(un\s+)?string|texto|cadena/.test(txt)){
+    pipSay("Un string (texto) va entre comillas:\n\"hola\" o 'hola'\n\nnombre = input(\"¿Cómo te llamás? \")  # también es texto",true);return}
+  if(/qu[eé]\s+es\s+(un\s+)?(bool|booleano)|true\s+y\s+false|true\s+false/.test(txt)){
+    pipSay("Un booleano solo puede ser True o False (con mayúscula).\n\ntiene_llave = True\nif tiene_llave:\n    print(\"pasás\")",true);return}
+  if(/qu[eé]\s+es\s+(un\s+)?algoritmo/.test(txt)){
+    pipSay("Un algoritmo es una secuencia de pasos claros para resolver un problema.\nEn programación esos pasos se escriben con código.",true);return}
+  if(/qu[eé]\s+es\s+(un\s+)?condicional|qu[eé]\s+es\s+(un\s+)?if\b|para\s+qu[eé]\s+sirve\s+if|c[oó]mo\s+funciona\s+(un\s+)?if/.test(txt)){
+    pipSay("Un condicional decide qué camino seguir.\n\nif vida > 20:\n    print(\"Lucho\")\nelse:\n    print(\"Huyo\")\n\nImportante: después del if va una condición y dos puntos :\nEl bloque de adentro va indentado (espacios al inicio).",true);return}
+  if(/qu[eé]\s+es\s+else|para\s+qu[eé]\s+sirve\s+else/.test(txt)){
+    pipSay("else es el camino alternativo cuando el if no se cumple.\n\nif nota >= 7:\n    print(\"Aprobaste\")\nelse:\n    print(\"A practicar\")",true);return}
+  if(/qu[eé]\s+es\s+elif/.test(txt)){
+    pipSay("elif es \"else if\": otra condición si la anterior falló.\n\nif n > 0:\n    print(\"positivo\")\nelif n == 0:\n    print(\"cero\")\nelse:\n    print(\"negativo\")",true);return}
+  if(/qu[eé]\s+es\s+(un\s+)?and|operador\s+and/.test(txt)){
+    pipSay("and exige que las DOS condiciones sean verdaderas.\n\nif tiene_llave and tiene_antorcha:\n    print(\"Puerta abierta\")",true);return}
+  if(/qu[eé]\s+es\s+(un\s+)?or\b|operador\s+or/.test(txt)){
+    pipSay("or se cumple si AL MENOS una condición es verdadera.\n\nif cansado or herido:\n    print(\"Descansá\")",true);return}
+  if(/qu[eé]\s+es\s+(una?\s+)?(iteraci[oó]n|bucle)|para\s+qu[eé]\s+sirve\s+(un\s+)?bucle|repetir/.test(txt)){
+    pipSay("Una iteración (bucle) repite instrucciones.\n• for → cuando sabés cuántas veces\n• while → mientras una condición sea True\n\nSiempre cuidá que el bucle pueda terminar.",true);return}
+  if(/qu[eé]\s+es\s+(un\s+)?while|para\s+qu[eé]\s+sirve\s+(un\s+)?while|c[oó]mo\s+funciona\s+(un\s+)?while/.test(txt)){
+    pipSay("while repite mientras la condición sea verdadera.\nLa variable de la condición DEBE cambiar adentro, si no se cuelga.\n\nt = 3\nwhile t > 0:\n    print(t)\n    t = t - 1\n\nSin t = t - 1 el navegador se puede trabar.",true);return}
+  if(/qu[eé]\s+es\s+(un\s+)?for\b|para\s+qu[eé]\s+sirve\s+for|c[oó]mo\s+funciona\s+(un\s+)?for/.test(txt)){
+    pipSay("for repite una cantidad conocida de veces.\n\nfor i in range(4):\n    print(i)\n\nrange(4) genera 0, 1, 2, 3 (cuatro vueltas).",true);return}
+  if(/qu[eé]\s+es\s+range|para\s+qu[eé]\s+sirve\s+range/.test(txt)){
+    pipSay("range(n) genera números desde 0 hasta n-1.\nrange(5) → 0,1,2,3,4\nrange(2, 6) → 2,3,4,5",true);return}
+  if(/qu[eé]\s+es\s+(una?\s+)?lista|para\s+qu[eé]\s+sirve\s+(una?\s+)?lista/.test(txt)){
+    pipSay("Una lista guarda varios valores en orden.\n\nmochila = [\"cuerda\", \"poción\", \"mapa\"]\nprint(mochila[0])  # primer elemento\nmochila.append(\"antorcha\")  # agregar",true);return}
+  if(/qu[eé]\s+es\s+(un\s+)?diccionario|para\s+qu[eé]\s+sirve\s+(un\s+)?diccionario/.test(txt)){
+    pipSay("Un diccionario guarda pares clave: valor.\n\nheroe = {\"nombre\": \"Luna\", \"nivel\": 2}\nprint(heroe[\"nombre\"])\nheroe[\"nivel\"] = 3",true);return}
+  if(/qu[eé]\s+es\s+(una?\s+)?funci[oó]n|qu[eé]\s+es\s+def\b|para\s+qu[eé]\s+sirve\s+def/.test(txt)){
+    pipSay("Una función empaqueta un bloque de código reutilizable.\n\ndef saludo(nombre):\n    print(\"Hola\", nombre)\n\nsaludo(\"Luna\")  # llamada",true);return}
+  if(/qu[eé]\s+es\s+return|para\s+qu[eé]\s+sirve\s+return/.test(txt)){
+    pipSay("return devuelve un valor desde la función hacia quien la llamó.\n\ndef doble(x):\n    return x * 2\n\nprint(doble(5))  # 10",true);return}
+  if(/qu[eé]\s+es\s+random|para\s+qu[eé]\s+sirve\s+random|n[uú]mero\s+al\s+azar|n[uú]mero\s+aleatorio/.test(txt)){
+    pipSay("random genera valores al azar.\n\nimport random\ndado = random.randint(1, 20)\nprint(dado)\n\nrandint(a, b) incluye ambos extremos.",true);return}
+  if(/qu[eé]\s+es\s+(un\s+)?(try|except)|manejo\s+de\s+errores|try\s*\/\s*except|try\s+except/.test(txt)){
+    pipSay("try/except evita que el programa se rompa si algo falla.\n\ntry:\n    n = int(input(\"Número: \"))\nexcept:\n    print(\"Eso no era un número\")",true);return}
+  if(/qu[eé]\s+es\s+print|para\s+qu[eé]\s+sirve\s+print/.test(txt)){
+    pipSay("print muestra información en pantalla.\n\nprint(\"Hola\")\nprint(42)\nprint(nombre)",true);return}
+  if(/qu[eé]\s+es\s+input|para\s+qu[eé]\s+sirve\s+input|pedir\s+datos?/.test(txt)){
+    pipSay("input pide un dato a la persona. Siempre devuelve texto.\n\nnombre = input(\"¿Cómo te llamás? \")\n# Si necesitás número:\nedad = int(input(\"Edad: \"))\npeso = float(input(\"Peso: \"))",true);return}
+  if(/qu[eé]\s+es\s+indentaci[oó]n|para\s+qu[eé]\s+sirve\s+indentar/.test(txt)){
+    pipSay("La indentación son los espacios al inicio de la línea.\nEn Python indica qué código pertenece a un if, for, while o def.\nSin indentación correcta, Python no entiende la estructura.",true);return}
+  if(/qu[eé]\s+es\s+(un\s+)?operador|operadores\s+(aritm|compar)/.test(txt)){
+    pipSay("Operadores frecuentes:\n• Aritméticos: + - * / // % **\n• Comparación: == != < > <= >=\n• Lógicos: and or not\n\nprint(10 % 3)  # resto → 1",true);return}
+  if(/qu[eé]\s+es\s+(el\s+)?m[oó]dulo|operador\s+%|resto/.test(txt)){
+    pipSay("El operador % da el resto de una división.\n10 % 3 → 1\n15 % 5 → 0 (múltiplo exacto)\nMuy usado en FizzBuzz.",true);return}
+
+  // (nunca confundir "qué es try" con fragmento de código)
+  if(/qu[eé]\s+es\s+(una?\s+)?variable|variable\s+es/.test(txt)){pipSay("Una variable es una cajita con nombre donde guardamos un valor.\n\n• Texto → comillas: nombre = \"Luna\"\n• int (entero) → edad = 15\n• float (decimal) → altura = 1.72\n• True/False → booleanos",true);return}
+  if(/qu[eé]\s+es\s+(un\s+)?algoritmo|algoritmo\s+es/.test(txt)){pipSay("Un algoritmo es una secuencia de pasos ordenados para resolver un problema.\nUna receta de cocina es un algoritmo. En programación escribimos esos pasos en Python.",true);return}
+  if(/qu[eé]\s+es\s+(un\s+)?condicional|qu[eé]\s+es\s+if|if\s+else/.test(txt)){pipSay("Un condicional permite tomar decisiones.\nif pregunta. else es el plan B.\nAmbos terminan en : y el código de adentro va indentado.",true);return}
+  if(/qu[eé]\s+es\s+(int|float)|tipos?\s+num[eé]ricos|n[uú]meros?\s+(enteros?|decimales?)/.test(txt)){pipSay("En Python hay dos tipos numéricos principales:\n\n• int → números enteros (15, 0, -3)\n• float → números con decimal (3.14, 2.5, 100.0)\n\nPodés hacer cuentas con ambos: suma, resta, multiplicación, división.",true);return}
+  if(/qu[eé]\s+es\s+(un\s+)?(try|except)|qu[eé]\s+es\s+try\s*except|manejo\s+de\s+errores|try\s*\/?\s*except/.test(txt)){pipSay("try/except es el manejo de errores en Python.\n\nSirve para intentar un código y, si falla, hacer otra cosa sin que se rompa todo el programa.\n\ntry:\n    n = int(\"hola\")\nexcept:\n    print(\"Eso no es un número\")\n\n• try: lo que querés intentar\n• except: qué hacer si hay error\nAmbos llevan : y el código de adentro va indentado.",true);return}
+  if(/qu[eé]\s+es\s+(una?\s+)?lista|lista\s+es/.test(txt)){pipSay("Una lista guarda varios valores en orden.\nobjetos = [\"poción\", \"cuerda\"]\nEl primero está en [0]. Para agregar: .append(\"llave\")",true);return}
+  if(/qu[eé]\s+es\s+(un\s+)?diccionario|diccionario\s+es/.test(txt)){pipSay("Un diccionario guarda pares clave-valor.\nmonstruo = {\"nombre\": \"Orco\", \"vida\": 40}\nSe lee con monstruo[\"nombre\"]",true);return}
+  if(/qu[eé]\s+es\s+(una?\s+)?funci[oó]n|def\s+es/.test(txt)){pipSay("Una función es un bloque de código con nombre que se puede reutilizar.\ndef nombre(param):\n    return valor\nDespués la llamás: nombre(20)",true);return}
+  if(/qu[eé]\s+es\s+(un\s+)?bucle|for\s+o\s+while/.test(txt)){pipSay("Un bucle repite instrucciones.\n• for → cuando sabés cuántas veces\n• while → cuando depende de una condición\nEl código de adentro siempre va indentado.",true);return}
+  if(/qu[eé]\s+es\s+(la\s+)?indentaci[oó]n|para\s+qu[eé]\s+indentar/.test(txt)){pipSay("La indentación son los espacios al inicio de la línea.\nEn Python indica qué código pertenece a un if, for, while, def o try.\nSin indentación Python no entiende la estructura.",true);return}
+  if(/qu[eé]\s+es\s+(un\s+)?booleano|true\s+false|and\s+or\s+not/.test(txt)){pipSay("Un booleano solo puede ser True o False.\n• and → las dos verdaderas\n• or → al menos una\n• not → invierte el valor",true);return}
+  if(/qu[eé]\s+es\s+print|para\s+qu[eé]\s+sirve\s+print/.test(txt)){pipSay("print() muestra información en pantalla.\nprint(\"texto\") o print(variable) o print(42)",true);return}
+  if(/qu[eé]\s+es\s+(un\s+)?(while|bucle)|para\s+qu[eé]\s+sirve\s+(un\s+)?while/.test(txt)){pipSay("while repite mientras la condición sea verdadera.\nLa variable DEBE cambiar adentro o se cuelga el programa.\n\nt = 3\nwhile t > 0:\n    print(t)\n    t = t - 1",true);return}
+  if(/qu[eé]\s+es\s+(un\s+)?for\b|para\s+qu[eé]\s+sirve\s+for/.test(txt)){pipSay("for repite una cantidad fija de veces.\nfor i in range(4):\n    print(i)",true);return}
+  if(/qu[eé]\s+es\s+input|para\s+qu[eé]\s+sirve\s+input|pedir\s+dato/.test(txt)){pipSay("input() pide un dato a la persona.\nSiempre devuelve texto.\nnombre = input(\"¿Cómo te llamás? \")\nSi necesitás un número: edad = int(input(\"Edad: \"))",true);return}
+  if(/qu[eé]\s+es\s+random|m[oó]dulo\s+random/.test(txt)){pipSay("random genera números al azar.\nimport random\nprint(random.randint(1, 20))",true);return}
+
+  if(/c[oó]mo te llam[aá]s|quién sos|tu nombre/.test(txt)){pipSay("Me llamo Pip. Soy el Ayudante de este calabozo. Creado para acompañar a estudiantes de 9º EBI y 1º EMS.",true);return}
+  if(/cuántos años|edad/.test(txt)){pipSay("Tengo la edad de varios semestres de Python.",true);return}
+  
+  // 2) Fragmentos de código / sintaxis incompleta
+  var analysis=analyzeCodeFragment(original);
+  if(analysis && !isQuestion){
+    pipSay(analysis,true);
+    // Si hay desafío abierto, relacionar con el checklist
+    if(typeof lastFails!=="undefined" && lastFails.length){
+      pipSay("Eso también aparece en tu misión: «"+lastFails[0].check.label+"».\n"+lastFails[0].check.hint,true);
+    }
+    return;
+  }
+  // Si pegan código largo incompleto
+  if(!isQuestion && (codeLike || hasIncompleteBlocks(original)) && analysis){
+    pipSay(analysis,true);return;
+  }
+
+  if(/cuadro|fútbol|hincha|peñarol|nacional/.test(txt)){pipSay("Soy hincha de los que programan limpio y con buena indentación.",true);return}
+  if(/hola|buenas|hey/.test(txt)){pipSay("¡Hola! Preguntame cualquier concepto (variable, int, float, try/except, lista…) o mandame código incompleto.",true);return}
+  if(/gracias/.test(txt)){pipSay("De nada. Seguí practicando.",true);return}
+
+  if(/tranc[eé]|trab[eé]|no s[eé]|no entiendo|ayuda con|me trabo/.test(txt)){
+    if(/variable|int|float/.test(txt)){pipSay("Variable = cajita. int = entero. float = decimal. Texto → comillas.",true);return}
+    if(/print/.test(txt)){pipSay("print(\"texto\") o print(variable). Nunca vacío si te piden mostrar algo.",true);return}
+    if(/input/.test(txt)){pipSay("input() pide datos. Guardá el resultado: nombre = input(\"...\")\nPara número: int(input(\"...\"))",true);return}
+    if(/def|funci/.test(txt)){pipSay("def nombre(param): ← dos puntos e indentación. return si querés devolver algo.",true);return}
+    if(/if|condicional|and|or|not/.test(txt)){pipSay("if condición: ← dos puntos e indentación.\nand / or / not para combinar.",true);return}
+    if(/for|while|bucle/.test(txt)){pipSay("for i in range(n): o while condicion: (y cambiá la variable). Todo indentado.",true);return}
+    if(/lista|append/.test(txt)){pipSay("lista = [\"a\", \"b\"]\nfor x in lista:\nlista.append(\"nuevo\")",true);return}
+    if(/diccionario|dict/.test(txt)){pipSay("d = {\"clave\": valor}\nprint(d[\"clave\"])",true);return}
+    if(/try|except|error/.test(txt)){pipSay("try/except sirve para manejar errores sin que el programa se rompa.\n\ntry:\n    n = int(\"hola\")\nexcept:\n    print(\"Eso no es un número\")\n\nPrimero se intenta el código del try. Si falla, se ejecuta el except.",true);return}
+    if(/random|import/.test(txt)){pipSay("import random\nprint(random.randint(1, 20))",true);return}
+    if(/indent/.test(txt)){pipSay("Después de un : el código de adentro tiene que tener espacios al inicio.",true);return}
+    pipEncourage();pipHelp();return;
+  }
+
+  if(/falta|error|falla|checklist/.test(txt)){pipHelp();return}
+  if(/señal|dónde|resalt/.test(txt)){pipPoint();return}
+  if(/mapa|progreso/.test(txt)){pipMap();return}
+  if(/chatbot|bonus/.test(txt)){pipSay("El Mini Chatbot se desbloquea después de Condicionales.",true);return}
+
+  if(/qu[eé]\s+me\s+falta|requisito|checklist|validar/.test(txt)){pipHelp();return}
+  if(/bucle infinito|se traba|se cuelga|congel|colg[oó]/.test(txt)){pipSay("Si el navegador se cuelga suele ser un while que no termina.\nLa variable de la condición tiene que cambiar adentro del bucle.\n\nt = 3\nwhile t > 0:\n    print(t)\n    t = t - 1",true);return}
+  if(/antorcha|se apaga/.test(txt)){pipSay("En la antorcha:\n1) t = 3\n2) while t > 0:\n3) print(t)\n4) t = t - 1  ← sin el paso 4 el bucle no termina",true);return}
+  if(/qu[eé]\s+es\s+range|para\s+qu[eé]\s+sirve\s+range/.test(txt)){pipSay("range(n) genera 0..n-1.\nfor i in range(4): repite 4 veces.",true);return}
+  if(/append|agregar a (la )?lista/.test(txt)){pipSay("mochila = [\"cuerda\"]\nmochila.append(\"poción\")",true);return}
+  if(/sello|pdf|exportar|hoja de avance/.test(txt)){pipSay("Con 📜 PDF exportás tu hoja de avance. El sello resume el progreso.",true);return}
+  if(/xp|inventario|objeto desbloqueado|nota/.test(txt)){pipSay("Completá todos los sub-niveles de un tema para ganar objeto + XP. La nota va de 0 a 10.",true);return}
+
+  if(codeLike){pipSay("Parece código. Pegalo completo o escribí «revisá mi código» para analizar el editor.\nSi es un while, asegurate de cambiar la variable adentro.",true)}
+  else{pipSay("Puedo ayudarte con más cosas. Probá:\n• qué es variable / if / while / for / lista / def / input\n• revisá mi código\n• qué me falta\n• bucle infinito\n• o pegá el fragmento que te traba",true)}
+  pipDefaultSugs();
+}
+
+/* Tour + PDF + Eventos */
+var tourSteps=[{t:"¡Bienvenido/a!",d:"Soy Pip el Ayudante. Te voy a guiar por el calabozo."},{t:"Nombre y apellido",d:"Escribí tu nombre y apellido de estudiante."},{t:"Elegí tu clase",d:"Mago, Guerrero, Arquero o Explorador."},{t:"El mapa",d:"Hay temas de print, input, variables (int/float), condicionales, bucles, listas, diccionarios, funciones, random y try/except."},{t:"Preguntame conceptos",d:"Podés preguntarme qué es una variable, un int, un float, try/except, etc."},{t:"¡Listo!",d:"¡Éxitos en el calabozo!"}];
+function startTour(){if(state.tourSeen)return;tourStep=0;updateTour();$("#tourOv").classList.add("open")}
+function updateTour(){var s=tourSteps[tourStep];$("#tourTitle").textContent=s.t;$("#tourText").textContent=s.d;var dots=$("#tourDots");dots.innerHTML="";tourSteps.forEach(function(_,i){var d=document.createElement("div");d.className="tour-dot"+(i===tourStep?" on":"");dots.appendChild(d)});$("#tourNext").textContent=tourStep===tourSteps.length-1?"¡Empezar!":"Siguiente →"}
+function nextTour(){if(tourStep<tourSteps.length-1){tourStep++;updateTour()}else finishTour()}
+function finishTour(){$("#tourOv").classList.remove("open");state.tourSeen=true;save();setTimeout(function(){pipOpen=true;$("#pipChat").classList.add("open");pipSay("¡Hola! Soy Pip el Ayudante. Preguntame conceptos (variable, int, float, try/except…) o mandame código incompleto. Estoy para ayudarte.",true);pipDefaultSugs()},400)}
+
+function exportPDF(){if(typeof window.jspdf==="undefined"){alert("No se pudo cargar jsPDF.");return}var doc=new window.jspdf.jsPDF();doc.setProperties({title:"Hoja de avance — Calabozos & Python",author:"Braian Mosqueira",subject:"Progreso del estudiante",keywords:"Python, educativo, Uruguay, EBI, EMS",creator:"Calabozos & Python"});doc.setFillColor(30,30,47);doc.rect(0,0,210,250,"F");doc.setFillColor(20,20,35);doc.rect(0,0,210,42,"F");doc.setFillColor(6,8,10);doc.rect(10,6,26,26,"F");try{doc.addImage("data:image/png;base64,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","PNG",11,7,24,24)}catch(e){}doc.setTextColor(201,168,76);doc.setFontSize(18);doc.setFont("helvetica","bold");doc.text("HOJA DE AVANCE",120,18,{align:"center"});doc.setFontSize(10);doc.setTextColor(176,160,130);doc.text("CALABOZOS & PYTHON",120,28,{align:"center"});doc.setDrawColor(201,168,76);doc.setLineWidth(0.6);doc.roundedRect(15,50,180,42,3,3,"S");doc.setTextColor(240,230,208);doc.setFontSize(11);doc.setFont("helvetica","bold");doc.text("Estudiante:",20,60);doc.setFont("helvetica","normal");doc.text(String(state.agent||"—"),55,60);doc.setFont("helvetica","bold");doc.text("Clase:",20,68);doc.setFont("helvetica","normal");doc.text(String(state.clase||"—"),55,68);doc.setFont("helvetica","bold");doc.text("XP:",20,76);doc.setFont("helvetica","normal");doc.text(String(xpTotal())+" / "+String(maxXP()),55,76);doc.setFont("helvetica","bold");doc.text("Nota /10:",110,60);doc.setFont("helvetica","normal");doc.text(String(nota()),150,60);doc.setFont("helvetica","bold");doc.text("Rango:",110,68);doc.setFont("helvetica","normal");doc.text(heroRankName(heroLevel()),150,68);doc.setFont("helvetica","bold");doc.text("Sello:",110,76);doc.setFont("courier","normal");doc.setFontSize(9);doc.text(genSeal(),145,76);doc.setFont("helvetica","bold");doc.setFontSize(13);doc.setTextColor(201,168,76);doc.text("Temas del Calabozo",20,108);doc.line(20,110,190,110);var y=120;doc.setFontSize(10);doc.setTextColor(240,230,208);TOPICS.forEach(function(tp,idx){var ok=true;tp.challenges.forEach(function(c){if(!state.completed[c.id])ok=false});doc.setFont("helvetica","bold");doc.text((idx+1)+". "+tp.title,22,y);doc.setFont("helvetica","normal");if(ok){doc.setTextColor(102,187,106);doc.text("OK",160,y)}else{doc.setTextColor(168,152,128);doc.text("Pendiente",150,y)}doc.setTextColor(240,230,208);y+=8});y+=6;doc.setFont("helvetica","bold");doc.text("Bonus Chatbot",22,y);doc.setFont("helvetica","normal");if(state.completed["bonus-chatbot"]){doc.setTextColor(102,187,106);doc.text("OK",160,y)}else{doc.setTextColor(168,152,128);doc.text("Pendiente",150,y)}y+=8;doc.setTextColor(240,230,208);doc.setFont("helvetica","bold");doc.text("Bonus FizzBuzz",22,y);doc.setFont("helvetica","normal");if(state.completed["bonus-fizz"]){doc.setTextColor(102,187,106);doc.text("OK",160,y)}else{doc.setTextColor(168,152,128);doc.text("Pendiente",150,y)}y+=8;doc.setTextColor(240,230,208);doc.setFont("helvetica","bold");doc.text("Dragon Rojo",22,y);doc.setFont("helvetica","normal");if(state.completed["dragon-1"]){doc.setTextColor(102,187,106);doc.text("OK",160,y)}else{doc.setTextColor(168,152,128);doc.text("Pendiente",150,y)}doc.setFillColor(232,213,170);doc.rect(0,250,210,47,"F");doc.setFillColor(210,190,145);doc.rect(0,250,210,3,"F");doc.setTextColor(90,70,40);doc.setFontSize(9);doc.setFont("helvetica","italic");doc.text("Calabozos & Python",105,270,{align:"center"});doc.setFont("helvetica","normal");doc.setFontSize(8);doc.text("Hoja de avance del estudiante",105,278,{align:"center"});doc.setFontSize(7);doc.setTextColor(110,90,55);doc.text("Autor: Braian Mosqueira",105,288,{align:"center"});doc.save("Hoja_"+((state.agent||"Estudiante").replace(/\s+/g,"_"))+".pdf");pipSay("¡Listo! Te descargué la hoja de avance.",true)}
+
+$("#pipFab").onclick=function(){pipOpen=!pipOpen;$("#pipChat").classList.toggle("open",pipOpen);if(pipOpen){pipDefaultSugs();$("#pipIn").focus()}};
+$("#pipClose").onclick=function(){pipOpen=false;$("#pipChat").classList.remove("open")};
+$("#pipSend").onclick=function(){var v=$("#pipIn").value;$("#pipIn").value="";pipRespond(v)};
+$("#pipIn").onkeydown=function(e){if(e.key==="Enter")$("#pipSend").click()};
+$("#tourNext").onclick=nextTour;$("#tourSkip").onclick=finishTour;
+$("#btnHelp").onclick=function(){$("#helpPanel").classList.toggle("open");$("#a11yPanel").classList.remove("open")};
+$("#btnA11y").onclick=function(){$("#a11yPanel").classList.toggle("open");$("#helpPanel").classList.remove("open")};
+document.addEventListener("click",function(e){if(!$("#helpPanel").contains(e.target)&&e.target!==$("#btnHelp"))$("#helpPanel").classList.remove("open");if(!$("#a11yPanel").contains(e.target)&&e.target!==$("#btnA11y"))$("#a11yPanel").classList.remove("open")});
+$$("[data-font]").forEach(function(b){b.onclick=function(){$$("[data-font]").forEach(function(x){x.setAttribute("aria-pressed","false")});this.setAttribute("aria-pressed","true");document.documentElement.setAttribute("data-font-size",this.getAttribute("data-font"))}});
+$$("[data-contrast]").forEach(function(b){b.onclick=function(){$$("[data-contrast]").forEach(function(x){x.setAttribute("aria-pressed","false")});this.setAttribute("aria-pressed","true");document.documentElement.setAttribute("data-contrast",this.getAttribute("data-contrast"))}});
+$$("[data-dyslexia]").forEach(function(b){b.onclick=function(){$$("[data-dyslexia]").forEach(function(x){x.setAttribute("aria-pressed","false")});this.setAttribute("aria-pressed","true");document.documentElement.setAttribute("data-dyslexia",this.getAttribute("data-dyslexia"))}});
+$$("[data-motion]").forEach(function(b){b.onclick=function(){$$("[data-motion]").forEach(function(x){x.setAttribute("aria-pressed","false")});this.setAttribute("aria-pressed","true");document.documentElement.setAttribute("data-reduce-motion",this.getAttribute("data-motion"))}});
+$$(".clase-btn").forEach(function(b){b.onclick=function(){$$(".clase-btn").forEach(function(x){x.setAttribute("aria-pressed","false")});this.setAttribute("aria-pressed","true");state.clase=this.getAttribute("data-clase");document.documentElement.setAttribute("data-clase",state.clase)}});
+$("#btnStart").onclick=function(){var name=$("#nameIn").value.trim();if(!name){$("#nameIn").focus();return}if(!state.clase)state.clase="Explorador";state.agent=name;save();renderMap();if(state.tourSeen)pipSay("¡Hola "+name+"! Preguntame conceptos o mandame código. Estoy para ayudarte.",true)};
+$("#btnRecover").onclick=function(){var code=$("#recoverIn").value.trim().toUpperCase(),name=$("#nameIn").value.trim(),msg=$("#recoverMsg");if(!name){msg.style.color="var(--bad)";msg.textContent="Ingresá el nombre primero.";return}if(!/^PY-[0-9A-Z]{3}-[0-9A-Z]{3}-[0-9A-Z]{3}$/.test(code)){msg.style.color="var(--bad)";msg.textContent="Formato inválido.";return}state.agent=name;msg.style.color="var(--ok)";msg.textContent="Sello reconocido.";save();setTimeout(renderMap,400)};
+$("#btnMap").onclick=renderMap;$("#btnBack").onclick=renderMap;
+$("#btnRun").onclick=runAnalysis;
+$("#btnConsole").onclick=function(){var w=$("#consoleWrap");w.classList.toggle("hidden");if(!w.classList.contains("hidden")){$("#consoleOut").innerHTML='<div class="empty">Ejecutando…</div>';runPy(getCode(),function(res){var out=$("#consoleOut");out.innerHTML="";if(res.out)res.out.split("\n").forEach(function(l){if(l){var d=document.createElement("div");d.textContent="⚔ "+l;out.appendChild(d)}});if(res.err){var e=document.createElement("div");e.className="err";e.textContent="⚠ "+res.err;out.appendChild(e)}if(!res.out&&!res.err)out.innerHTML='<div class="empty">(sin salida)</div>'})}};
+$("#btnClear").onclick=function(){var ch=findCh(currentId);if(!ch)return;if(confirm("¿Borrar el código?")){setCode(ch.starter);delete state.drafts[currentId];save();liveCheck()}};
+$("#winOk").onclick=function(){$("#winModal").classList.add("hidden");renderMap()};
+$("#dragonYes").onclick=function(){$("#dragonModal").classList.add("hidden");openChallenge("dragon-1")};
+$("#dragonNo").onclick=function(){$("#dragonModal").classList.add("hidden");renderMap()};
+$("#finalPDF").onclick=exportPDF;$("#finalOk").onclick=function(){$("#finalModal").classList.add("hidden");renderMap()};
+var btnInvEl=$("#btnInv");
+if(btnInvEl){btnInvEl.onclick=function(){
+  var inv=$("#inventario");
+  if(!inv)return;
+  var open=inv.classList.toggle("visible");
+  state.invOpen=open;
+  save();
+};}
+$("#btnPDF").onclick=exportPDF;
+$("#btnReset").onclick=function(){if(confirm("¿Reiniciar toda la partida?")){try{localStorage.removeItem(STORAGE)}catch(e){}state={agent:"",clase:"",completed:{},drafts:{},xpParcial:{},err:{},maxChecks:{},inventory:[],tourSeen:false,dragonSeen:false};show("viewBrief");refreshTop();$("#nameIn").value="";startTour()}};
+$("#btnTheme").onclick=function(){var cur=document.documentElement.getAttribute("data-theme");var next=cur==="light"?"dark":"light";document.documentElement.setAttribute("data-theme",next);if(editor&&!useFallback)editor.setOption("theme",next==="light"?"default":"dracula")};
+document.addEventListener("keydown",function(e){if(e.key==="Escape"){["winModal","dragonModal","finalModal"].forEach(function(id){var m=$("#"+id);if(m&&!m.classList.contains("hidden")){m.classList.add("hidden");renderMap()}});$("#helpPanel").classList.remove("open");$("#a11yPanel").classList.remove("open");$("#pipChat").classList.remove("open");pipOpen=false;$("#tourOv").classList.remove("open")}});
+
+(function init(){
+  temaFiltro=parseTemaFromURL();
+  modoTema=!!temaFiltro;
+  load();
+  if(state.clase)document.documentElement.setAttribute("data-clase",state.clase);
+  refreshTop();
+  if(modoTema){
+    // Modo tema: no tour completo; pedir nombre si falta y ir al mapa filtrado
+    if(!state.agent){
+      show("viewBrief");
+      var tag=$(".tag");
+      if(tag) tag.textContent="✦ Modo tema · "+temaTitulo();
+      var sub=$(".subtitle");
+      if(sub) sub.textContent="Solo este bloque · la nota se escala sobre 10";
+    } else {
+      renderMap();
+    }
+  } else if(state.agent){
+    renderMap();
+  } else {
+    show("viewBrief");
+    startTour();
+  }
+})();
+})();
+</script>
+</body>
+</html>
