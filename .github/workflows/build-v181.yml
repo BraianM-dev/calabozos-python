@@ -1,0 +1,64 @@
+name: Build Aventuras Python v1.8.1
+on:
+  push:
+    branches: [v1.8.1-build]
+    paths: ['.import-v181/READY']
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v1.8.1-build
+          fetch-depth: 0
+      - name: Rebuild and verify source archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat .import-v181/part-* | base64 --decode > /tmp/v181.tar.zst
+          echo '3c5ee6349d7966227f2d46d9ffa10f0e573bf569d99e831a2b07b38421de7eb4  /tmp/v181.tar.zst' | sha256sum -c -
+          rm -rf /tmp/v181 && mkdir -p /tmp/v181
+          tar --zstd -xf /tmp/v181.tar.zst -C /tmp/v181
+          test -f /tmp/v181/juego.html
+          test -f /tmp/v181/assets/campaigns.js
+          test -f /tmp/v181/assets/game-core.css
+          test -f /tmp/v181/assets/game-parts/part-00.js
+          test -f /tmp/v181/calabozos/index.html
+          test -f /tmp/v181/jujutsu/index.html
+          test -f /tmp/v181/multiverso/index.html
+      - name: Restore pinned offline runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT=/tmp/v181/assets/vendor
+          mkdir -p "$ROOT/codemirror" "$ROOT/skulpt"
+          CM='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16'
+          curl -fsSL "$CM/codemirror.min.css" -o "$ROOT/codemirror/codemirror.min.css"
+          curl -fsSL "$CM/theme/dracula.min.css" -o "$ROOT/codemirror/dracula.min.css"
+          curl -fsSL "$CM/codemirror.min.js" -o "$ROOT/codemirror/codemirror.min.js"
+          curl -fsSL "$CM/mode/python/python.min.js" -o "$ROOT/codemirror/python.min.js"
+          curl -fsSL "$CM/addon/edit/closebrackets.min.js" -o "$ROOT/codemirror/closebrackets.min.js"
+          curl -fsSL "$CM/addon/edit/matchbrackets.min.js" -o "$ROOT/codemirror/matchbrackets.min.js"
+          curl -fsSL 'https://raw.githubusercontent.com/codemirror/codemirror5/5.65.16/LICENSE' -o "$ROOT/codemirror/LICENSE"
+          SK='https://cdn.jsdelivr.net/npm/skulpt@1.2.0'
+          curl -fsSL "$SK/dist/skulpt.min.js" -o "$ROOT/skulpt/skulpt.min.js"
+          curl -fsSL "$SK/dist/skulpt-stdlib.js" -o "$ROOT/skulpt/skulpt-stdlib.js"
+          curl -fsSL "$SK/LICENSE" -o "$ROOT/skulpt/LICENSE"
+          test -s "$ROOT/codemirror/codemirror.min.js"
+          test -s "$ROOT/skulpt/skulpt.min.js"
+          test -s "$ROOT/skulpt/skulpt-stdlib.js"
+      - name: Validate project
+        run: node /tmp/v181/tests/verificar.js
+      - name: Commit validated build
+        shell: bash
+        run: |
+          set -euo pipefail
+          find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+          cp -a /tmp/v181/. ./
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Aventuras & Python v1.8.1 multitema validated build'
+          git push origin HEAD:v1.8.1-build
