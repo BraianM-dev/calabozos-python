@@ -70,7 +70,11 @@ function themedExportPDF(){
   var t=theme(),s=root.state||{},name=s.agent||'Estudiante',clase=s.clase||'Sin clase',done=completedCount(),total=missionTotal(),xp=val('xpTotal',0),mx=val('maxXP',0),dom=val('dominio',total?Math.round(done/total*100):0),lvl=val('heroLevel',1),doc=new root.FichaPDF();
   doc.setProperties({title:t.pdfTitle+' - '+t.label,author:'Braian Mosqueira',subject:'Ficha de progreso educativo de Python',keywords:'Python, educación, DUA, progreso, '+t.label,creator:'Aventuras & Python'});
   decorate(doc,t);
-  drawPip(doc,164,19,t);drawHero(doc,151,53,t,clase);
+  var classKey=String(clase||'mago').toLowerCase(),stageKey=done>=26?'legendario':done>=13?'veterano':'inicial';
+  var group=root.CALABOZOS_HEROES_JPEG&&root.CALABOZOS_HEROES_JPEG[classKey],hero=group&&group[stageKey];
+  if(!hero&&root.CALABOZOS_HEROES_JPEG&&root.CALABOZOS_HEROES_JPEG.mago)hero=root.CALABOZOS_HEROES_JPEG.mago.inicial;
+  if(root.CALABOZOS_LOGO_JPEG)doc.addImageJPEG(root.CALABOZOS_LOGO_JPEG.data,root.CALABOZOS_LOGO_JPEG.width,root.CALABOZOS_LOGO_JPEG.height,165,18,25,25);
+  if(hero){box(doc,149,47,43,48,[255,255,255],t.accent);doc.addImageJPEG(hero.data,hero.width,hero.height,150,48,41,46);}
   txt(doc,t.pdfTitle,18,27,19,true,t.dark,'times');txt(doc,t.pdfSub,18,35,8,true,t.accent,'helvetica');
   box(doc,18,45,124,39,[255,255,255],t.accent);txt(doc,'AVENTURERO/A',23,53,6,true,[98,91,83]);fit(doc,name,23,62,78,16,t.dark,true,2);txt(doc,'CLASE',104,53,6,true,[98,91,83]);fit(doc,clase,104,62,33,9,t.accent,true,2);
   txt(doc,t.progress,18,96,11,true,t.dark,'times');
@@ -84,7 +88,7 @@ function themedExportPDF(){
     var tp=topics[i],td=0,tt=(tp.challenges||[]).length;for(var j=0;j<tt;j++)if(completed[tp.challenges[j].id])td++;
     var ok=tt&&td===tt;box(doc,18,yy,174,10,ok?t.paper2:[255,255,255],ok?t.accent2:t.accent);txt(doc,(i+1<10?'0':'')+(i+1),22,yy+6.8,6,true,t.accent);fit(doc,tp.title||tp.id,34,yy+6.8,105,6.8,t.dark,true,1);txt(doc,td+' / '+tt,164,yy+6.8,7,true,ok?t.accent:t.dark);yy+=11.2;}
   }else{fit(doc,'Ruta curricular disponible dentro del juego.',22,yy+7,160,8,t.dark,false,2);yy+=18;}
-  var noteY=Math.min(262,yy+5);box(doc,18,noteY,174,17,[255,255,255],t.accent);drawPip(doc,21,noteY-6,t);fit(doc,t.pipLine,54,noteY+7,132,7.5,t.dark,true,2);
+  var noteY=Math.min(262,yy+5);box(doc,18,noteY,174,17,[255,255,255],t.accent);fit(doc,t.pipLine,23,noteY+7,164,7.5,t.dark,true,2);
   txt(doc,'CC BY 4.0 · Aventuras & Python · Recurso educativo',105,290,6,false,[100,94,86]);
   var safeName=String(name).replace(/[^a-z0-9áéíóúüñ_-]+/gi,'-').replace(/^-+|-+$/g,'')||'estudiante';doc.save('ficha-'+campaignId()+'-'+safeName+'.pdf');
 }

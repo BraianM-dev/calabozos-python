@@ -1,0 +1,136 @@
+/* Aventuras & Python 1.8.3 · capa visual ilustrada compartida · CC BY 4.0 */
+:root{
+  --cp-night:#071426;--cp-deep:#0a1d35;--cp-panel:#102744;--cp-panel-soft:#173452;
+  --cp-ink:#f7f3e8;--cp-muted:#c8d6e6;--cp-gold:#f5c45e;--cp-gold-deep:#c57b2d;
+  --cp-sky:#6dd8ff;--cp-edge:#567595;--cp-shadow:0 20px 55px rgba(0,0,0,.34);
+}
+
+body{background-attachment:fixed;background-size:auto,auto,128px 128px!important}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background:radial-gradient(circle at 12% 12%,rgba(109,216,255,.10),transparent 31%),radial-gradient(circle at 88% 2%,rgba(245,196,94,.11),transparent 27%)}
+.topbar{background:rgba(6,20,38,.96)!important;border-bottom:1px solid rgba(245,196,94,.38)!important;box-shadow:0 8px 28px rgba(0,0,0,.24);backdrop-filter:blur(12px)}
+.brand{letter-spacing:.055em;text-shadow:0 2px 14px rgba(245,196,94,.18)}
+.iconbtn,.nav a{background:rgba(16,39,68,.88)!important;border-color:rgba(126,158,192,.55)!important;box-shadow:inset 0 1px rgba(255,255,255,.04);transition:transform .18s ease,border-color .18s ease,background .18s ease}
+.iconbtn:hover,.iconbtn:focus,.nav a:hover,.nav a:focus{background:#193b60!important;border-color:var(--gold)!important;transform:translateY(-1px)}
+.panel,.section,.card,.campaign-card{box-shadow:var(--cp-shadow)}
+.btn{transition:transform .16s ease,filter .16s ease,box-shadow .16s ease}
+.btn:not([disabled]):hover,.btn:not([disabled]):focus{transform:translateY(-1px);filter:brightness(1.07)}
+.btn-primary{box-shadow:0 7px 18px rgba(0,0,0,.2),inset 0 1px rgba(255,255,255,.32)}
+
+/* Portada compartida */
+.landing-page main{width:min(1180px,100%)}
+.landing-page .landing-hero{position:relative;padding:36px 30px 0;border:1px solid rgba(109,216,255,.22);border-radius:24px;overflow:hidden;background:linear-gradient(145deg,rgba(16,39,68,.96),rgba(6,20,38,.92));box-shadow:var(--cp-shadow)}
+.landing-page .landing-hero:before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(110deg,rgba(245,196,94,.08),transparent 38%,rgba(109,216,255,.07))}
+.landing-page .landing-hero>*{position:relative;z-index:1}
+.landing-party{height:300px;margin:18px -30px 0;background:linear-gradient(180deg,transparent,rgba(5,16,31,.08)),url('party-heroes.jpg') center 25%/cover no-repeat;border-top:1px solid rgba(245,196,94,.24);filter:saturate(1.05) contrast(1.02)}
+.landing-page .campaign-cards{align-items:stretch}
+.landing-page .campaign-card{isolation:isolate;min-height:355px;padding:190px 20px 20px!important;border-radius:20px!important;background:linear-gradient(160deg,rgba(20,43,70,.98),rgba(7,20,38,.98))!important;transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
+.landing-page .campaign-card:before{position:absolute;z-index:-1;inset:0 0 auto;height:180px!important;margin:0!important;border-bottom:1px solid rgba(255,255,255,.12);background-color:#0b203a!important;background-repeat:no-repeat!important;background-size:600% 100%!important;background-position:0 50%!important;filter:drop-shadow(0 7px 10px rgba(0,0,0,.28));image-rendering:auto!important}
+.landing-page .campaign-card:nth-child(1):before{background-image:linear-gradient(180deg,rgba(7,20,38,.05),rgba(7,20,38,.66)),url('hero-sprites/mago-veterano.png')!important}
+.landing-page .campaign-card.jjk:before{background-image:linear-gradient(180deg,rgba(35,20,64,.02),rgba(26,17,51,.74)),url('hero-sprites/arquero-veterano.png')!important}
+.landing-page .campaign-card.multiverso:before{background-image:linear-gradient(180deg,rgba(5,40,43,.02),rgba(6,31,42,.75)),url('hero-sprites/explorador-legendario.png')!important}
+.landing-page .campaign-card:hover{transform:translateY(-5px);border-color:var(--gold)!important;box-shadow:0 24px 60px rgba(0,0,0,.44)}
+.landing-page .campaign-card h3{font-size:22px;margin:0}
+.landing-page .campaign-card .btn{margin-top:auto}
+
+/* Juego: briefing y mapa */
+.game-page main{max-width:1040px}
+.game-page #viewBrief{position:relative;overflow:hidden;padding-right:300px;min-height:480px;background:linear-gradient(140deg,rgba(18,46,76,.97),rgba(7,20,38,.97));border-color:rgba(245,196,94,.42)}
+.game-page #viewBrief:after{content:"";position:absolute;right:0;top:0;bottom:0;width:290px;background:linear-gradient(90deg,rgba(7,20,38,0),rgba(7,20,38,.2)),url('hero-evolution/hero-mago-veterano.jpg') 50% 14%/cover no-repeat;opacity:.78;pointer-events:none}
+.game-page #viewBrief>*{position:relative;z-index:1}
+.briefing-party{display:flex;height:118px;gap:2px;margin:10px 0 14px;max-width:460px;overflow:hidden;border-radius:14px;background:linear-gradient(180deg,rgba(109,216,255,.08),rgba(5,18,34,.58));border:1px solid rgba(109,216,255,.22)}
+.briefing-party .party-hero{width:25%;height:118px;background-repeat:no-repeat;background-size:600% 100%;background-position:0 50%;filter:drop-shadow(0 5px 5px rgba(0,0,0,.38))}
+.party-mago{background-image:url('hero-sprites/mago-inicial.png')}.party-guerrero{background-image:url('hero-sprites/guerrero-inicial.png')}.party-arquero{background-image:url('hero-sprites/arquero-inicial.png')}.party-explorador{background-image:url('hero-sprites/explorador-inicial.png')}
+.game-page .clase-btn{min-height:44px;padding:8px 14px;border-radius:11px;background:rgba(9,29,51,.86);font-weight:700}
+.game-page .clase-btn[aria-pressed="true"]{box-shadow:0 0 0 2px rgba(255,255,255,.12),0 0 22px rgba(245,196,94,.19);transform:translateY(-1px)}
+.zonegrid{gap:15px}
+.zonecard{min-height:230px;padding:17px;border-radius:15px;background:linear-gradient(155deg,rgba(19,48,78,.96),rgba(9,25,46,.98));border-color:rgba(114,148,184,.55);box-shadow:0 12px 30px rgba(0,0,0,.22);overflow:hidden}
+.zonecard:before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:linear-gradient(var(--blue),var(--gold));opacity:.7}
+.zonecard.done{background:linear-gradient(155deg,rgba(18,65,64,.94),rgba(8,34,44,.98));box-shadow:0 12px 30px rgba(0,0,0,.2),inset 0 0 35px rgba(102,187,106,.06)}
+.zonecard.locked{opacity:.66;filter:saturate(.7)}
+.zonecard h3{font-size:calc(18px*var(--font-scale))}
+.zonecard .btn{margin-top:auto!important}
+.mission-card{background:linear-gradient(135deg,rgba(19,57,91,.92),rgba(18,40,67,.96));box-shadow:0 14px 34px rgba(0,0,0,.22);border-width:1px}
+.editor-wrap,.console-wrap,.checklist,.interaction-panel{box-shadow:0 12px 28px rgba(0,0,0,.18)}
+
+/* Ficha ilustrada: retrato abierto, sin aro punteado ni marco vertical. */
+.inventario{width:380px!important;padding:15px 16px!important;border:1px solid rgba(245,196,94,.7)!important;border-radius:20px!important;background:linear-gradient(145deg,#102947,#091c32 72%,#071426)!important;box-shadow:0 28px 70px rgba(0,0,0,.58),inset 0 1px rgba(255,255,255,.05)!important}
+.inventario:before{height:3px!important;left:18px;right:18px;width:auto!important;background:linear-gradient(90deg,transparent,var(--blue),var(--gold),transparent)!important}
+.inventario .pj-row{display:grid!important;grid-template-columns:126px minmax(0,1fr);gap:14px!important;min-height:150px;padding:11px!important;border:0!important;border-radius:18px!important;background:radial-gradient(circle at 18% 40%,rgba(75,151,209,.20),transparent 34%),linear-gradient(135deg,rgba(22,63,100,.58),rgba(7,24,44,.72))!important;overflow:visible!important}
+.inventario .pj-row:after{left:140px!important;right:15px!important}
+.inventario .pj-av{width:126px!important;height:138px!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;overflow:visible!important;align-self:end}
+.inventario .pj-av:before{inset:auto 8px 0!important;height:24px;border-radius:50%!important;background:radial-gradient(ellipse,rgba(109,216,255,.38),rgba(245,196,94,.13) 48%,transparent 72%)!important;filter:blur(2px)!important;animation:hero-stage-glow 4s ease-in-out infinite!important}
+.inventario .pj-av:after{right:2px!important;bottom:5px!important;font-size:9px!important;padding:3px 6px!important;z-index:4}
+.inventario .hero-sprite-frame{width:138px!important;height:138px!important;margin-left:-6px;border-radius:0!important;background-size:600% 100%!important;background-position:0 50%;image-rendering:auto!important;filter:drop-shadow(0 8px 7px rgba(0,0,0,.45));transform-origin:50% 88%}
+@keyframes hero-stage-glow{0%,100%{opacity:.35;transform:scale(.92)}50%{opacity:.8;transform:scale(1.05)}}
+.inventario .pj-meta b{font-size:calc(16px*var(--font-scale))!important;color:#fff3c4!important}
+.inventario .pj-evolution{color:var(--blue)!important}
+.micro-rune{height:9px!important}
+
+/* Pip ilustrado y legible */
+.pip-sprite{background-image:url('pip-states-v3.png')!important;image-rendering:auto!important}
+.pip-fab{width:64px!important;height:64px!important;border:1px solid rgba(245,196,94,.9)!important;background:radial-gradient(circle at 50% 38%,#244f77,#071426 75%)!important;box-shadow:0 10px 30px rgba(0,0,0,.5),0 0 0 5px rgba(109,216,255,.08)!important}
+.pip-fab:before{display:none!important}
+.pip-fab .pip-sprite{width:68px!important;height:68px!important;margin:-4px!important;filter:drop-shadow(0 6px 5px rgba(0,0,0,.46))}
+.pip-chat{width:410px!important;max-height:min(620px,calc(100vh - 94px))!important;border-radius:18px!important;border-color:rgba(245,196,94,.58)!important;background:linear-gradient(180deg,#112b49,#091b31)!important;box-shadow:0 25px 70px rgba(0,0,0,.6)!important}
+.pip-head{min-height:76px;background:linear-gradient(105deg,rgba(28,78,119,.9),rgba(9,27,49,.95))!important;padding:10px 13px!important}
+.pip-avatar{width:60px!important;height:60px!important;flex-basis:60px!important;border:0!important;border-radius:16px!important;background:transparent!important;box-shadow:none!important;overflow:visible}
+.pip-avatar .pip-sprite{width:70px!important;height:70px!important;transform:translate(-5px,-5px);filter:drop-shadow(0 5px 4px rgba(0,0,0,.4))}
+.pip-bubble.bot{background:#173c61!important;border:1px solid rgba(109,216,255,.2)}
+.pip-bubble.user{background:#2c6f96!important;color:#fff!important}
+.pip-sugs{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;gap:7px!important;padding:8px 10px!important;scrollbar-width:thin}
+.pip-sugs button{flex:0 0 auto;min-height:38px!important;white-space:nowrap!important;border-radius:9px!important;background:#102b4a!important}
+.pip-capability{max-height:0!important;overflow:hidden!important;padding:0 11px!important;border:0!important;opacity:0;transition:max-height .25s ease,padding .25s ease,opacity .25s ease}
+.pip-capability.visible{max-height:70px!important;padding:7px 11px!important;border-bottom:1px solid var(--line)!important;opacity:1}
+html.pip-only .pip-chat{max-width:920px!important;border:1px solid rgba(245,196,94,.45)!important;border-radius:18px!important;margin:10px auto!important}
+html.pip-only .pip-sugs{grid-template-columns:none!important;display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important}
+
+/* Ruta del héroe ilustrada */
+.hero-journey{max-width:1040px;border-color:rgba(245,196,94,.48);border-radius:18px;background:radial-gradient(circle at 50% 0,rgba(109,216,255,.12),transparent 48%),linear-gradient(125deg,#071b33,#12385c);box-shadow:0 15px 38px rgba(0,0,0,.28)}
+.journey-scene{height:126px;border-bottom-color:#9d7b48;background:linear-gradient(180deg,rgba(109,216,255,.03),rgba(46,99,137,.17) 63%,rgba(245,196,94,.12))}
+.journey-actor{width:104px;height:104px;margin-left:-52px;bottom:2px;filter:drop-shadow(0 8px 7px rgba(0,0,0,.48))}
+.journey-sprite{image-rendering:auto!important}
+
+/* Manual, guía y recursos: misma identidad visual. */
+.manual-page,.guide-page,.resource-page{background:#071426!important;background-image:radial-gradient(circle at 10% 5%,rgba(109,216,255,.09),transparent 26%),radial-gradient(circle at 88% 2%,rgba(245,196,94,.09),transparent 24%)!important}
+.manual-page header,.guide-page .topbar{background:linear-gradient(135deg,#071426,#12385c)!important;border-bottom-color:#f5c45e!important}
+.manual-page .section,.guide-page .panel,.resource-page .panel{background:linear-gradient(145deg,rgba(16,39,68,.98),rgba(9,28,50,.98))!important;border-color:#526f90!important;border-radius:18px!important;box-shadow:0 16px 42px rgba(0,0,0,.22)}
+.manual-page .card,.manual-page .term,.manual-page .level{background:#0a2039!important;border-color:#4f6c8b!important;box-shadow:none}
+.manual-page .pip-state-guide{height:auto!important;max-height:none!important;object-fit:contain!important;background:linear-gradient(145deg,#0d2948,#061426)!important;padding:10px}
+.manual-page .evolution-grid img{object-fit:cover!important;object-position:50% 15%!important}
+
+/* Campañas individuales */
+.campaign-landing{min-height:100vh;display:flex!important;align-items:center;justify-content:center;padding:30px 16px!important;background:#071426!important}
+.campaign-landing main{position:relative;width:min(980px,100%)!important;min-height:590px;padding:48px 46% 42px 46px!important;border-radius:26px!important;overflow:hidden;background:linear-gradient(145deg,rgba(18,45,74,.98),rgba(6,20,38,.98))!important;border:1px solid rgba(245,196,94,.45)!important;box-shadow:0 30px 90px rgba(0,0,0,.48)!important}
+.campaign-landing main:after{content:"";position:absolute;right:0;top:0;bottom:0;width:43%;background-position:50% 16%;background-size:cover;background-repeat:no-repeat;mask-image:linear-gradient(90deg,transparent 0,#000 22%);-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 22%)}
+.campaign-landing.calabozos main:after{background-image:url('hero-evolution/hero-mago-legendario.jpg')}
+.campaign-landing.arcana main:after{background-image:url('hero-evolution/hero-arquero-legendario.jpg')}
+.campaign-landing.multiverso main:after{background-image:url('hero-evolution/hero-explorador-legendario.jpg')}
+.campaign-landing main>*{position:relative;z-index:1}
+.campaign-landing .cast{height:128px!important;margin:8px 0;background-size:600% 100%!important;background-position:0 50%!important;background-repeat:no-repeat!important;image-rendering:auto!important}
+.campaign-landing.calabozos .cast{background-image:url('hero-sprites/mago-veterano.png')!important}.campaign-landing.arcana .cast{background-image:url('hero-sprites/arquero-veterano.png')!important}.campaign-landing.multiverso .cast{background-image:url('hero-sprites/explorador-veterano.png')!important}
+
+html[data-theme="light"] body:before{opacity:.35}
+html[data-theme="light"] .landing-page .landing-hero,html[data-theme="light"] .game-page #viewBrief,html[data-theme="light"] .manual-page .section,html[data-theme="light"] .guide-page .panel{background:#fffaf0!important}
+html[data-contrast="high"] .landing-party,html[data-contrast="high"] .briefing-party{filter:none}
+
+@media(max-width:900px){
+  .game-page #viewBrief{padding-right:22px;min-height:0}.game-page #viewBrief:after{display:none}
+  .briefing-party{max-width:none}.landing-party{height:250px}
+  .campaign-landing main{padding:34px!important;min-height:0}.campaign-landing main:after{opacity:.18;width:65%}
+}
+@media(max-width:760px){
+  .landing-page .landing-hero{padding:24px 14px 0}.landing-party{margin:16px -14px 0;height:190px}
+  .landing-page .campaign-card{min-height:305px;padding-top:160px!important}.landing-page .campaign-card:before{height:150px!important}
+  .briefing-party{height:92px}.briefing-party .party-hero{height:92px}
+  .inventario{width:auto!important}.inventario .pj-row{grid-template-columns:112px minmax(0,1fr)}.inventario .pj-av{width:112px!important;height:122px!important}.inventario .hero-sprite-frame{width:122px!important;height:122px!important}
+  .pip-chat,html.embed-mode .pip-chat{width:auto!important;max-height:none!important}
+  .journey-scene{height:106px}.journey-actor{width:82px;height:82px;margin-left:-41px}
+}
+@media(max-width:480px){
+  .landing-party{height:150px;background-size:auto 100%}
+  .briefing-party{height:78px}.briefing-party .party-hero{height:78px}
+  .game-page #viewBrief{padding:16px 13px}
+  .inventario .pj-row{grid-template-columns:94px minmax(0,1fr)}.inventario .pj-av{width:94px!important;height:108px!important}.inventario .hero-sprite-frame{width:108px!important;height:108px!important}.inventario .pj-row:after{left:105px!important}
+  .campaign-landing main{padding:28px 22px!important}.campaign-landing main:after{display:none}.campaign-landing h1{font-size:38px!important}
+}
+@media(prefers-reduced-motion:reduce){.landing-page .campaign-card,.btn,.iconbtn,.nav a{transition:none!important}}
