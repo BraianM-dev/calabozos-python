@@ -31,13 +31,13 @@
   }
   root.CalabozosJourney={update:update};
 })(window);
-/* Load campaign metadata/PDF layer while the document parser is still in <head>.
-   The document.write branch is intentional for legacy-browser ordering. */
+/* Runtime visual/PDF: carga bloqueante durante el parseo normal y se omite
+   limpiamente en DOM simulados usados por los tests. */
 (function(){
   if(typeof document==='undefined')return;
-  if(document.readyState==='loading'){
+  if(document.readyState==='loading'&&typeof document.write==='function'){
     document.write('<script src="assets/campaign-runtime.js"><\/script>');
-  }else{
+  }else if(document.head&&typeof document.createElement==='function'){
     var s=document.createElement('script');s.src='assets/campaign-runtime.js';s.async=false;document.head.appendChild(s);
   }
 })();
