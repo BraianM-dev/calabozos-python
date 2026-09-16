@@ -11,8 +11,6 @@
     for(i=0;i<total;i++){if(data.completed[missions[i].id])done++;else if(!next)next=missions[i];}
     var key=data.name+'|'+data.clase+'|'+data.scope,percent=total?done/total*100:0,actorPercent=2+(percent*.96/100);
     var actor=document.getElementById('journeyActor'),sprite=document.getElementById('journeySprite'),steps=document.getElementById('journeySteps');
-    /* Varias partes de la interfaz pueden refrescarse en el mismo instante. No
-       reiniciar el estado evita cortar la caminata recién activada. */
     if(previous&&previous.key===key&&previous.done===done&&previous.sprite===data.sprite)return;
     var animate=previous&&previous.key===key&&done>previous.done&&!reduced();
     clearTimeout(timer);actor.className='journey-actor'+(animate?' advancing':'');
@@ -33,3 +31,13 @@
   }
   root.CalabozosJourney={update:update};
 })(window);
+/* Load campaign metadata/PDF layer while the document parser is still in <head>.
+   The document.write branch is intentional for legacy-browser ordering. */
+(function(){
+  if(typeof document==='undefined')return;
+  if(document.readyState==='loading'){
+    document.write('<script src="assets/campaign-runtime.js"><\/script>');
+  }else{
+    var s=document.createElement('script');s.src='assets/campaign-runtime.js';s.async=false;document.head.appendChild(s);
+  }
+})();
