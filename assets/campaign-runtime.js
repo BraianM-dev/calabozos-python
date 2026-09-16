@@ -66,7 +66,7 @@ function decorate(doc,t){
   }
 }
 function themedExportPDF(){
-  if(typeof root.FichaPDF==='undefined'){if(root.exportPDFLegacy)return root.exportPDFLegacy();alert('No se encontró el motor PDF.');return;}
+  if(typeof root.FichaPDF==='undefined'){if(root.exportPDFLegacy)return root.exportPDFLegacy();if(root.alert)root.alert('No se encontró el motor PDF.');return;}
   var t=theme(),s=root.state||{},name=s.agent||'Estudiante',clase=s.clase||'Sin clase',done=completedCount(),total=missionTotal(),xp=val('xpTotal',0),mx=val('maxXP',0),dom=val('dominio',total?Math.round(done/total*100):0),lvl=val('heroLevel',1),doc=new root.FichaPDF();
   doc.setProperties({title:t.pdfTitle+' - '+t.label,author:'Braian Mosqueira',subject:'Ficha de progreso educativo de Python',keywords:'Python, educación, DUA, progreso, '+t.label,creator:'Aventuras & Python'});
   decorate(doc,t);
@@ -91,7 +91,13 @@ function themedExportPDF(){
 function install(){
   if(typeof root.exportPDF==='function'&&!root.exportPDFLegacy)root.exportPDFLegacy=root.exportPDF;
   root.exportPDF=themedExportPDF;
+  var btn=document.getElementById&&document.getElementById('btnPDF');
+  if(btn&&!btn.getAttribute('data-campaign-pdf-bound')){
+    btn.setAttribute('data-campaign-pdf-bound','true');
+    btn.addEventListener('click',function(ev){if(ev){ev.preventDefault();ev.stopImmediatePropagation();}themedExportPDF();},true);
+  }
   document.documentElement.setAttribute('data-campaign-visual','v1.8.2');
 }
+root.CampaignPDF={export:themedExportPDF,install:install,theme:theme,campaignId:campaignId};
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install);else install();
 })(window);
