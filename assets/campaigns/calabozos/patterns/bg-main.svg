@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" shape-rendering="crispEdges">
+<!-- Original CC BY 4.0 pattern -->
+<g opacity=".16" fill="none" stroke="#f4c35a" stroke-width="2">
+<path d="M0 31h128M0 63h128M0 95h128M31 0v31M95 0v31M15 31v32M79 31v32M47 63v32M111 63v32M31 95v33M95 95v33"/>
+<rect x="10" y="11" width="8" height="8"/><rect x="106" y="43" width="8" height="8"/><rect x="53" y="75" width="8" height="8"/>
+<path d="M73 12l8 8-8 8-8-8zM19 72l8 8-8 8-8-8zM101 102l8 8-8 8-8-8z"/>
+</g>
+<g opacity=".12" fill="#ff8a3d"><rect x="42" y="15" width="3" height="10"/><rect x="39" y="18" width="9" height="4"/><rect x="83" y="84" width="3" height="10"/><rect x="80" y="87" width="9" height="4"/></g>
+</svg>
