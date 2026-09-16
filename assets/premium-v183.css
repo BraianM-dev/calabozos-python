@@ -118,6 +118,7 @@ html[data-contrast="high"] .landing-party,html[data-contrast="high"] .briefing-p
   .briefing-party{max-width:none}.landing-party{height:250px}
   .campaign-landing main{padding:34px!important;min-height:0}.campaign-landing main:after{opacity:.18;width:65%}
 }
+@media(min-width:761px){body:not(.game-page) #cpA11yFab{top:72px!important;bottom:auto!important}}
 @media(max-width:760px){
   .landing-page .landing-hero{padding:24px 14px 0}.landing-party{margin:16px -14px 0;height:190px}
   .landing-page .campaign-card{min-height:305px;padding-top:160px!important}.landing-page .campaign-card:before{height:150px!important}
