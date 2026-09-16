@@ -17,6 +17,7 @@ const runtime=read('assets/campaign-runtime.js');new vm.Script(runtime,{filename
 assert(runtime.includes("Academia Arcana & Python"),'legacy jujutsu route is presented as Academia Arcana');
 assert(runtime.includes("FICHA DE AVENTURA")&&runtime.includes("FICHA ARCANA")&&runtime.includes("FICHA MULTIVERSAL"),'three PDF identities');
 assert(runtime.includes('root.exportPDF=themedExportPDF'),'themed PDF replaces generic export');
+assert(runtime.includes('stopImmediatePropagation'),'PDF button blocks legacy handler');
 assert(runtime.includes('drawPip')&&runtime.includes('drawHero'),'PDF draws original campaign character art');
 const journey=read('assets/journey.js');assert(journey.includes('assets/campaign-runtime.js'),'runtime loads before game initialization');
 const arcana=read('jujutsu/index.html');assert(arcana.includes('Academia Arcana & Python'),'Arcana public landing renamed');assert(!arcana.includes('<h1>Jujutsu & Python</h1>'),'old franchise title removed from public campaign heading');
@@ -25,12 +26,15 @@ const notices=read('THIRD-PARTY-NOTICES.md');assert(notices.includes('personajes
 const sw=read('sw.js');assert(sw.includes('calabozos-python-v1-8-2'),'cache version bumped');assert(sw.includes('assets/campaign-runtime.js'),'runtime cached offline');assets.forEach(p=>assert(sw.includes('./'+p),p+' cached offline'));
 
 /* Real PDF generation for every campaign using the same vector engine shipped to browsers. */
-let currentCampaign='calabozos',captured='';
+let currentCampaign='calabozos',captured='',pdfClick=null;
+const pdfButton={attrs:{},getAttribute(n){return this.attrs[n]||null},setAttribute(n,v){this.attrs[n]=v},addEventListener(type,fn,capture){if(type==='click'){pdfClick=fn;this.capture=!!capture;}}};
 const docEl={getAttribute:n=>n==='data-campaign'?currentCampaign:null,setAttribute(){}};
-const ctx={console,Blob,atob,URLSearchParams,location:{search:'',pathname:'/juego.html'},navigator:{},document:{readyState:'complete',documentElement:docEl,addEventListener(){},createElement(){return{}},body:{appendChild(){},removeChild(){}}},setTimeout(){},clearTimeout(){}};
+const ctx={console,Blob,atob,URLSearchParams,location:{search:'',pathname:'/juego.html'},navigator:{},document:{readyState:'complete',documentElement:docEl,getElementById:id=>id==='btnPDF'?pdfButton:null,addEventListener(){},createElement(){return{}},body:{appendChild(){},removeChild(){}}},setTimeout(){},clearTimeout(){}};
 ctx.window=ctx;ctx.globalThis=ctx;ctx.CP_CAMPAIGNS={calabozos:{},jujutsu:{},multiverso:{}};
 ctx.state={agent:'Ada Pixel',clase:'Mago',completed:{'a':true},inventory:[]};ctx.TOPICS=[{id:'print',title:'PRINT',challenges:[{id:'a'}]},{id:'input',title:'INPUT',challenges:[{id:'b'}]}];ctx.getAll=()=>[{id:'a'},{id:'b'}];ctx.xpTotal=()=>20;ctx.maxXP=()=>40;ctx.dominio=()=>50;ctx.heroLevel=()=>2;
 vm.createContext(ctx);vm.runInContext(read('assets/ficha-pdf.js'),ctx);ctx.FichaPDF.prototype.save=function(){captured=this.output();};vm.runInContext(runtime,ctx);
+assert(pdfClick&&pdfButton.capture,'PDF button is rebound in capture phase');
 for(const [id,label] of [['calabozos','FICHA DE AVENTURA'],['jujutsu','FICHA ARCANA'],['multiverso','FICHA MULTIVERSAL']]){currentCampaign=id;captured='';ctx.exportPDF();assert(captured.startsWith('%PDF-1.4'),id+' produces a PDF');assert(captured.includes(label),id+' PDF contains campaign title');assert(captured.includes('/Author (Braian Mosqueira)'),id+' PDF metadata contains author');assert(/\/Count 1\b/.test(captured),id+' PDF stays on one A4 page');}
+currentCampaign='jujutsu';captured='';let prevented=false,stopped=false;pdfClick({preventDefault(){prevented=true},stopImmediatePropagation(){stopped=true}});assert(prevented&&stopped,'themed PDF click blocks legacy listener');assert(captured.includes('FICHA ARCANA'),'real PDF button click exports active campaign sheet');
 
-console.log('✓ v1.8.2: pixel-art, identidad pública, offline y tres PDF temáticos reales verificados');
+console.log('✓ v1.8.2: pixel-art, identidad pública, offline, botón PDF y tres PDF temáticos reales verificados');
