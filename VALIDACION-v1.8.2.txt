@@ -21,6 +21,7 @@ PRIORIDAD 3 — PDF TEMÁTICO
 - Multiverso genera FICHA MULTIVERSAL.
 - Cada PDF cambia paleta, marco, terminología, Pip y decoración según campaña.
 - Los tres PDF fueron generados realmente durante las pruebas y verificados como PDF 1.4 A4 de una sola página.
+- El botón Ficha PDF fue probado simulando un clic real: intercepta y bloquea el exportador clásico y utiliza la campaña activa.
 - Autoría en metadata: Braian Mosqueira.
 
 VALIDACIÓN AUTOMÁTICA
@@ -30,7 +31,8 @@ VALIDACIÓN AUTOMÁTICA
 - Accesibilidad / responsive / iframe / persistencia / offline: PASS.
 - Tests específicos de assets v1.8.2: PASS.
 - Tres PDF temáticos reales: PASS.
+- Intercepción real del botón PDF por campaña: PASS.
 - Smoke test HTTP de portada, juego, tres campañas, loaders, runtime y Pip SVG: PASS.
-- GitHub Actions run validado: 35093940883 — SUCCESS.
+- GitHub Actions run final validado: 35094278790 — SUCCESS.
 
-Resultado: versión candidata apta para publicación en main.
+Resultado: versión v1.8.2 validada y apta para publicación en main.
