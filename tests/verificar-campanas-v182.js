@@ -20,6 +20,7 @@ assert(runtime.includes('root.exportPDF=themedExportPDF'),'themed PDF replaces g
 assert(runtime.includes('drawPip')&&runtime.includes('drawHero'),'PDF draws original campaign character art');
 const journey=read('assets/journey.js');assert(journey.includes('assets/campaign-runtime.js'),'runtime loads before game initialization');
 const arcana=read('jujutsu/index.html');assert(arcana.includes('Academia Arcana & Python'),'Arcana public landing renamed');assert(!arcana.includes('<h1>Jujutsu & Python</h1>'),'old franchise title removed from public campaign heading');
+const index=read('index.html');assert(index.includes('Academia Arcana &amp; Python'),'root landing exposes Arcana identity');assert(!index.includes('Entrar a Jujutsu'),'root landing does not market legacy route name');assert(!/epilepsia/i.test(index),'accessibility wording uses reducir movimiento without medical label');
 const notices=read('THIRD-PARTY-NOTICES.md');assert(notices.includes('personajes, patterns, Pip, iconografía y composición visual originales'),'original visual licensing notice');assert(notices.includes('Rick and Morty'),'multiverse third-party boundary documented');
 const sw=read('sw.js');assert(sw.includes('calabozos-python-v1-8-2'),'cache version bumped');assert(sw.includes('assets/campaign-runtime.js'),'runtime cached offline');assets.forEach(p=>assert(sw.includes('./'+p),p+' cached offline'));
-console.log('✓ v1.8.2: assets pixel-art, campañas y PDF temático verificados');
+console.log('✓ v1.8.2: assets pixel-art, identidad pública, campañas y PDF temático verificados');
