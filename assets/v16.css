@@ -1,0 +1,64 @@
+/* Calabozos & Python 1.7 - interfaz definitiva, dominio y animaciones por estado. */
+.topbar{gap:10px}
+.topbtns{align-items:center}
+.topbar #btnReset{display:none!important}
+#a11yPanel .danger-zone{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+.settings-theme{width:100%;justify-content:center;margin:5px 0 2px}
+
+.inventario{width:330px;max-height:76vh;overflow:auto}
+.inventario.visible{animation:none}
+.inventario .pj-row{overflow:visible}
+.inventario .pj-av:before{animation:hero-aura-idle 5s ease-in-out infinite}
+.inventario .hero-sprite-frame{animation:hero-idle 4.8s steps(1,end) infinite;will-change:background-position,filter,transform}
+.inventario .pj-av:hover .hero-sprite-frame,.inventario .pj-av:focus .hero-sprite-frame{animation:none}
+.inventario .pj-av.hero-thinking .hero-sprite-frame{animation:hero-thinking 1.8s steps(1,end) infinite}
+.inventario .pj-av.hero-executing .hero-sprite-frame{animation:hero-executing 1.05s steps(1,end) 1}
+.inventario .pj-av.hero-success .hero-sprite-frame{animation:hero-success 1.35s steps(1,end) 1}
+.inventario .pj-av.hero-error .hero-sprite-frame{animation:hero-error .85s steps(1,end) 1;filter:saturate(.75) brightness(.94)}
+.inventario .pj-av.hero-interact .hero-sprite-frame{animation:hero-interact 1.1s steps(1,end) 1}
+.inventario .pj-av.hero-evolution .hero-sprite-frame{animation:hero-evolution 1.8s steps(1,end) 1}
+.inventario .pj-av.hero-evolution{animation:hero-frame-evolution 1.8s ease 1}
+
+@keyframes hero-idle{0%,70%,100%{background-position:0 50%;transform:scale(1)}76%,82%{background-position:20% 50%;transform:scale(1.01)}88%,94%{background-position:0 50%;transform:scale(1)}}
+@keyframes hero-thinking{0%,45%{background-position:20% 50%}50%,95%{background-position:40% 50%}100%{background-position:20% 50%}}
+@keyframes hero-executing{0%{background-position:20% 50%}24%{background-position:40% 50%}48%{background-position:60% 50%}72%{background-position:80% 50%}100%{background-position:100% 50%}}
+@keyframes hero-success{0%{background-position:0 50%;transform:scale(1)}22%{background-position:60% 50%;transform:scale(1.08)}48%{background-position:80% 50%;transform:scale(1.13)}72%{background-position:100% 50%;transform:scale(1.08)}100%{background-position:0 50%;transform:scale(1)}}
+@keyframes hero-error{0%,100%{background-position:0 50%;transform:translateX(0)}25%{background-position:20% 50%;transform:translateX(-2px)}55%{background-position:40% 50%;transform:translateX(2px)}80%{background-position:20% 50%;transform:translateX(0)}}
+@keyframes hero-interact{0%{background-position:0 50%}32%{background-position:40% 50%}65%{background-position:60% 50%}100%{background-position:0 50%}}
+@keyframes hero-evolution{0%{background-position:0 50%;opacity:.25;transform:scale(.72);filter:brightness(2.2)}22%{background-position:40% 50%}48%{background-position:60% 50%;opacity:.8;transform:scale(1.18)}72%{background-position:100% 50%;filter:brightness(1.7) saturate(1.5)}100%{background-position:0 50%;opacity:1;transform:scale(1);filter:none}}
+@keyframes hero-frame-evolution{0%,100%{box-shadow:0 0 0 3px rgba(245,185,66,.25),0 0 18px rgba(245,185,66,.3)}45%{box-shadow:0 0 0 10px rgba(103,232,249,.3),0 0 46px rgba(245,185,66,.9)}}
+@keyframes hero-aura-idle{0%,100%{opacity:.18;transform:scale(.92)}50%{opacity:.45;transform:scale(1.03)}}
+
+.micro-path{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;margin:9px 0 5px}
+.micro-rune{height:7px;border-radius:8px;background:#26344a;border:1px solid #52647c}
+.micro-rune.on{background:linear-gradient(90deg,var(--blue),var(--gold));border-color:#fff1ad;box-shadow:0 0 6px rgba(245,185,66,.45)}
+.micro-label{display:block;color:var(--dim);font-size:calc(10px*var(--font-scale));line-height:1.35}
+.mastery-summary{display:flex;justify-content:space-between;gap:8px;padding:7px 0;color:var(--dim);font-size:calc(11px*var(--font-scale));border-top:1px solid var(--line)}
+.runes{color:var(--gold);letter-spacing:1px;white-space:nowrap}
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+
+.mission-type{display:inline-flex;align-items:center;margin-left:7px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--gold);font-size:calc(11px*var(--font-scale));font-weight:700}
+.choice-option:focus,.block-move:focus{outline:3px solid var(--blue);outline-offset:2px}
+.primary-action-row{padding:9px;border:1px solid rgba(103,232,249,.28);background:rgba(7,27,51,.38);border-radius:10px}
+.primary-action-row .btn-primary{min-width:180px;justify-content:center}
+
+.pip-capability{display:none;padding:8px 11px;background:rgba(103,232,249,.08);border-bottom:1px solid var(--line);color:var(--dim);font-size:calc(12px*var(--font-scale));line-height:1.4}
+.pip-capability.visible{display:block;animation:pip-notice-in .22s ease-out}
+.pip-capability strong{color:var(--blue)}
+.pip-sugs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;padding:8px 10px;max-height:none;overflow:visible}
+.pip-sugs button{min-height:42px;padding:7px 8px;border:1px solid var(--line);border-radius:8px;line-height:1.25;white-space:normal;text-align:center}
+html.pip-only .pip-sugs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:9px 16px}
+@keyframes pip-notice-in{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+
+.offline-status{display:none;padding:6px 10px;background:#5b2b00;color:#fff4d6;text-align:center;font-size:14px}
+.offline-status.show{display:block}
+
+@media(max-width:720px){
+  .topbar{align-items:flex-start}.stats{order:3;width:100%;margin-left:0;justify-content:space-between}.topbtns{margin-left:auto}
+  .topbtns .iconbtn{padding:8px 9px}.inventario{left:8px;bottom:8px;max-height:78vh}
+  .pip-chat{right:7px;bottom:70px;max-width:calc(100vw - 14px)}
+}
+@media(max-width:480px){.topbtns .label-wide{display:none}.inventario{width:calc(100vw - 16px)!important;max-width:none!important}}
+
+html[data-motion="on"] .inventario .hero-sprite-frame{background-position:0 50%!important}
+html[data-motion="on"] .micro-rune{box-shadow:none!important}

@@ -1,0 +1,8 @@
+Calabozos & Python / Aventuras & Python v1.8.1
+- Arquitectura multitema: calabozos, jujutsu, multiverso.
+- Un único motor canónico: juego.html + assets/.
+- Entradas por carpeta con cargador liviano.
+- Progreso compartido mediante las claves existentes de localStorage.
+- ?tema= y ?nivel= se conservan al entrar desde cada carpeta.
+- Service Worker actualizado a v1.8.1 e incluye las tres rutas.
+- Multiverso & Python usa identidad original y no incorpora recursos oficiales de franquicias de terceros.

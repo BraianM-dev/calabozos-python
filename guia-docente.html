@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Guía docente · Calabozos &amp; Python</title>
+  <meta name="description" content="Guía docente del recurso Calabozos & Python. Orientaciones de uso, iframes, accesibilidad y DUA. 9º EBI / 1º EMS.">
+  <script>(function(){var legacy=!(window.CSS && window.CSS.supports && window.CSS.supports("color","var(--test)"));if(legacy){var link=document.createElement("link");link.rel="stylesheet";link.href="assets/compat-guia-docente.css";document.head.appendChild(link);}})();</script>
+<style>
+    :root {
+      --bg: #0f172a;
+      --bg2: #111c31;
+      --panel: #1e293b;
+      --text: #f8fafc;
+      --dim: #d5dbe5;
+      --gold: #fbbf24;
+      --gold2: #d97706;
+      --accent: #67e8f9;
+      --ok: #66bb6a;
+      --line: #64748b;
+      --serif: 'Segoe UI', Arial, Verdana, sans-serif;
+      --display: Georgia, 'Times New Roman', serif;
+      --mono: Consolas, 'Liberation Mono', 'Courier New', monospace;
+      --radius: 12px;
+    }
+    html[data-theme="light"] {
+      --bg: #f5e6c8;
+      --bg2: #e8d5b0;
+      --panel: #fff8e7;
+      --text: #2c1e0f;
+      --dim: #6b5435;
+      --gold: #1a56db;
+      --gold2: #1e40af;
+      --accent: #1d4ed8;
+      --ok: #15803d;
+      --line: #c2a878;
+    }
+    html[data-contrast="high"] {
+      --bg: #000; --bg2: #111; --panel: #1a1a1a;
+      --text: #fff; --dim: #ddd; --gold: #ff0; --gold2: #ff0; --accent: #0af; --line: #fff;
+    }
+    html[data-dyslexia="on"] {
+      --serif: 'Comic Sans MS', Verdana, sans-serif;
+      --display: 'Comic Sans MS', Verdana, sans-serif;
+    }
+    html[data-reduce-motion="on"] *,
+    html[data-reduce-motion="on"] *::before,
+    html[data-reduce-motion="on"] *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #0f172a;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" opacity="0.15"><g fill="none" stroke="%23c9a84c" stroke-width="1.5"><polygon points="22 12 25 18.5 32 19.5 27 24 28 31 22 27.5 16 31 17 24 12 19.5 19 18.5"/><polygon points="73 22 63 34 72 34 71 42 81 30 72 30 73 22"/><polygon points="42 62 52 68.5 52 75.5 42 82 32 75.5 32 68.5"/><circle cx="85" cy="80" r="1.5" fill="%23c9a84c"/><circle cx="15" cy="75" r="1" fill="%23c9a84c"/></g></svg>');
+      background-repeat: repeat;
+      background-size: 100px 100px;
+      color: var(--text);
+      font-family: var(--serif);
+      font-size: 18px;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+    .topbar {
+      position: sticky; top: 0; z-index: 50;
+      display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
+      padding: 12px 20px;
+      background: #111827;
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(8px);
+    }
+    html[data-theme="light"] .topbar { background: rgba(245,230,200,0.96); }
+    .brand {
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: var(--gold);
+    }
+    .brand small {
+      display: block;
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: 0.75rem;
+      color: var(--dim);
+      font-style: normal;
+    }
+    .topbtns { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+    .iconbtn {
+      background: var(--bg2);
+      border: 1px solid var(--line);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 7px 12px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      font-family: var(--serif);
+      text-decoration: none;
+    }
+    .iconbtn:hover { border-color: var(--gold); color: var(--gold); }
+    main { max-width: 860px; margin: 0 auto; padding: 32px 18px 80px; }
+    h1 {
+      font-family: var(--display);
+      font-size:1.9rem;
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+    .subtitle { color: var(--dim); font-style: italic; margin-bottom: 20px; }
+    .tag {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: 99px;
+      padding: 3px 12px;
+      margin-bottom: 14px;
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .panel h2 {
+      font-family: var(--display);
+      font-size: 1.2rem;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    .panel h3 {
+      font-family: var(--display);
+      font-size: 1.05rem;
+      color: var(--accent);
+      margin: 18px 0 8px;
+    }
+    p { margin-bottom: 12px; }
+    ul, ol { padding-left: 1.4em; margin-bottom: 12px; }
+    li { margin-bottom: 6px; }
+    blockquote {
+      border-left: 3px solid var(--gold);
+      padding: 8px 16px;
+      margin: 14px 0;
+      color: var(--dim);
+      font-style: italic;
+      background: rgba(212,160,23,0.08);
+      border-radius: 0 8px 8px 0;
+    }
+    code, pre {
+      font-family: var(--mono);
+      font-size: 0.85em;
+    }
+    code {
+      background: var(--bg2);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    pre {
+      background: var(--bg2);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px 16px;
+      overflow-x: auto;
+      margin: 12px 0 16px;
+      line-height: 1.5;
+      color: var(--accent);
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 11px 20px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      color: #0f172a;
+    }
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid var(--line);
+      color: var(--text);
+    }
+    .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+    .btnrow { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0 16px;
+      font-size: 0.95rem;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 8px 12px;
+      text-align: left;
+    }
+    th {
+      background: var(--bg2);
+      color: var(--gold);
+      font-family: var(--display);
+      font-weight: 600;
+    }
+    .embed-demo {
+      border: 1px dashed var(--line);
+      border-radius: 10px;
+      padding: 12px;
+      margin: 12px 0;
+      background: rgba(56,189,248,0.04);
+    }
+    .embed-demo iframe {
+      width: 100%;
+      height: 420px;
+      border: none;
+      border-radius: 8px;
+      background: var(--bg2);
+    }
+    footer {
+      text-align: center;
+      padding: 24px;
+      color: var(--dim);
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      border-top: 1px solid var(--line);
+    }
+    footer a { color: var(--gold); text-decoration: none; }
+    .a11y-panel {
+      position: fixed; top: 60px; right: 12px; z-index: 60;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 14px;
+      width:280px;
+      max-width:90vw;
+      width: min(280px, 90vw);
+      display: none;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    }
+    .a11y-panel.open { display: block; }
+    .a11y-panel h3 { color: var(--gold); font-family: var(--display); margin-bottom: 10px; font-size: 0.95rem; }
+    .a11y-group { margin-bottom: 10px; }
+    .a11y-group label {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--dim);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      font-family: var(--mono);
+    }
+    .a11y-group button {
+      background: var(--bg2);
+      border: 1px solid var(--line);
+      color: var(--text);
+      border-radius: 6px;
+      padding: 4px 9px;
+      margin: 2px;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+    .a11y-group button[aria-pressed="true"] { border-color: var(--gold); color: var(--gold); }
+    .toc a { color: var(--gold); text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+  </style>
+  <link rel="stylesheet" href="assets/responsive.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">CALABOZOS &amp; PYTHON<small>Guía docente</small></div>
+  <div class="topbtns">
+    <button class="iconbtn" id="btnTheme" title="Cambiar tema">◐ Tema</button>
+    <button class="iconbtn" id="btnA11y" title="Accesibilidad">♿ Accesibilidad</button>
+    <a class="iconbtn" href="manual-jugador.html">📖 Manual del jugador</a>
+    <a class="iconbtn" href="index.html">🏠 Inicio</a>
+    <a class="iconbtn" href="juego.html">⚔ Juego</a>
+  </div>
+</div>
+
+<div class="a11y-panel" id="a11yPanel" role="dialog" aria-label="Opciones de accesibilidad">
+  <h3>Accesibilidad</h3>
+  <div class="a11y-group">
+    <label>Tamaño de letra</label>
+    <button data-font="0.9">Pequeño</button>
+    <button data-font="1" aria-pressed="true">Normal</button>
+    <button data-font="1.15">Grande</button>
+    <button data-font="1.3">Muy grande</button>
+  </div>
+  <div class="a11y-group">
+    <label>Contraste</label>
+    <button data-contrast="normal" aria-pressed="true">Normal</button>
+    <button data-contrast="high">Alto</button>
+  </div>
+  <div class="a11y-group">
+    <label>Modo dislexia</label>
+    <button data-dyslexia="off" aria-pressed="true">Off</button>
+    <button data-dyslexia="on">On</button>
+  </div>
+  <div class="a11y-group">
+    <label>Reducir movimiento</label>
+    <button data-motion="off" aria-pressed="true">Animaciones on</button>
+    <button data-motion="on">Animaciones off</button>
+  </div>
+</div>
+
+<main>
+  <span class="tag">✦ Para docentes · 9º EBI / 1º EMS</span>
+  <h1>Guía docente</h1>
+  <p class="subtitle">Orientaciones de uso, iframes, accesibilidad y sugerencias de aula</p>
+
+  <div class="panel toc">
+    <h2>Contenido</h2>
+    <ol>
+      <li><a href="#para-que">Para qué sirve este recurso</a></li>
+      <li><a href="#publico">Público y tiempos sugeridos</a></li>
+      <li><a href="#como-usar">Cómo usarlo en el aula</a></li>
+      <li><a href="#iframes">Embeber con iframes</a></li>
+      <li><a href="#accesibilidad">Accesibilidad y DUA</a></li>
+      <li><a href="#evaluacion">Evaluación y evidencia</a></li>
+      <li><a href="#pip">Rol de Pip el Ayudante</a></li>
+      <li><a href="#problemas">Problemas frecuentes</a></li>
+    </ol>
+  </div>
+
+  <div class="panel" id="para-que">
+    <h2>1. Para qué sirve este recurso</h2>
+    <p>
+      <strong>Calabozos &amp; Python</strong> es una campaña RPG educativa para practicar los fundamentos de Python
+      de forma progresiva: <code>print</code>, variables (<code>int</code>, <code>float</code>, booleanos),
+      condicionales, bucles, listas, diccionarios, funciones, <code>random</code> y <code>try</code>/<code>except</code>.
+    </p>
+    <p>
+      Los estudiantes avanzan por un mapa de calabozos, resuelven misiones narrativas y reciben ayuda de
+      <strong>Pip el Ayudante</strong>, un NPC que explica conceptos y analiza código incompleto
+      <em>sin regalar la solución completa</em>.
+    </p>
+    <ul>
+      <li>Validación real del código (intérprete Python en el navegador).</li>
+      <li>Pistas progresivas y checklist de diagnóstico.</li>
+      <li>Interacciones variadas: programar, completar, depurar, ordenar, predecir, explicar, comparar soluciones, elegir casos de prueba y completar seguimientos.</li>
+      <li>Los bloques se pueden arrastrar o mover con botones y teclado.</li>
+      <li>Persistencia local, sello rápido y exportación/importación completa de la partida.</li>
+      <li>Exportación de hoja de avance en PDF A4 de una sola página.</li>
+      <li>Se publica como sitio estático en GitHub Pages; Skulpt y CodeMirror se incluyen localmente y no requieren una CDN.</li>
+    </ul>
+  </div>
+
+  <div class="panel" id="publico">
+    <h2>2. Público y tiempos sugeridos</h2>
+    <table>
+      <thead>
+        <tr><th>Nivel</th><th>Uso sugerido</th><th>Tiempo aproximado</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>9.º EBI</strong></td>
+          <td>Recorrido completo guiado (temas 1–6 o 1–8)</td>
+          <td>6–12 horas de clase</td>
+        </tr>
+        <tr>
+          <td><strong>1.º EMS</strong></td>
+          <td>Repaso + misiones bonus + chatbot + dragón</td>
+          <td>4–10 horas</td>
+        </tr>
+        <tr>
+          <td>Talleres / refuerzo</td>
+          <td>Un tema por encuentro (print, variables, if…)</td>
+          <td>1–2 horas por tema</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      No es obligatorio completar todo el mapa. Podés detenerte después de condicionales o listas
+      según el programa de tu curso.
+    </p>
+  </div>
+
+  <div class="panel" id="como-usar">
+    <h2>3. Cómo usarlo en el aula</h2>
+    <h3>Secuencia recomendada</h3>
+    <ol>
+      <li>Presentá el recurso (mapa, Pip, idea de “misiones”).</li>
+      <li>Cada estudiante escribe <strong>nombre y apellido</strong> y elige una clase.</li>
+      <li>Avanzan por el mapa en orden (los temas se desbloquean progresivamente).</li>
+      <li>Si se traban: abren a Pip, preguntan el concepto o mandan un fragmento de código.</li>
+      <li>Al cerrar un tema, anotan el sello o exportan la hoja de avance.</li>
+    </ol>
+    <h3>Roles posibles del docente</h3>
+    <ul>
+      <li><strong>Facilitador</strong>: circulás, mirás checklists, pedís que le pregunten a Pip antes de intervenir.</li>
+      <li><strong>Modelador</strong>: resolvés en vivo un sub-nivel mostrando el razonamiento (sin pegar la solución).</li>
+      <li><strong>Evaluador</strong>: usás la hoja PDF + el sello de progreso como evidencia.</li>
+    </ul>
+    <blockquote>
+      Sugerencia: pedí que, antes de pedir ayuda a vos, le escriban a Pip “qué me falta” o “qué es una variable”.
+      Eso refuerza la autonomía y el lenguaje técnico.
+    </blockquote>
+  </div>
+
+  
+  <div class="panel" id="niveles-folder">
+    <h2>Carpeta <code>niveles/</code></h2>
+    <p>
+      La carpeta <code>niveles/</code> sirve para <strong>páginas opcionales por tema</strong>,
+      pensadas para embeber en un LMS o aula virtual <em>un solo bloque</em> del recurso
+      (por ejemplo solo <code>print</code> o solo <code>input</code>), sin obligar a cargar
+      todo el mapa de una vez.
+    </p>
+    <p>
+      Cada archivo de esa carpeta puede ser una mini página con consignas + un
+      <code>iframe</code> a <code>juego.html</code>. El progreso sigue guardándose en el
+      navegador del estudiante.
+    </p>
+    <p>Ver <code>niveles/README.md</code> y el ejemplo <code>niveles/ejemplo-print.html</code>.</p>
+  </div>
+
+  <div class="panel" id="iframes">
+    <h2>4. Embeber con iframes</h2>
+    <p>
+      Podés integrar el juego en un aula virtual (Moodle, Classroom con HTML, sitio institucional, etc.)
+      sin salir de la plataforma.
+    </p>
+
+    <h3>Una misión concreta</h3>
+    <p>Para proyectar o asignar una misión puntual, usá por ejemplo <code>juego.html?nivel=input-5</code>. Para repetir la introducción, agregá <code>?bienvenida=1</code>.</p>
+
+    <h3>Un solo tema</h3>
+    <p>Usá <code>?tema=print</code>, <code>?tema=input</code>, <code>?tema=variables</code>, etc. El dominio se calcula únicamente sobre las misiones de ese bloque.</p>
+    <pre>&lt;iframe
+  src="juego.html?tema=input"
+  width="100%"
+  height="800"
+  style="border:none; border-radius:12px;"
+  title="Calabozos — input"&gt;
+&lt;/iframe&gt;</pre>
+
+    <h3>Juego completo</h3>
+    <pre>&lt;iframe
+  src="juego.html?tema=print"
+  width="100%"
+  height="800"
+  style="border:none; border-radius:12px;"
+  title="Calabozos y Python"
+  loading="lazy"
+  allowfullscreen&gt;
+&lt;/iframe&gt;</pre>
+
+    <h3>Desde GitHub Pages (ejemplo)</h3>
+    <pre>&lt;iframe
+  src="https://TU-USUARIO.github.io/calabozos-python/juego.html"
+  width="100%"
+  height="900"
+  style="border:none; border-radius:12px;"
+  title="Calabozos y Python"&gt;
+&lt;/iframe&gt;</pre>
+
+    <h3>Solo la página de presentación</h3>
+    <pre>&lt;iframe
+  src="index.html"
+  width="100%"
+  height="700"
+  style="border:none; border-radius:12px;"
+  title="Presentación Calabozos y Python"&gt;
+&lt;/iframe&gt;</pre>
+
+    <h3>Consejos prácticos</h3>
+    <ul>
+      <li>Usá <code>height</code> de al menos 700–900 px para que el editor y el mapa se vean cómodos.</li>
+      <li>En móviles el layout se adapta, pero la experiencia de código es mejor en notebook o PC.</li>
+      <li>El progreso se guarda en el <strong>navegador del estudiante</strong> (localStorage), no en el servidor.</li>
+      <li>Si el LMS bloquea iframes de otros dominios, subí el recurso al mismo dominio o usá la versión local.</li>
+    </ul>
+
+    <div class="embed-demo">
+      <p style="margin-bottom:8px; color:var(--dim); font-size:0.9rem;">Vista previa (si el archivo está disponible en la misma carpeta):</p>
+      <iframe src="juego.html" title="Vista previa del juego" loading="lazy"></iframe>
+    </div>
+  </div>
+
+  <div class="panel" id="accesibilidad">
+    <h2>5. Accesibilidad y DUA</h2>
+    <p>El panel ♿ permite ajustar:</p>
+    <table>
+      <thead>
+        <tr><th>Opción</th><th>Para quién ayuda</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Tamaño de letra</td><td>Baja visión, fatiga visual, proyector</td></tr>
+        <tr><td>Tema claro / oscuro</td><td>Preferencia y condiciones de luz del aula</td></tr>
+        <tr><td>Contraste alto</td><td>Necesidades de contraste elevado</td></tr>
+        <tr><td>Modo dislexia</td><td>Lectura más cómoda (fuente alternativa)</td></tr>
+        <tr><td>Reducir movimiento</td><td>Epilepsia fotosensible, vértigo, distracción</td></tr>
+      </tbody>
+    </table>
+    <p>
+      En términos de <strong>Diseño Universal para el Aprendizaje</strong>:
+    </p>
+    <ul>
+      <li><strong>Representación</strong>: teoría + ejemplos + narrativa RPG + Pip oral/escrito.</li>
+      <li><strong>Acción y expresión</strong>: código libre, completar, ordenar con arrastre o botones, predicciones, checklist, PDF y reintentos.</li>
+      <li><strong>Engagement</strong>: clases de personaje, inventario, misiones, feedback inmediato, ayuda sin spoiler.</li>
+    </ul>
+    <p><strong>Gamificación responsable:</strong> las animaciones y los reconocimientos aparecen por avances verificables. Se evita el premio aleatorio, la racha obligatoria y cualquier mecánica de permanencia compulsiva. El estudiante puede desactivar todo movimiento.</p>
+  </div>
+
+  <div class="panel" id="evaluacion">
+    <h2>6. Evaluación y evidencia</h2>
+    <ul>
+      <li><strong>Hoja de avance PDF</strong>: el estudiante la descarga al final o al cerrar un bloque de temas.</li>
+      <li><strong>Guardado automático</strong>: conserva el progreso y los borradores en este navegador. La ficha PDF contiene el sello para recuperar temas completos con el mismo nombre; no sustituye todos los datos locales.</li>
+      <li><strong>Sello de progreso</strong>: código tipo <code>PY-XXX-XXX-XXX</code> que resume temas completados (útil para recuperación).</li>
+      <li><strong>Observación en clase</strong>: mirar el checklist (qué requisitos fallan) y si usa a Pip de forma autónoma.</li>
+      <li><strong>Dominio</strong>: el juego muestra el porcentaje de misiones completadas. No es una nota académica.</li>
+    </ul>
+    <p>
+      Sugerencia de rúbrica simple: completitud de sub-niveles + calidad de las preguntas a Pip +
+      capacidad de corregir con las pistas (sin copiar soluciones).
+    </p>
+  </div>
+
+  <div class="panel" id="pip">
+    <h2>7. Rol de Pip el Ayudante</h2>
+    <p>Pip puede:</p>
+    <ul>
+      <li>Explicar conceptos: variable, algoritmo, print, input, int, float, condicional, lista, diccionario, función, bucle, indentación, try/except…</li>
+      <li>Analizar fragmentos incompletos (<code>print</code>, <code>def</code>, comillas o paréntesis sin cerrar).</li>
+      <li>Señalar el primer requisito del checklist que falla y dar una pista concreta.</li>
+      <li>Resumir la consigna, proponer el primer paso, explicar el último error y sugerir casos de prueba.</li>
+      <li>Explicar por qué los identificadores deben evitar ñ y tildes en esta consola.</li>
+      <li>Guiar en hasta tres niveles: pregunta socrática, pista enfocada y estructura general con huecos.</li>
+      <li>Explicar una línea concreta, acompañar una traza y revisar nombres, repeticiones y claridad.</li>
+      <li>Producir una devolución estructurada: propósito, criterios cumplidos, primera dificultad y prueba recomendada.</li>
+    </ul>
+    <p>Pip <strong>no</strong> es una IA generativa ni reemplaza la evaluación docente. No entrega una respuesta completa para copiar: sus preguntas, pistas y plantillas buscan que el estudiante explique, pruebe y corrija.</p>
+    <p>El avatar original de profesor-búho funciona como señal visual del acompañamiento. Sus reacciones indican que Pip está explicando o celebrando un aprendizaje; no alteran la evaluación ni entregan premios al azar.</p>
+  </div>
+
+  <div class="panel" id="problemas">
+    <h2>8. Problemas frecuentes</h2>
+    <table>
+      <thead>
+        <tr><th>Situación</th><th>Qué probar</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>No corre el código / no hay salida</td>
+          <td>Comprobar que se haya subido completa la carpeta <code>assets/vendor</code>. Abrir la consola del juego y probar el editor básico.</td>
+        </tr>
+        <tr>
+          <td>Se perdió el progreso</td>
+          <td>Usar el sello de recuperación en la pantalla inicial (mismo nombre y apellido).</td>
+        </tr>
+        <tr>
+          <td>El editor no se ve bien</td>
+          <td>Hay fallback a <code>textarea</code> si CodeMirror no carga.</td>
+        </tr>
+        <tr>
+          <td>La consola falla con ñ o tildes</td>
+          <td>Conservarlas en textos y comentarios, pero escribir identificadores compatibles: <code>dano</code>, <code>numero</code>, <code>pocion</code>.</td>
+        </tr>
+        <tr>
+          <td>Animaciones molestan</td>
+          <td>Panel ♿ → Reducir movimiento.</td>
+        </tr>
+        <tr>
+          <td>Quiero solo un tema</td>
+          <td>Podés pedir que avancen hasta ese tema y se detengan; el mapa es lineal.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel">
+    <h2>Enlaces rápidos</h2>
+    <div class="btnrow">
+      <a class="btn btn-primary" href="juego.html">⚔ Abrir el juego</a>
+      <a class="btn btn-ghost" href="manual-jugador.html">📖 Manual del jugador</a>
+      <a class="btn btn-ghost" href="index.html">🏠 Presentación</a>
+      <a class="btn btn-ghost" href="LICENSE">Licencia CC BY 4.0</a>
+    </div>
+  </div>
+
+<section class="panel">
+  <h2>Iframes recomendados</h2>
+  <ul>
+    <li><code>juego.html?tema=print</code> — un solo tema (layout compacto, dominio del bloque)</li>
+    <li><code>juego.html?vista=pip</code> — solo el chat de Pip el Ayudante</li>
+    <li><code>juego.html</code> — campaña completa</li>
+  </ul>
+  <p>Pip entiende preguntas como «variable», «qué es una variable», «qué es un if», y conoce el glosario del calabozo. No regala soluciones listas para pegar.</p>
+</section>
+
+</main>
+
+<footer>
+  Calabozos &amp; Python · Braian Mosqueira ·
+  <a href="LICENSE">Licencia CC BY 4.0</a> ·
+  Recurso educativo para ANEP / Uruguay
+</footer>
+
+<script>
+(function(){
+  var themeBtn = document.getElementById('btnTheme');
+  var a11yBtn = document.getElementById('btnA11y');
+  var panel = document.getElementById('a11yPanel');
+
+  try {
+    var t = localStorage.getItem('cp-theme');
+    if (t) document.documentElement.setAttribute('data-theme', t);
+    var c = localStorage.getItem('cp-contrast');
+    if (c) document.documentElement.setAttribute('data-contrast', c);
+    var d = localStorage.getItem('cp-dyslexia');
+    if (d) document.documentElement.setAttribute('data-dyslexia', d);
+    var m = localStorage.getItem('cp-motion');
+    if (m) document.documentElement.setAttribute('data-reduce-motion', m);
+    var f = localStorage.getItem('cp-font');
+    if (f) document.documentElement.style.fontSize = (parseFloat(f) * 100) + '%';
+  } catch(e) {}
+
+  themeBtn.addEventListener('click', function(){
+    var cur = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = cur === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try { localStorage.setItem('cp-theme', next); } catch(e) {}
+  });
+
+  a11yBtn.addEventListener('click', function(e){
+    e.stopPropagation();
+    panel.classList.toggle('open');
+  });
+  document.addEventListener('click', function(e){
+    if (!panel.contains(e.target) && e.target !== a11yBtn) panel.classList.remove('open');
+  });
+
+  document.querySelectorAll('[data-font]').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('[data-font]').forEach(function(x){ x.setAttribute('aria-pressed','false'); });
+      this.setAttribute('aria-pressed','true');
+      var val = this.getAttribute('data-font');
+      document.documentElement.style.fontSize = (parseFloat(val) * 100) + '%';
+      try { localStorage.setItem('cp-font', val); } catch(e) {}
+    });
+  });
+  document.querySelectorAll('[data-contrast]').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('[data-contrast]').forEach(function(x){ x.setAttribute('aria-pressed','false'); });
+      this.setAttribute('aria-pressed','true');
+      var val = this.getAttribute('data-contrast');
+      document.documentElement.setAttribute('data-contrast', val);
+      try { localStorage.setItem('cp-contrast', val); } catch(e) {}
+    });
+  });
+  document.querySelectorAll('[data-dyslexia]').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('[data-dyslexia]').forEach(function(x){ x.setAttribute('aria-pressed','false'); });
+      this.setAttribute('aria-pressed','true');
+      var val = this.getAttribute('data-dyslexia');
+      document.documentElement.setAttribute('data-dyslexia', val);
+      try { localStorage.setItem('cp-dyslexia', val); } catch(e) {}
+    });
+  });
+  document.querySelectorAll('[data-motion]').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('[data-motion]').forEach(function(x){ x.setAttribute('aria-pressed','false'); });
+      this.setAttribute('aria-pressed','true');
+      var val = this.getAttribute('data-motion');
+      document.documentElement.setAttribute('data-reduce-motion', val);
+      try { localStorage.setItem('cp-motion', val); } catch(e) {}
+    });
+  });
+})();
+</script>
+<script src="assets/accessibility.js"></script>
+</body>
+</html>

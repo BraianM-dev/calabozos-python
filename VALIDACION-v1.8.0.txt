@@ -1,0 +1,31 @@
+CALABOZOS & PYTHON v1.8.0 MULTITEMA — VALIDACIÓN
+Fecha: 2026-09-15
+
+Base funcional: v1.7.1
+
+Pruebas automatizadas:
+- Sintaxis JavaScript: OK
+- 39 desafíos retenidos: OK
+- Pip: 28 casos de QA: OK
+- Andamiaje fuerte por defecto: OK
+- Selector visible de nivel de ayuda eliminado: OK
+- Responsive 1366x768, móvil e iframe: OK
+- Persistencia y recuperación: OK
+- PDF: OK
+- Skulpt/CodeMirror locales: OK
+- Caché offline: OK
+- Journey/personaje: OK
+- Interacciones variadas: OK
+- IDs únicos: OK
+
+Pruebas v1.8 multitema:
+- ?campana=calabozos: OK
+- ?campana=jujutsu: OK
+- ?campana=jujutsu&tema=condicionales: OK
+- ?tema= conserva su significado curricular: OK
+- Progreso compartido entre ambientaciones: por diseño, usa el mismo STORAGE existente.
+- assets/campaigns.js y assets/campaigns.css incluidos en Service Worker: OK
+- Landing page con acceso a ambas campañas: OK
+
+Propiedad intelectual:
+La campaña Jujutsu es una variante fan educativa no oficial y no distribuye recursos gráficos, audio, fuentes ni logotipos oficiales de la franquicia.

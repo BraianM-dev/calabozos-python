@@ -1,0 +1,255 @@
+/* CC BY 4.0 · CSS fallback generated exclusively from the style block. */
+
+    :root {
+      --bg: #1e1e2f;
+      --bg2: #16213e;
+      --panel: #2a2a45;
+      --text: #f0e6d0;
+      --dim: #a89880;
+      --gold: #c9a84c;
+      --gold2: #b8860b;
+      --accent: #4fc3f7;
+      --ok: #66bb6a;
+      --line: #4a4a8a;
+      --serif: 'EB Garamond', Georgia, serif;
+      --display: 'Cinzel', serif;
+      --mono: 'JetBrains Mono', Consolas, monospace;
+      --radius: 12px;
+    }
+    html[data-theme="light"] {
+      --bg: #f5e6c8;
+      --bg2: #e8d5b0;
+      --panel: #fff8e7;
+      --text: #2c1e0f;
+      --dim: #6b5435;
+      --gold: #1a56db;
+      --gold2: #1e40af;
+      --accent: #1d4ed8;
+      --ok: #15803d;
+      --line: #c2a878;
+    }
+    html[data-contrast="high"] {
+      --bg: #000;
+      --bg2: #111;
+      --panel: #1a1a1a;
+      --text: #fff;
+      --dim: #ddd;
+      --gold: #ff0;
+      --gold2: #ff0;
+      --accent: #0af;
+      --line: #fff;
+    }
+    html[data-dyslexia="on"] {
+      --serif: 'Comic Sans MS', Verdana, sans-serif;
+      --display: 'Comic Sans MS', Verdana, sans-serif;
+    }
+    html[data-reduce-motion="on"] *,
+    html[data-reduce-motion="on"] *::before,
+    html[data-reduce-motion="on"] *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #1e1e2f;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" opacity="0.15"><g fill="none" stroke="%23c9a84c" stroke-width="1.5"><polygon points="22 12 25 18.5 32 19.5 27 24 28 31 22 27.5 16 31 17 24 12 19.5 19 18.5"/><polygon points="73 22 63 34 72 34 71 42 81 30 72 30 73 22"/><polygon points="42 62 52 68.5 52 75.5 42 82 32 75.5 32 68.5"/><circle cx="85" cy="80" r="1.5" fill="%23c9a84c"/><circle cx="15" cy="75" r="1" fill="%23c9a84c"/></g></svg>');
+      background-repeat: repeat;
+      background-size: 100px 100px;
+      color: #f0e6d0;
+      font-family: 'EB Garamond', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+    .topbar {
+      position: sticky; top: 0; z-index: 50;
+      display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
+      padding: 12px 20px;
+      background: #1a1a30;
+      border-bottom: 1px solid #4a4a8a;
+      backdrop-filter: blur(8px);
+    }
+    html[data-theme="light"] .topbar { background: rgba(245,230,200,0.96); }
+    .brand {
+      font-family: 'Cinzel', serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: #c9a84c;
+    }
+    .brand small {
+      display: block;
+      font-family: 'EB Garamond', Georgia, serif;
+      font-weight: 400;
+      font-size: 0.75rem;
+      color: #a89880;
+      font-style: italic;
+    }
+    .topbtns { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+    .iconbtn {
+      background: #16213e;
+      border: 1px solid #4a4a8a;
+      color: #f0e6d0;
+      border-radius: 8px;
+      padding: 7px 12px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      font-family: 'EB Garamond', Georgia, serif;
+      text-decoration: none;
+    }
+    .iconbtn:hover { border-color: #c9a84c; color: #c9a84c; }
+    main { max-width: 860px; margin: 0 auto; padding: 32px 18px 80px; }
+    h1 {
+      font-family: 'Cinzel', serif;
+      font-size:  4vw;
+      color: #c9a84c;
+      margin-bottom: 6px;
+    }
+    .subtitle { color: #a89880; font-style: italic; margin-bottom: 20px; }
+    .tag {
+      display: inline-block;
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      font-size: 0.75rem;
+      color: #4fc3f7;
+      border: 1px solid #4fc3f7;
+      border-radius: 99px;
+      padding: 3px 12px;
+      margin-bottom: 14px;
+    }
+    .panel {
+      background: #2a2a45;
+      border: 1px solid #4a4a8a;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .panel h2 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.25rem;
+      color: #c9a84c;
+      margin-bottom: 10px;
+    }
+    .panel h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.05rem;
+      color: #4fc3f7;
+      margin: 16px 0 6px;
+    }
+    p { margin-bottom: 12px; }
+    ul, ol { padding-left: 1.4em; margin-bottom: 12px; }
+    li { margin-bottom: 4px; }
+    blockquote {
+      border-left: 3px solid #c9a84c;
+      padding: 8px 16px;
+      margin: 14px 0;
+      color: #a89880;
+      font-style: italic;
+      background: rgba(212,160,23,0.08);
+      border-radius: 0 8px 8px 0;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 11px 20px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary {
+      background: linear-gradient(135deg, #c9a84c, #b8860b);
+      color: #1a1a2e;
+      box-shadow: 0 4px 14px rgba(212,160,23,0.35);
+    }
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid #4a4a8a;
+      color: #f0e6d0;
+    }
+    .btn-ghost:hover { border-color: #c9a84c; color: #c9a84c; }
+    .btnrow { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    .etapa {
+      display: grid;
+      grid-template-columns: 60px 1fr;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid #4a4a8a;
+    }
+    .etapa:last-child { border-bottom: none; }
+    .etapa-num {
+      font-family: 'Cinzel', serif;
+      font-size: 1.4rem;
+      color: #c9a84c;
+      text-align: center;
+    }
+    .etapa h3 { margin: 0 0 4px; color: #f0e6d0; }
+    .etapa p { margin: 0; font-size: 0.95rem; color: #a89880; }
+    footer {
+      text-align: center;
+      padding: 24px;
+      color: #a89880;
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      font-size: 0.75rem;
+      border-top: 1px solid #4a4a8a;
+    }
+    footer a { color: #c9a84c; text-decoration: none; }
+    .a11y-panel {
+      position: fixed; top: 60px; right: 12px; z-index: 60;
+      background: #2a2a45;
+      border: 1px solid #4a4a8a;
+      border-radius: 10px;
+      padding: 14px;
+      width: 280px;
+      display: none;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    }
+    .a11y-panel.open { display: block; }
+    .a11y-panel h3 { color: #c9a84c; font-family: 'Cinzel', serif; margin-bottom: 10px; font-size: 0.95rem; }
+    .a11y-group { margin-bottom: 10px; }
+    .a11y-group label {
+      display: block;
+      font-size: 0.75rem;
+      color: #a89880;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      font-family: 'JetBrains Mono', Consolas, monospace;
+    }
+    .a11y-group button {
+      background: #16213e;
+      border: 1px solid #4a4a8a;
+      color: #f0e6d0;
+      border-radius: 6px;
+      padding: 4px 9px;
+      margin: 2px;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+    .a11y-group button[aria-pressed="true"] { border-color: #c9a84c; color: #c9a84c; }
+    .embed-note {
+      font-size: 0.9rem;
+      color: #a89880;
+      margin-top: 10px;
+      padding: 10px 14px;
+      background: rgba(212,160,23,0.08);
+      border-radius: 8px;
+      border: 1px dashed #4a4a8a;
+    }
+    code {
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      font-size: 0.85em;
+      background: #16213e;
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+  
+/* Layout conservador para motores sin CSS Grid. */
+.zonegrid,.cards,.feature-grid,.grid{display:block;}
+.zonecard,.card,.feature{margin-bottom:12px;}
+details,summary{display:block;}
+
+body{background-color:#0f172a;color:#f8fafc;font-family:'Segoe UI',Arial,Verdana,sans-serif}.topbar{background:#111827}.panel{background:#1e293b;border-color:#64748b}.brand,h1,.panel h2{color:#fbbf24}.subtitle,.panel p,.panel li{color:#d5dbe5}.iconbtn,.btn{font-family:'Segoe UI',Arial,Verdana,sans-serif}
