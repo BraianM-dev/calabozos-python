@@ -1,19 +1,42 @@
+/* Aventuras & Python · visual themes v1.8.2 · original CC BY 4.0 assets */
+html[data-campaign="calabozos"]{--gold:#f4c35a;--gold2:#b66a2c;--blue:#8fd3ff;--line:#70533b}
+html[data-campaign="calabozos"] body{background-color:#0d151e;background-image:linear-gradient(rgba(7,12,18,.88),rgba(7,12,18,.88)),url('campaigns/calabozos/patterns/bg-main.svg');background-repeat:repeat;background-size:auto,128px 128px}
+html[data-campaign="calabozos"][data-theme="light"] body{background-color:#f4ead4;background-image:linear-gradient(rgba(244,234,212,.92),rgba(244,234,212,.92)),url('campaigns/calabozos/patterns/bg-main.svg')}
+html[data-campaign="calabozos"] .topbar{box-shadow:0 1px 18px rgba(244,195,90,.16)}
+html[data-campaign="calabozos"] .pip-sprite{background-image:url('campaigns/calabozos/pip/pip-sheet.svg')!important;filter:drop-shadow(0 3px 0 rgba(0,0,0,.22))}
+html[data-campaign="calabozos"] .inventario{background:linear-gradient(145deg,#151f2a 0%,#182a37 62%,#101820 100%);border-color:rgba(244,195,90,.55)}
+html[data-campaign="calabozos"] .hero-journey{background-image:linear-gradient(90deg,rgba(244,195,90,.08),rgba(143,211,255,.06))}
 
-html[data-campaign="multiverso"]{--gold:#a3e635;--gold2:#22c55e;--blue:#22d3ee;--line:#16a34a}
-html[data-campaign="multiverso"] body{background-color:#07130f;background-image:radial-gradient(circle at 18% 18%,rgba(163,230,53,.16),transparent 30%),radial-gradient(circle at 82% 24%,rgba(34,211,238,.15),transparent 27%),radial-gradient(circle at 48% 82%,rgba(168,85,247,.10),transparent 32%),repeating-radial-gradient(circle at 50% 50%,rgba(255,255,255,.018) 0 1px,transparent 1px 18px)}
-html[data-campaign="multiverso"][data-theme="light"] body{background-color:#effdf4;background-image:radial-gradient(circle at 20% 15%,rgba(34,197,94,.12),transparent 35%),radial-gradient(circle at 78% 24%,rgba(34,211,238,.10),transparent 30%)}
-html[data-campaign="multiverso"] .topbar{box-shadow:0 1px 20px rgba(34,197,94,.22)}
-html[data-campaign="multiverso"] .brand{letter-spacing:.045em;text-shadow:0 0 14px rgba(163,230,53,.28)}
-html[data-campaign="multiverso"] .pip-sprite{filter:hue-rotate(115deg) saturate(1.25) drop-shadow(0 0 6px rgba(34,211,238,.55))}
-html[data-campaign="multiverso"] .hero-journey{background-image:linear-gradient(90deg,rgba(34,197,94,.08),rgba(34,211,238,.08),rgba(168,85,247,.06))}
 html[data-campaign="jujutsu"]{--gold:#c4b5fd;--gold2:#7c3aed;--blue:#67e8f9;--line:#6d28d9}
-html[data-campaign="jujutsu"] body{background-color:#090914;background-image:radial-gradient(circle at 20% 15%,rgba(124,58,237,.22),transparent 32%),radial-gradient(circle at 80% 30%,rgba(34,211,238,.12),transparent 28%),repeating-linear-gradient(135deg,rgba(255,255,255,.025) 0 1px,transparent 1px 16px)}
-html[data-campaign="jujutsu"][data-theme="light"] body{background-color:#f4f1ff;background-image:radial-gradient(circle at 20% 15%,rgba(124,58,237,.12),transparent 35%)}
+html[data-campaign="jujutsu"] body{background-color:#090914;background-image:linear-gradient(rgba(9,9,20,.9),rgba(9,9,20,.9)),url('campaigns/arcana/patterns/bg-main.svg');background-repeat:repeat;background-size:auto,128px 128px}
+html[data-campaign="jujutsu"][data-theme="light"] body{background-color:#f4f1ff;background-image:linear-gradient(rgba(244,241,255,.93),rgba(244,241,255,.93)),url('campaigns/arcana/patterns/bg-main.svg')}
 html[data-campaign="jujutsu"] .topbar{box-shadow:0 1px 18px rgba(124,58,237,.22)}
 html[data-campaign="jujutsu"] .brand{letter-spacing:.055em;text-shadow:0 0 14px rgba(124,58,237,.35)}
-html[data-campaign="jujutsu"] .pip-sprite{filter:hue-rotate(32deg) saturate(1.18) drop-shadow(0 0 5px rgba(124,58,237,.5))}
-html[data-campaign="jujutsu"] .hero-journey{background-image:linear-gradient(90deg,rgba(124,58,237,.08),rgba(34,211,238,.06))}
+html[data-campaign="jujutsu"] .pip-sprite{background-image:url('campaigns/arcana/pip/pip-sheet.svg')!important;filter:drop-shadow(0 0 5px rgba(124,58,237,.48))}
+html[data-campaign="jujutsu"] .inventario{background:linear-gradient(145deg,#111024 0%,#21153d 58%,#101827 100%);border-color:rgba(196,181,253,.58)}
+html[data-campaign="jujutsu"] .hero-journey{background-image:linear-gradient(90deg,rgba(124,58,237,.10),rgba(34,211,238,.07))}
+
+html[data-campaign="multiverso"]{--gold:#a3e635;--gold2:#22c55e;--blue:#22d3ee;--line:#16a34a}
+html[data-campaign="multiverso"] body{background-color:#07130f;background-image:linear-gradient(rgba(5,18,20,.89),rgba(5,18,20,.89)),url('campaigns/multiverso/patterns/bg-main.svg');background-repeat:repeat;background-size:auto,128px 128px}
+html[data-campaign="multiverso"][data-theme="light"] body{background-color:#effdf4;background-image:linear-gradient(rgba(239,253,244,.93),rgba(239,253,244,.93)),url('campaigns/multiverso/patterns/bg-main.svg')}
+html[data-campaign="multiverso"] .topbar{box-shadow:0 1px 20px rgba(34,197,94,.22)}
+html[data-campaign="multiverso"] .brand{letter-spacing:.045em;text-shadow:0 0 14px rgba(163,230,53,.28)}
+html[data-campaign="multiverso"] .pip-sprite{background-image:url('campaigns/multiverso/pip/pip-sheet.svg')!important;filter:drop-shadow(0 0 6px rgba(34,211,238,.5))}
+html[data-campaign="multiverso"] .inventario{background:linear-gradient(145deg,#071b20 0%,#0c3441 58%,#16162e 100%);border-color:rgba(132,255,79,.55)}
+html[data-campaign="multiverso"] .hero-journey{background-image:linear-gradient(90deg,rgba(34,197,94,.08),rgba(34,211,238,.08),rgba(168,85,247,.06))}
+
+.pip-sprite,.hero-sprite-frame{image-rendering:pixelated;image-rendering:crisp-edges}
+.pip-sprite{background-repeat:no-repeat;background-size:300% 200%}
+
 .campaign-switch{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}.campaign-switch button{flex:1 1 130px}.campaign-switch button[aria-pressed="true"]{border-color:var(--gold);color:var(--gold);background:var(--bg2)}
 .campaign-note{font-size:calc(11px*var(--font-scale));color:var(--dim);margin-top:6px;line-height:1.45}
-.campaign-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin:18px 0}.campaign-card{border:1px solid var(--line);border-radius:12px;padding:16px;background:var(--panel);display:flex;flex-direction:column;gap:9px}.campaign-card h3{font-family:var(--display);color:var(--gold);font-size:18px}.campaign-card p{color:var(--dim);font-size:14px;flex:1}.campaign-card.jjk{background:linear-gradient(145deg,rgba(76,29,149,.2),rgba(30,41,59,.96));border-color:#7c3aed}.campaign-card.multiverso{background:linear-gradient(145deg,rgba(20,83,45,.28),rgba(8,47,73,.9));border-color:#22c55e}
-@media(max-width:560px){.campaign-switch{display:grid;grid-template-columns:1fr}.campaign-switch button{width:100%}}
+.campaign-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin:18px 0}
+.campaign-card{border:1px solid var(--line);border-radius:14px;padding:16px;background:var(--panel);display:flex;flex-direction:column;gap:9px;overflow:hidden;position:relative}
+.campaign-card:before{content:'';display:block;height:92px;margin:-4px -4px 4px;background:url('campaigns/calabozos/cast.svg') center/contain no-repeat;image-rendering:pixelated}
+.campaign-card h3{font-family:var(--display);color:var(--gold);font-size:18px}.campaign-card p{color:var(--dim);font-size:14px;flex:1}
+.campaign-card.jjk{background:linear-gradient(145deg,rgba(76,29,149,.2),rgba(30,41,59,.96));border-color:#7c3aed}.campaign-card.jjk:before{background-image:url('campaigns/arcana/cast.svg')}
+.campaign-card.multiverso{background:linear-gradient(145deg,rgba(20,83,45,.28),rgba(8,47,73,.9));border-color:#22c55e}.campaign-card.multiverso:before{background-image:url('campaigns/multiverso/cast.svg')}
+
+html[data-contrast="high"] body{background-image:none!important}
+html[data-contrast="high"] .pip-sprite{filter:none!important}
+@media(max-width:560px){.campaign-switch{display:grid;grid-template-columns:1fr}.campaign-switch button{width:100%}.campaign-card:before{height:78px}}
