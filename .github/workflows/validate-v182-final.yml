@@ -1,0 +1,27 @@
+name: Validate v1.8.2 final
+
+on:
+  push:
+    branches: [visual-v1.8.2]
+    paths: ['.github/workflows/validate-v182-final.yml']
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Run complete test suite
+        run: npm test
+      - name: HTTP smoke test
+        shell: bash
+        run: |
+          node scripts/serve.cjs --port 4173 >/tmp/aventuras.log 2>&1 &
+          PID=$!
+          trap 'kill $PID || true' EXIT
+          sleep 1
+          for path in /index.html /juego.html /calabozos/index.html /calabozos/juego.html /jujutsu/index.html /jujutsu/juego.html /multiverso/index.html /multiverso/juego.html /assets/campaign-runtime.js /assets/campaigns/calabozos/pip/pip-sheet.svg /assets/campaigns/arcana/pip/pip-sheet.svg /assets/campaigns/multiverso/pip/pip-sheet.svg; do
+            curl --fail --silent --show-error "http://127.0.0.1:4173$path" >/dev/null
+          done
