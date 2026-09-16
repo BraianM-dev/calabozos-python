@@ -2,20 +2,20 @@
 
 **Plataforma educativa multitema para aprender los fundamentos de Python**
 
-**Versión 1.8.1 · tres ambientaciones · escritorio, 1366 × 768, tablets, celulares y CREA**
+**Versión 1.8.3 · tres ambientaciones · escritorio, 1366 × 768, tablets, celulares y CREA**
 
 ![Nivel](https://img.shields.io/badge/Nivel-9º%20EBI%20%2F%201º%20EMS-blue)
 ![Lenguaje](https://img.shields.io/badge/Lenguaje-Python-3776AB?logo=python&logoColor=white)
 ![Licencia](https://img.shields.io/badge/Licencia-CC%20BY%204.0-lightgrey)
 
 
-> **v1.8.1 · Plataforma multitema:** el mismo motor curricular puede jugarse desde `calabozos/`, `jujutsu/` o `multiverso/`. Las campañas comparten progreso, validadores, Pip, accesibilidad y los 39 desafíos.
+> **v1.8.3 · Identidad ilustrada:** el mismo motor curricular puede jugarse desde `calabozos/`, `jujutsu/` o `multiverso/`. Las campañas comparten progreso, validadores, Pip, accesibilidad, héroes ilustrados animados y los 39 desafíos.
 
 ---
 
 ## Descripción
 
-**Aventuras & Python** es una plataforma educativa gamificada con un único recorrido curricular de Python y varias ambientaciones intercambiables. Los estudiantes resuelven las mismas 39 misiones, con las mismas validaciones y el mismo progreso, pero pueden elegir entre una campaña RPG clásica, una campaña fan de hechicería contemporánea o una campaña original de ciencia caótica y multiversos. **Pip** adapta su presentación al universo elegido y mantiene el andamiaje pedagógico.
+**Aventuras & Python** es una plataforma educativa gamificada con un único recorrido curricular de Python y varias ambientaciones intercambiables. Los estudiantes resuelven las mismas 39 misiones, con las mismas validaciones y el mismo progreso, pero pueden elegir entre una campaña RPG clásica, una academia arcana original o una campaña original de ciencia caótica y multiversos. **Pip** adapta su presentación al universo elegido y mantiene el andamiaje pedagógico.
 
 Está pensado para **9.º grado de Educación Básica Integrada (EBI)** de Uruguay, y es perfectamente adaptable y usable en **1.º de Educación Media Superior (EMS)**.
 
@@ -41,16 +41,16 @@ Está pensado para **9.º grado de Educación Básica Integrada (EBI)** de Urugu
 
 ## Ambientaciones de campaña
 
-La versión **1.8.1** separa la lógica educativa de la ambientación visual/narrativa. El estudiante puede recorrer las mismas **39 misiones**, con las mismas validaciones de Python y el mismo progreso, usando distintas campañas:
+La versión **1.8.3** separa la lógica educativa de la ambientación visual/narrativa. El estudiante puede recorrer las mismas **39 misiones**, con las mismas validaciones de Python y el mismo progreso, usando distintas campañas:
 
 - `calabozos/index.html` o `juego.html?campana=calabozos` — campaña RPG original.
-- `jujutsu/index.html` o `juego.html?campana=jujutsu` — campaña fan educativa inspirada en *Jujutsu Kaisen*.
+- `jujutsu/index.html` o `juego.html?campana=jujutsu` — Academia Arcana, campaña original de hechicería contemporánea. La ruta se mantiene por compatibilidad con enlaces anteriores.
 - `multiverso/index.html` o `juego.html?campana=multiverso` — campaña original de ciencia caótica, portales y dimensiones absurdas.
 - `juego.html?campana=jujutsu&tema=condicionales` — combina una ambientación con un tema curricular para CREA/iframe.
 
 El cambio de ambientación **no reinicia** XP, borradores, misiones completadas ni ficha del personaje. El parámetro `?tema=` sigue reservado para el contenido curricular. Las ambientaciones se configuran en `assets/campaigns.js`, de modo que se pueden incorporar nuevas campañas sin duplicar los desafíos.
 
-> **Propiedad intelectual:** la ambientación Jujutsu se ofrece como variante fan educativa y no incorpora ilustraciones, audio, tipografías ni otros recursos oficiales de la franquicia. Los nombres y elementos identificables de *Jujutsu Kaisen* pertenecen a sus respectivos titulares y no quedan cubiertos por la licencia CC BY 4.0 del código y contenido original de este proyecto. **Multiverso & Python** es una ambientación original de ciencia ficción, portales y humor absurdo; toma como referencia general el género contemporáneo de aventuras multiversales, sin copiar personajes, nombres, diálogos ni recursos de *Rick and Morty* u otras obras.
+> **Propiedad intelectual:** las tres identidades públicas, los personajes, Pip y las composiciones incluidas son recursos originales del proyecto bajo CC BY 4.0. La carpeta técnica `jujutsu/` solo conserva compatibilidad con enlaces antiguos; la identidad pública actual es **Academia Arcana & Python** y no utiliza personajes, logos, diálogos ni arte de franquicias de terceros.
 
 ## Características principales
 
@@ -304,14 +304,15 @@ El sello de la ficha PDF restaura los temas completos al escribir el mismo nombr
 Con Node.js: `node tests/verificar.js`. Comprueba 28 situaciones conversacionales de Pip y genera dos PDF de prueba —avance parcial y campaña completa— en la carpeta temporal del sistema; no sustituye las pruebas en navegadores.
 
 
-## Arquitectura multitema v1.8.1
+## Arquitectura multitema v1.8.3
 
 - `/calabozos/` — campaña RPG clásica.
-- `/jujutsu/` — campaña fan educativa de hechicería contemporánea.
+- `/jujutsu/` — Academia Arcana original; la ruta se conserva por compatibilidad.
 - `/multiverso/` — campaña original de ciencia caótica, portales y dimensiones.
 - `/juego.html` — motor canónico compartido.
 - `/assets/campaigns.js` — textos y nombres narrativos por campaña.
 - `/assets/campaigns.css` — identidad visual por campaña.
+- `/assets/premium-v183.css` — sistema visual ilustrado compartido.
 - `/shared/README.md` — documentación de la arquitectura común.
 
 El progreso se almacena de forma compartida. Cambiar de ambientación no reinicia XP ni actividades.

@@ -3,7 +3,7 @@ const path=require('path'); const base=path.resolve(__dirname,'..')+'/'; const q
 const html=fs.readFileSync(base+'juego.html','utf8');
 assert(html.includes('attr==="data-font"?"data-font-size":attr'),'font-size accessibility mapping');assert(html.includes('data-motion="on"'),'reduced-motion CSS');
 assert(html.includes('class="mission-consigna" id="zBrief"'),'brief inside mission card');
-assert(html.includes('assets/pip-states-v3.svg'),'Pip multi-state sprite asset');
+assert(html.includes('assets/pip-states-v3.png'),'Pip multi-state sprite asset');
 assert(html.includes('pip-state-thinking')&&html.includes('pip-state-warning'),'Pip contextual visual states');
 assert(html.includes("center('20'"),'d20 replaces generic PY seal');
 assert(html.includes('CALABOZOS_HEROES_JPEG')&&!html.includes("center('CC BY'"),'class portrait replaces CC license badge');
@@ -68,8 +68,8 @@ context.location.search='?campana=jujutsu&tema=condicionales';assert.equal(q.par
 context.location.search='';
 let said=[];q.setSay((s,bot)=>{if(bot)said.push(s)});
 assert.equal(q.heroStageForProgress(0,39).key,'inicial');assert.equal(q.heroStageForProgress(13,39).key,'veterano');assert.equal(q.heroStageForProgress(26,39).key,'legendario');
-assert(q.heroSpritePath('Arquero','legendario').includes('hero-sprites/arquero-legendario.svg'),'class/stage sprite selection');
-for(const cls of ['mago','guerrero','arquero','explorador'])for(const stage of ['inicial','veterano','legendario'])assert(fs.existsSync(base+'assets/hero-sprites/'+cls+'-'+stage+'.svg'),cls+' '+stage+' sprite');
+assert(q.heroSpritePath('Arquero','legendario').includes('hero-sprites/arquero-legendario.png'),'class/stage sprite selection');
+for(const cls of ['mago','guerrero','arquero','explorador'])for(const stage of ['inicial','veterano','legendario'])assert(fs.existsSync(base+'assets/hero-sprites/'+cls+'-'+stage+'.png'),cls+' '+stage+' sprite');
 const cases=[['qué es una variable','nombre'],['otro ejemplo','monedas'],['no entendí','etiqueta'],['diferencia entre for y while','iterable'],['diferencia entre print y return','devuelve'],['qué es input','texto'],['ValueError','valor'],['IndexError','posición'],['hola','Pip'],['qué es random','random'],['qué es break','bucle'],['qué es not','invierte'],['qué es una variabel','nombre'],['qué es range','excluye'],['quién sos','Pip'],['cómo lo pruebo','tres casos']];
 for(const [ask,expected] of cases){said=[];q.pipRespond(ask);assert(said.join('\n').includes(expected),ask+': '+said);}
 q.setEditorCode('nombre = "Luna"\nprint(nombre)');said=[];q.pipRespond('explicá mi código línea por línea');assert(said.join('\n').includes('L1: asigna')&&said.join('\n').includes('L2: muestra'),'Pip line-by-line: '+said);

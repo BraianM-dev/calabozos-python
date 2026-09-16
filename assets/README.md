@@ -1,8 +1,10 @@
 # Recursos visuales
 
-- `pip-states-v3.svg`: hoja vectorial de seis estados originales de Pip (atento, parpadeo, pensando, explicando, celebrando y advertencia). Se integra como sprite CSS y no imita personajes existentes.
-- `hero-evolution/*.svg`: doce retratos vectoriales originales que conservan la identidad de las cuatro clases en sus etapas inicial, veterana y legendaria.
-- `hero-sprites/*.svg`: doce hojas vectoriales de seis fotogramas cada una para los estados del personaje. El primer fotograma funciona como respaldo cuando está activado **Reducir movimiento**.
+- `pip-states-v3.png`: hoja ilustrada de seis estados originales de Pip (atento, parpadeo, pensando, explicando, celebrando y advertencia). Se integra como sprite CSS y no imita personajes existentes.
+- `hero-evolution/*.jpg`: doce retratos ilustrados originales que conservan la identidad de las cuatro clases en sus etapas inicial, veterana y legendaria.
+- `hero-sprites/*.png`: doce hojas ilustradas de seis fotogramas cada una para los estados del personaje. El primer fotograma funciona como respaldo cuando está activado **Reducir movimiento**.
+- `party-heroes.jpg`: composición optimizada de las clases y el dragón original para la portada.
+- `premium-v183.css`: sistema visual compartido por portada, juego, manual, guía, campañas e iframes.
 - `heroes-pdf-data.js`: copia técnica embebida de los doce retratos para que la ficha PDF funcione sin conexión.
 - `logo-pdf-data.js`: emblema embebido utilizado por el generador PDF local.
 - `vendor/`: copias locales de CodeMirror y Skulpt para no depender de servicios externos durante la clase.

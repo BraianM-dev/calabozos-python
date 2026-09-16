@@ -1,0 +1,27 @@
+Aventuras & Python v1.8.3 — restauración visual ilustrada
+
+Objetivo
+- Corregir la regresión pixelada de v1.8.2 sin modificar el motor curricular ni perder funciones.
+
+Cambios verificados
+- Doce sprites PNG ilustrados: cuatro clases por tres evoluciones, seis fotogramas por estado.
+- Pip ilustrado con seis estados visuales y respuestas contextuales conservadas.
+- Portada general y tres portadas de campaña con ilustraciones originales.
+- Ficha del héroe sin aro punteado y con animaciones de reposo, pensamiento, ejecución, éxito, error e interacción.
+- Ruta inferior con el mismo personaje, clase y evolución.
+- PDF temático A4 con retrato de la clase y evolución elegidas.
+- Sistema visual compartido en portada, juego, manual, guía y ejemplos.
+- Diseño adaptable para 1366 × 768, teléfonos y vistas iframe.
+- Caché offline actualizado a v1.8.3 con los recursos ilustrados.
+
+Pruebas automáticas
+- 39 desafíos y sus identificadores únicos.
+- 28 conversaciones y rutas contextuales de Pip.
+- Ordenar, completar, predecir, depurar, comparar, explicar, elegir pruebas y escribir código.
+- Guardado local, sello, FizzBuzz, simulador básico y restauración.
+- Tres campañas y filtros por tema.
+- Dos PDF reales de una sola página.
+- Firmas PNG/JPEG, rutas de sprites, recursos offline y ausencia de pixelado en la capa activa.
+
+Comando
+  npm test

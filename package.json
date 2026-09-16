@@ -1,1 +1,10 @@
-{"name":"aventuras-python","private":true,"version":"1.8.2","scripts":{"dev":"node scripts/serve.cjs","test":"node tests/verificar.js && node tests/verificar-campanas-v182.js","manual:data":"node scripts/generate-manual-data.cjs"}}
+{
+  "name": "aventuras-python",
+  "private": true,
+  "version": "1.8.3",
+  "scripts": {
+    "dev": "node scripts/serve.cjs",
+    "test": "node tests/verificar.js && node tests/verificar-visual-v183.js",
+    "manual:data": "node scripts/generate-manual-data.cjs"
+  }
+}
