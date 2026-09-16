@@ -23,4 +23,14 @@ const arcana=read('jujutsu/index.html');assert(arcana.includes('Academia Arcana 
 const index=read('index.html');assert(index.includes('Academia Arcana &amp; Python'),'root landing exposes Arcana identity');assert(!index.includes('Entrar a Jujutsu'),'root landing does not market legacy route name');assert(!/epilepsia/i.test(index),'accessibility wording uses reducir movimiento without medical label');
 const notices=read('THIRD-PARTY-NOTICES.md');assert(notices.includes('personajes, patterns, Pip, iconografía y composición visual originales'),'original visual licensing notice');assert(notices.includes('Rick and Morty'),'multiverse third-party boundary documented');
 const sw=read('sw.js');assert(sw.includes('calabozos-python-v1-8-2'),'cache version bumped');assert(sw.includes('assets/campaign-runtime.js'),'runtime cached offline');assets.forEach(p=>assert(sw.includes('./'+p),p+' cached offline'));
-console.log('✓ v1.8.2: assets pixel-art, identidad pública, campañas y PDF temático verificados');
+
+/* Real PDF generation for every campaign using the same vector engine shipped to browsers. */
+let currentCampaign='calabozos',captured='';
+const docEl={getAttribute:n=>n==='data-campaign'?currentCampaign:null,setAttribute(){}};
+const ctx={console,Blob,atob,URLSearchParams,location:{search:'',pathname:'/juego.html'},navigator:{},document:{readyState:'complete',documentElement:docEl,addEventListener(){},createElement(){return{}},body:{appendChild(){},removeChild(){}}},setTimeout(){},clearTimeout(){}};
+ctx.window=ctx;ctx.globalThis=ctx;ctx.CP_CAMPAIGNS={calabozos:{},jujutsu:{},multiverso:{}};
+ctx.state={agent:'Ada Pixel',clase:'Mago',completed:{'a':true},inventory:[]};ctx.TOPICS=[{id:'print',title:'PRINT',challenges:[{id:'a'}]},{id:'input',title:'INPUT',challenges:[{id:'b'}]}];ctx.getAll=()=>[{id:'a'},{id:'b'}];ctx.xpTotal=()=>20;ctx.maxXP=()=>40;ctx.dominio=()=>50;ctx.heroLevel=()=>2;
+vm.createContext(ctx);vm.runInContext(read('assets/ficha-pdf.js'),ctx);ctx.FichaPDF.prototype.save=function(){captured=this.output();};vm.runInContext(runtime,ctx);
+for(const [id,label] of [['calabozos','FICHA DE AVENTURA'],['jujutsu','FICHA ARCANA'],['multiverso','FICHA MULTIVERSAL']]){currentCampaign=id;captured='';ctx.exportPDF();assert(captured.startsWith('%PDF-1.4'),id+' produces a PDF');assert(captured.includes(label),id+' PDF contains campaign title');assert(captured.includes('/Author (Braian Mosqueira)'),id+' PDF metadata contains author');assert(/\/Count 1\b/.test(captured),id+' PDF stays on one A4 page');}
+
+console.log('✓ v1.8.2: pixel-art, identidad pública, offline y tres PDF temáticos reales verificados');
