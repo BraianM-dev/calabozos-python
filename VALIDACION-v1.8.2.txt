@@ -1,0 +1,36 @@
+Aventuras & Python v1.8.2 — Validación visual y funcional
+Fecha: 2026-09-16
+
+PRIORIDAD 1 — IDENTIDAD VISUAL
+- Pip reemplazado por spritesheets pixel-art originales específicos para Calabozos, Academia Arcana y Multiverso.
+- Nuevos patterns SVG originales por campaña.
+- Nuevos casts pixel-art originales por campaña para portadas y selector general.
+- Todos los SVG nuevos incluyen declaración CC BY 4.0 del proyecto.
+- No se incorporan personajes, logos, diálogos, ilustraciones ni recursos oficiales de franquicias de terceros.
+
+PRIORIDAD 2 — SISTEMA POR CAMPAÑA
+- assets/campaign-runtime.js centraliza la identidad visual/PDF.
+- La ruta técnica jujutsu/ se conserva por compatibilidad; la identidad pública visible es Academia Arcana & Python.
+- Multiverso & Python mantiene identidad original de ciencia ficción, portales y humor absurdo.
+- El progreso curricular sigue compartido entre campañas.
+- Service Worker actualizado a calabozos-python-v1-8-2 e incluye runtime y nuevos assets para modo offline.
+
+PRIORIDAD 3 — PDF TEMÁTICO
+- Calabozos genera FICHA DE AVENTURA.
+- Academia Arcana genera FICHA ARCANA.
+- Multiverso genera FICHA MULTIVERSAL.
+- Cada PDF cambia paleta, marco, terminología, Pip y decoración según campaña.
+- Los tres PDF fueron generados realmente durante las pruebas y verificados como PDF 1.4 A4 de una sola página.
+- Autoría en metadata: Braian Mosqueira.
+
+VALIDACIÓN AUTOMÁTICA
+- Suite histórica del proyecto: PASS.
+- 39 desafíos conservados: PASS.
+- Enrutamiento de tres campañas: PASS.
+- Accesibilidad / responsive / iframe / persistencia / offline: PASS.
+- Tests específicos de assets v1.8.2: PASS.
+- Tres PDF temáticos reales: PASS.
+- Smoke test HTTP de portada, juego, tres campañas, loaders, runtime y Pip SVG: PASS.
+- GitHub Actions run validado: 35093940883 — SUCCESS.
+
+Resultado: versión candidata apta para publicación en main.
