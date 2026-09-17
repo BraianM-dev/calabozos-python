@@ -16,6 +16,8 @@
 <script src="assets/vendor/codemirror/matchbrackets.min.js"></script>
 <script src="assets/logo-pdf-data.js"></script>
 <script src="assets/heroes-pdf-data.js"></script>
+<script src="assets/campaign-heroes-pdf-data.js"></script>
+<script src="assets/qr-pdf-data.js"></script>
 <script src="assets/ficha-pdf.js"></script>
 
 <script>(function(){var legacy=!(window.CSS && window.CSS.supports && window.CSS.supports("color","var(--test)"));if(legacy){var link=document.createElement("link");link.rel="stylesheet";link.href="assets/compat-juego.css";document.head.appendChild(link);}})();</script>
@@ -521,7 +523,7 @@ html[data-clase="Explorador"] .inventario .hero-sprite-frame{animation-duration:
 <link rel="stylesheet" href="assets/journey.css">
 <link rel="stylesheet" href="assets/responsive.css">
 <link rel="stylesheet" href="assets/campaigns.css">
-<link rel="stylesheet" href="assets/premium-v183.css">
+<link rel="stylesheet" href="assets/premium-v184.css">
 <script src="assets/campaigns.js"></script>
 <script src="assets/journey.js"></script>
 </head>
@@ -870,17 +872,21 @@ function printUsesDefinedName(code){
   return true;
 }
 function hasBadPyNames(code){
-  // Skulpt falla con ñ y tildes en identificadores
-  var lines=String(code||"").split(/\r?\n/);
-  var i,line,m;
-  for(i=0;i<lines.length;i++){
-    line=lines[i].replace(/#.*$/,"").replace(/["'][^"']*["']/g," ");
-    if(/[áéíóúÁÉÍÓÚñÑüÜ]/.test(line) && /=\s*|def\s+|\./.test(line)){
-      // letra especial fuera de strings
-      if(/[áéíóúÁÉÍÓÚñÑüÜ]/.test(line)) return true;
-    }
-  }
-  return false;
+  /* Python admite nombres Unicode (incluida ñ). Solo informa si el intérprete
+     embebido necesita una equivalencia ASCII para ejecutar el mismo código. */
+  var cleaned=String(code||"").replace(/#[^\n]*/g," ").replace(/("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')/g," ");
+  return /(?:^|[^A-Za-z0-9_À-ÿ])[À-ÿ][A-Za-z0-9_À-ÿ]*/.test(cleaned)||/[A-Za-z_][A-Za-z0-9_À-ÿ]*[À-ÿ]/.test(cleaned);
+}
+function skulptSafeCode(code){
+  var map={},chars={"á":"a","é":"e","í":"i","ó":"o","ú":"u","ü":"u","ñ":"n","Á":"A","É":"E","Í":"I","Ó":"O","Ú":"U","Ü":"U","Ñ":"N"};
+  var src=String(code||"");
+  return src.replace(/("""[\s\S]*?"""|'''[\s\S]*?'''|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|#[^\n]*)|([A-Za-z_À-ÿ][A-Za-z0-9_À-ÿ]*)/g,function(all,literal,name){
+    if(literal)return literal;
+    if(!name||!/[À-ÿ]/.test(name))return all;
+    if(map[name])return map[name];
+    var safe=name.replace(/[À-ÿ]/g,function(ch){return chars[ch]||"u";});
+    map[name]=safe;return safe;
+  });
 }
 function hasProperIndentation(code){
 
@@ -1001,7 +1007,7 @@ function registerChallengeHelp(ch){
 
 
 var STORAGE="calabozos-py-v10",LEGACY_STORAGE="calabozos-py-v9",SAVE_SCHEMA=2;
-function freshState(){return {version:SAVE_SCHEMA,agent:"",clase:"",completed:{},drafts:{},xpParcial:{},xpPenalties:[],err:{},maxChecks:{},inventory:[],invOpen:false,tourSeen:false,dragonSeen:false,seenSnippets:{},mastery:{},learningLog:[],pipPrefs:{helpLevel:"explicit"},reflections:{}}}
+function freshState(){return {version:SAVE_SCHEMA,agent:"",clase:"",completed:{},drafts:{},xpParcial:{},xpPenalties:[],err:{},maxChecks:{},inventory:[],invOpen:false,tourSeen:false,dragonSeen:false,seenSnippets:{},mastery:{},learningLog:[],pipPrefs:{helpLevel:"strong"},reflections:{}}}
 var state=freshState();
 var currentId=null,editor=null,useFallback=false,lastFails=[],pipOpen=false,tourStep=0;
 var temaFiltro=null,modoTema=false,nivelFiltro=null;
@@ -1625,7 +1631,7 @@ function normalizeState(p){
   if(!base.completed)base.completed={};if(!base.drafts)base.drafts={};if(!base.xpParcial)base.xpParcial={};
   if(!base.err)base.err={};if(!base.maxChecks)base.maxChecks={};if(!base.inventory)base.inventory=[];
   if(!base.seenSnippets)base.seenSnippets={};if(!base.mastery)base.mastery={};if(!base.learningLog)base.learningLog=[];
-  if(!base.pipPrefs)base.pipPrefs={helpLevel:"explicit"};if(!base.reflections)base.reflections={};
+  if(!base.pipPrefs)base.pipPrefs={helpLevel:"strong"};base.pipPrefs.helpLevel="strong";if(!base.reflections)base.reflections={};
   /* Las reducciones antiguas quedan como antecedentes, pero desde v1.6 no afectan XP ni dominio. */
   if(!base.xpPenalties)base.xpPenalties=[];
   return base;
@@ -1641,10 +1647,11 @@ function nota(){return dominio()}
 function xpLostTotal(){return 0;}
 function topicsDone(){var list=scopedTopics();var n=0;list.forEach(function(t){var ok=true;t.challenges.forEach(function(c){if(!state.completed[c.id])ok=false});if(ok)n++});return n}
 function genSeal(){
-  var m = progressMask();
-  var h = nameHash(state.agent);
-  var chk = (m*17 + h*29 + 41) % 1296;
-  return "PY-"+b36enc(m,3)+"-"+b36enc(h,3)+"-"+b36enc(chk,3);
+  /* v2 conserva también misiones parciales (no solo temas terminados). */
+  var bits=[0,0,0],all=getAll(),h=nameHash(state.agent),i;
+  for(i=0;i<all.length;i++)if(state.completed&&state.completed[all[i].id])bits[Math.floor(i/16)]|=(1<<(i%16));
+  var chk=(bits[0]*17+bits[1]*29+bits[2]*37+h*41+73)%1679616;
+  return "PY2-"+b36enc(bits[0],4)+"-"+b36enc(bits[1],4)+"-"+b36enc(bits[2],4)+"-"+b36enc(h,3)+"-"+b36enc(chk,5);
 }
 function applySeal(mask, agentName){
   if(!state.completed) state.completed = {};
@@ -1652,6 +1659,17 @@ function applySeal(mask, agentName){
   if(!state.xpPenalties) state.xpPenalties = [];
   if(!state.inventory) state.inventory = [];
   var restored = 0;
+  if(mask&&typeof mask==='object'&&mask.challengeBits){
+    var all=getAll(),bi;
+    for(bi=0;bi<all.length;bi++)if(mask.challengeBits[Math.floor(bi/16)]&(1<<(bi%16))){
+      var item=all[bi];if(!state.completed[item.id]){state.completed[item.id]=true;state.xpParcial[item.id]=item.xp||0;restored++;}
+    }
+    TOPICS.forEach(function(t){var complete=t.challenges.length>0;t.challenges.forEach(function(c){if(!state.completed[c.id])complete=false;});if(complete&&t.item&&state.inventory.indexOf(t.item)<0)state.inventory.push(t.item);});
+    if(state.completed['bonus-chatbot']&&state.inventory.indexOf((CHATBOT_BONUS&&CHATBOT_BONUS.item)||'Cristal del Chatbot')<0)state.inventory.push((CHATBOT_BONUS&&CHATBOT_BONUS.item)||'Cristal del Chatbot');
+    if(state.completed['bonus-fizz']&&state.inventory.indexOf((FIZZ_BONUS&&FIZZ_BONUS.item)||'Runa FizzBuzz')<0)state.inventory.push((FIZZ_BONUS&&FIZZ_BONUS.item)||'Runa FizzBuzz');
+    if(state.completed['dragon-1']&&state.inventory.indexOf('Escama del Dragón')<0)state.inventory.push('Escama del Dragón');
+    if(agentName)state.agent=agentName;if(!state.clase)state.clase='Explorador';state.tourSeen=true;save();return restored;
+  }
   // Temas principales (bit i)
   TOPICS.forEach(function(t,i){
     if(mask & (1 << i)){
@@ -1690,6 +1708,8 @@ function applySeal(mask, agentName){
 }
 function parseSeal(code){
   var raw = String(code||"").toUpperCase().replace(/\s+/g,"");
+  var v2=raw.match(/^PY2-([0-9A-Z]+)-([0-9A-Z]+)-([0-9A-Z]+)-([0-9A-Z]+)-([0-9A-Z]+)$/);
+  if(v2){var a=b36dec(v2[1]),b=b36dec(v2[2]),c=b36dec(v2[3]),hh=b36dec(v2[4]),cc=b36dec(v2[5]),ee=(a*17+b*29+c*37+hh*41+73)%1679616;if(cc!==ee)return {ok:false,err:"Sello alterado o incompleto (checksum no coincide)."};return {ok:true,mask:progressMask(),challengeBits:[a,b,c],partial:true,hash:hh};}
   var m = raw.match(/^PY-([0-9A-Z]+)-([0-9A-Z]+)-([0-9A-Z]+)$/);
   if(!m) return {ok:false, err:"Formato inválido. Debe ser PY-XXX-XXX-XXX"};
   var mask = b36dec(m[1]);
@@ -1768,6 +1788,7 @@ function updateInventory(){
       if(!sprite){sprite=document.createElement("span");sprite.id="pjSprite";sprite.className="hero-sprite-frame";sprite.setAttribute("aria-hidden","true");av.innerHTML="";av.appendChild(sprite);}
       sprite.style.backgroundImage="url('"+heroSpritePath(state.clase,stage.key)+"')";
       av.className="pj-av stage-"+stage.key+" power-"+power;
+      av.setAttribute("data-clase",state.clase||"");
       av.setAttribute("data-level",String(lv));
       av.setAttribute("data-stage",stage.key);
       av.setAttribute("data-power",String(power));
@@ -1852,8 +1873,8 @@ function campaignCompletedCount(){var n=0;getAll().forEach(function(c){if(state.
 function heroStageForProgress(done,total){total=Math.max(1,total||39);done=Math.max(0,done||0);var veteranAt=Math.ceil(total/3),legendAt=Math.ceil(total*2/3);if(done>=legendAt)return {key:"legendario",label:"legendaria",next:0,remaining:0};if(done>=veteranAt)return {key:"veterano",label:"veterana",next:legendAt,remaining:legendAt-done};return {key:"inicial",label:"inicial",next:veteranAt,remaining:veteranAt-done};}
 function heroStage(){return heroStageForProgress(campaignCompletedCount(),getAll().length);}
 function heroClassKey(clase){var key=String(clase||"mago").toLowerCase();return ["mago","guerrero","arquero","explorador"].indexOf(key)<0?"mago":key;}
-function heroImagePath(clase){var key=heroClassKey(clase);return "assets/hero-evolution/hero-"+key+"-"+heroStage().key+".jpg";}
-function heroSpritePath(clase,stage){return "assets/hero-sprites/"+heroClassKey(clase)+"-"+(stage||heroStage().key)+".png";}
+function heroImagePath(clase){var key=heroClassKey(clase),root=(campaignId==="jujutsu"?"arcana":campaignId);if(root!=="calabozos")return "assets/campaigns/"+root+"/portraits/"+key+".png";return "assets/hero-evolution/hero-"+key+"-"+heroStage().key+".jpg";}
+function heroSpritePath(clase,stage){var key=heroClassKey(clase),root=(campaignId==="jujutsu"?"arcana":campaignId);if(root!=="calabozos")return "assets/campaigns/"+root+"/sprites/"+key+".png";return "assets/hero-sprites/"+key+"-"+(stage||heroStage().key)+".png";}
 var HERO_STATE_CLASSES=["hero-thinking","hero-executing","hero-success","hero-error","hero-interact","hero-evolution"];
 function heroReact(kind,duration){
   var av=$("#pjAv");if(!av||!state.agent)return;
@@ -2082,7 +2103,7 @@ function runPyWithInput(code, inputs, cb){
   try {
     configureSkulpt(box, inputs);
     Sk.misceval.asyncToPromise(function(){
-      return Sk.importMainWithBody("<stdin>", false, code, true);
+      return Sk.importMainWithBody("<stdin>", false, (typeof skulptSafeCode==="function"&&hasBadPyNames(code))?skulptSafeCode(code):code, true);
     }).then(function(){
       if(finished) return;
       finished = true;
@@ -2519,17 +2540,6 @@ function runAnalysis(){
   if(ch.id&&/input-3|peso|float/.test(ch.id+ch.title))mockInputs=["3.5"];
   if(ch.id&&/input-1|heroe|guardián|guardian/i.test(ch.id+ch.title))mockInputs=["Luna"];
   var mockIdx=0;
-  if(typeof hasBadPyNames==="function"&&hasBadPyNames(code)){
-    allPass=false;
-    if(out)out.innerHTML='<div class="err">⚠ Nombre incompatible: no uses ñ ni vocales con tilde en variables o funciones. Usá, por ejemplo, <strong>dano</strong> o <strong>danio</strong>. La ñ sí puede aparecer dentro de textos entre comillas y comentarios.</div>';
-    if(!state.completed[currentId]){
-      state.err[currentId]=(state.err[currentId]||0)+1;save();
-      showHint(ch);
-    }
-    logLearning(ch.id,"error","Se detectó un identificador incompatible; se recomendó usar nombres ASCII.");heroReact("error",1100);save();
-    pipSay("⚠️ Detecté una ñ o tilde en un nombre de código. Cambiá solo el identificador: daño → dano o danio. Los textos entre comillas pueden conservar la ñ.",true);
-    return;
-  }
   runPyWithInput(code,mockInputs,function(res){
     state.lastExecErr=res&&res.err?String(res.err):"";
     if(out){
@@ -2539,6 +2549,7 @@ function runAnalysis(){
       if(res.out){res.out.split("\n").forEach(function(l){if(l)html+='<div>⚔ '+l.replace(/</g,"&lt;")+'</div>';});}
       if(res.err){html+='<div class="err">⚠ Error al ejecutar: '+String(res.err).replace(/</g,"&lt;")+'</div>';allPass=false;}
       if(!res.out&&!res.err)html+='<div class="empty">(sin salida de ejecución)</div>';
+      if(hasBadPyNames(code))html+='<div class="note">⚑ La ñ y las tildes se conservaron en tu editor; el motor local aplicó una equivalencia compatible solo durante la ejecución.</div>';
       if(!allPass)html+='<div class="err">No se puede avanzar: corregí los requisitos marcados.</div>';
       out.innerHTML=html;
     }
@@ -2973,7 +2984,7 @@ function pipGuidedStep(){
  if(!ch)return '🗺️ Primero entrá a una misión. Allí puedo guiarte paso a paso usando su consigna real.';
  if(pipContext.guideMission!==ch.id){pipContext.guideMission=ch.id;pipContext.guideLevel=0;}
  pipContext.guideLevel=Math.min(3,pipContext.guideLevel+1);
- var attempts=(state&&state.err&&state.err[ch.id])?state.err[ch.id]:0,policy=state.pipPrefs&&state.pipPrefs.helpLevel||"explicit",cap=policy==="conceptual"?1:policy==="explicit"?3:2,stage=Math.max(1,Math.min(cap,Math.max(attempts,pipContext.guideLevel)));
+ var attempts=(state&&state.err&&state.err[ch.id])?state.err[ch.id]:0,cap=3,stage=Math.max(1,Math.min(cap,Math.max(attempts,pipContext.guideLevel)));
  var goal=s.first?s.first.label:((ch.protocol&&ch.protocol[0])||'comprobar la salida');
  var hint=s.first&&s.first.hint?s.first.hint:'Compará cada instrucción con la consigna.';
  if(stage===1)return '🧭 Paso actual: '+goal+'.\nPregunta guía: ¿qué dato necesitás tener antes de poder mostrar o calcular el resultado? Escribí solo esa parte y probala.';
@@ -3458,14 +3469,16 @@ function exportPDF(){
   if(!sealDieAdded)d20(33,260,13,wine,goldLight,cream);
   text('SELLO DE CONTINUIDAD',52,251.5,7.5,true,goldLight,'helvetica');
   fit(genSeal(),52,260.5,102,14,1,cream,true);
-  text('Conservá este código para recuperar los temas completados.',52,268,7,false,[232,221,190],'helvetica');
-  var heroKey=String(state.clase||'mago').toLowerCase(),stageKey=heroStage(heroLevel()).key,heroGroup=window.CALABOZOS_HEROES_JPEG&&window.CALABOZOS_HEROES_JPEG[heroKey],heroData=heroGroup&&heroGroup[stageKey];
+  text('Conservá este código: recupera misiones completas y parciales.',52,268,7,false,[232,221,190],'helvetica');
+  var heroKey=String(state.clase||'mago').toLowerCase(),stageKey=heroStage(heroLevel()).key,campaignHeroGroup=window.CALABOZOS_CAMPAIGN_HEROES_JPEG&&window.CALABOZOS_CAMPAIGN_HEROES_JPEG[(campaignId==='jujutsu'?'arcana':campaignId)],heroGroup=window.CALABOZOS_HEROES_JPEG&&window.CALABOZOS_HEROES_JPEG[heroKey],heroData=campaignHeroGroup&&campaignHeroGroup[heroKey];
+  if(!heroData)heroData=heroGroup&&heroGroup[stageKey];
   if(!heroData&&window.CALABOZOS_HEROES_JPEG&&window.CALABOZOS_HEROES_JPEG.mago)heroData=window.CALABOZOS_HEROES_JPEG.mago.inicial;
   if(heroData){box(165.2,245.5,25.8,29,[255,244,214],gold,.45);doc.addImageJPEG(heroData.data,heroData.width,heroData.height,166,246.2,24.2,27.6);}
   var pdfPower=minorEvolution().rank;for(var pi=0;pi<12;pi++){fill(pi<pdfPower?gold:[85,98,120]);doc.circle(pi<6?163.8:192.4,248.2+(pi%6)*4.1,.72,'fill');}
   center((stageKey+' · mejora '+minorEvolution().rank+'/12').toUpperCase(),178.2,273.3,4.1,true,wine2,'helvetica');
   stroke([116,88,54],.25);for(var tx=14;tx<196;tx+=13){doc.strokeRect(tx,278+(Math.floor((tx-14)/13)%2)*2,13,4);}
   stroke(gold,.3);doc.line(14,282.5,196,282.5);
+  if(window.CALABOZOS_QR_JPEG){box(173,267,23,23,[255,255,255],gold,.35);doc.addImageJPEG(window.CALABOZOS_QR_JPEG.data,window.CALABOZOS_QR_JPEG.width,window.CALABOZOS_QR_JPEG.height,175,269,19,19);}
   center('CALABOZOS & PYTHON · CC BY 4.0',105,287,7.2,true,brown,'helvetica');
   // Una única página A4: la ficha resume los 39 desafíos y todas las misiones.
   doc.save('Ficha_avance_'+String(state.agent||'Estudiante').replace(/[^a-zA-Z0-9áéíóúñü_-]+/g,'_').slice(0,70)+'.pdf');
@@ -3618,7 +3631,7 @@ function bindUI(){
     if(name && nameHash(name)!==parsed.hash){if(msg){msg.style.color="var(--bad)";msg.textContent="El sello pertenece a otro nombre. Escribí el mismo nombre usado al generarlo."}return}
     var restored=applySeal(parsed.mask,name||state.agent||"Aventurero/a");
     document.documentElement.setAttribute("data-clase",state.clase);
-    if(msg){msg.style.color="var(--ok)";msg.textContent="Sello válido: "+restored+" misiones restauradas."}
+    if(msg){msg.style.color="var(--ok)";msg.textContent="Sello válido: "+restored+" misiones completas o parciales restauradas."}
     renderMap();
   });
   on("btnRun","click",function(){runAnalysis();});
@@ -3677,7 +3690,6 @@ function bindUI(){
   on("btnSaveFile","click",exportSaveFile);
   on("btnLoadFile","click",function(){var input=$("#saveFileInput");if(input)input.click()});
   var saveInput=$("#saveFileInput");if(saveInput)saveInput.addEventListener("change",function(){if(this.files&&this.files[0])importSaveFile(this.files[0]);this.value=""});
-  var helpLevel=$("#pipHelpLevel");if(helpLevel){helpLevel.value=state.pipPrefs&&state.pipPrefs.helpLevel||"explicit";helpLevel.addEventListener("change",function(){if(!state.pipPrefs)state.pipPrefs={};state.pipPrefs.helpLevel=this.value;save();pipSay("Nivel de ayuda configurado en: "+this.options[this.selectedIndex].text+".",true)})}
   var reflection=$("#reflectionInput");if(reflection)reflection.addEventListener("change",function(){if(!state.reflections)state.reflections={};state.reflections.latest=this.value.trim();state.reflections.updatedAt=new Date().toISOString();save();showSaveStatus("Reflexión guardada.")});
   on("btnReset","click",function(){
     if(confirm("¿Reiniciar toda la partida?")){
@@ -3741,7 +3753,6 @@ try{bindUI();}catch(errBind){try{console.error("bindUI",errBind);}catch(e){}}
     }
     state=normalizeState(state);
     setupOfflineSupport();
-    var configuredHelp=$("#pipHelpLevel");if(configuredHelp)configuredHelp.value=state.pipPrefs&&state.pipPrefs.helpLevel||"explicit";
     if(state.clase) document.documentElement.setAttribute("data-clase",state.clase);
     refreshTop();
     /* Una mirada breve cada pocos segundos hace que Pip parezca atento sin distraer. */
