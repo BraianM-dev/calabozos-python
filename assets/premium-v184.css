@@ -41,6 +41,9 @@ html[data-campaign="multiverso"] .party-explorador{background-image:url('campaig
 .inventario .hero-sprite-frame{width:132px!important;height:132px!important;animation:hero-idle-v184 4.8s ease-in-out infinite;}
 .inventario .pj-av[data-clase="Guerrero"] .hero-sprite-frame{transform:scale(1.16);}
 .inventario .pj-av[data-clase="Guerrero"] .hero-sprite-frame{animation-name:hero-idle-warrior-v184}
+/* Keep the portrait open: only a low ground glow remains, never a circular badge. */
+.inventario .pj-av:before{inset:auto 14px 0!important;height:8px!important;border-radius:50%!important;background:radial-gradient(ellipse,rgba(109,216,255,.34),rgba(245,196,94,.12) 48%,transparent 78%)!important;filter:blur(2px)!important}
+.inventario.visible~.pip-fab{opacity:0!important;pointer-events:none!important}
 @keyframes hero-idle-v184{0%,100%{transform:translateY(0) rotate(-.4deg)}50%{transform:translateY(-3px) rotate(.4deg)}}
 @keyframes hero-idle-warrior-v184{0%,100%{transform:translateY(0) rotate(-.3deg) scale(1.16)}50%{transform:translateY(-3px) rotate(.3deg) scale(1.18)}}
 

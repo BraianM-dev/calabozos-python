@@ -59,7 +59,7 @@ const sharedA11y=fs.readFileSync(base+'assets/accessibility.js','utf8');new vm.S
 let script=[...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].pop()[1];
 script=script.slice(0,script.indexOf('try{bindUI();}'))+`\nwindow.qa={pipRespond:pipRespond,exportPDF:exportPDF,state:state,topics:TOPICS,all:getAll,scope:scopedChallenges,setScope:function(t){temaFiltro=t;modoTema=!!t},setSay:function(f){pipSay=f},setCurrent:function(id){currentId=id},setEditorCode:function(c){getCode=function(){return c}},genSeal:genSeal,parseSeal:parseSeal,applySeal:applySeal,simulate:trySimplePySim,badNames:hasBadPyNames,heroStage:heroStage,heroStageForProgress:heroStageForProgress,heroImagePath:heroImagePath,heroSpritePath:heroSpritePath,recordXpPenalty:recordXpPenalty,xpLostTotal:xpLostTotal,xpTotal:xpTotal,dominio:dominio,minorEvolution:minorEvolution,masteryTotals:masteryTotals,parseCampaign:parseCampaignFromURL,parseTema:parseTemaFromURL};})();`;
 const context={window:{},location:{search:'',href:'http://local/juego.html'},document:{querySelector:()=>null,querySelectorAll:()=>[],documentElement:{style:{},classList:{add(){},remove(){}},setAttribute(){}}},console,setTimeout,clearTimeout,setInterval:()=>0,Blob,atob};context.window=context;vm.createContext(context);
-vm.runInContext(campaignsSrc,context);vm.runInContext(fs.readFileSync(base+'assets/logo-pdf-data.js','utf8'),context);vm.runInContext(fs.readFileSync(base+'assets/heroes-pdf-data.js','utf8'),context);vm.runInContext(fs.readFileSync(base+'assets/ficha-pdf.js','utf8'),context);vm.runInContext(script,context);
+vm.runInContext(campaignsSrc,context);vm.runInContext(fs.readFileSync(base+'assets/logo-pdf-data.js','utf8'),context);vm.runInContext(fs.readFileSync(base+'assets/heroes-pdf-data.js','utf8'),context);vm.runInContext(fs.readFileSync(base+'assets/qr-pdf-data.js','utf8'),context);vm.runInContext(fs.readFileSync(base+'assets/ficha-pdf.js','utf8'),context);vm.runInContext(script,context);
 const q=context.qa;
 context.location.search='?campana=calabozos';assert.equal(q.parseCampaign(),'calabozos');
 context.location.search='?campana=jujutsu';assert.equal(q.parseCampaign(),'jujutsu');
@@ -98,7 +98,8 @@ q.topics.slice(0,8).forEach(t=>t.challenges.forEach(c=>{q.state.completed[c.id]=
 const formative=q.all()[1];q.state.maxChecks[formative.id]=1;q.state.xpParcial[formative.id]=12;q.state.xpPenalties=[{id:formative.id,lost:20}];q.recordXpPenalty(formative,formative.xp,4,3,false);assert(q.xpLostTotal()===0&&!q.state.xpPenalties.some(p=>p.id===formative.id),'legacy XP penalty removed');assert(q.xpTotal()>12,'completed mission grants full configured XP');
 let pdfDemo='';context.FichaPDF.prototype.save=function(){pdfDemo=this.output();fs.writeFileSync(qaDir+'ficha-demostracion.pdf',pdfDemo,'ascii');};
 q.exportPDF();
-assert(/\/BaseFont \/Times-Bold/.test(pdfDemo)&&/\/Count 1\b/.test(pdfDemo)&&/\/Subtype \/Image/.test(pdfDemo),'themed one-page PDF with logo');
+assert(/\/BaseFont \/Times-Bold/.test(pdfDemo)&&/\/Count 1\b/.test(pdfDemo)&&(/\/Subtype \/Image/g.exec(pdfDemo)||[]).length,'themed one-page PDF with logo');
+assert((pdfDemo.match(/\/Subtype \/Image/g)||[]).length>=2,'PDF includes logo/hero and QR images');
 assert(pdfDemo.includes('EVIDENCIA FORMATIVA')&&pdfDemo.includes('PUNTOS PERDIDOS: 0'),'PDF explains non-punitive progress');
 assert(pdfDemo.includes('LEGENDARIO'),'PDF uses evolved hero stage');
 assert(/\/Author \(Braian Mosqueira\)/.test(pdfDemo)&&(pdfDemo.match(/Braian Mosqueira/g)||[]).length===1,'author only in PDF metadata');

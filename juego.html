@@ -3478,7 +3478,8 @@ function exportPDF(){
   center((stageKey+' · mejora '+minorEvolution().rank+'/12').toUpperCase(),178.2,273.3,4.1,true,wine2,'helvetica');
   stroke([116,88,54],.25);for(var tx=14;tx<196;tx+=13){doc.strokeRect(tx,278+(Math.floor((tx-14)/13)%2)*2,13,4);}
   stroke(gold,.3);doc.line(14,282.5,196,282.5);
-  if(window.CALABOZOS_QR_JPEG){box(173,267,23,23,[255,255,255],gold,.35);doc.addImageJPEG(window.CALABOZOS_QR_JPEG.data,window.CALABOZOS_QR_JPEG.width,window.CALABOZOS_QR_JPEG.height,175,269,19,19);}
+  /* QR visible in its own footer cell (the portrait occupies the far right). */
+  if(window.CALABOZOS_QR_JPEG){box(144,261,18,18,[255,255,255],gold,.35);doc.addImageJPEG(window.CALABOZOS_QR_JPEG.data,window.CALABOZOS_QR_JPEG.width,window.CALABOZOS_QR_JPEG.height,145.2,262.2,15.6,15.6);center('ABRÍ EL JUEGO',153,281.5,3.6,true,wine2,'helvetica');}
   center('CALABOZOS & PYTHON · CC BY 4.0',105,287,7.2,true,brown,'helvetica');
   // Una única página A4: la ficha resume los 39 desafíos y todas las misiones.
   doc.save('Ficha_avance_'+String(state.agent||'Estudiante').replace(/[^a-zA-Z0-9áéíóúñü_-]+/g,'_').slice(0,70)+'.pdf');
@@ -3535,6 +3536,8 @@ function bindUI(){
   on("pipFab","click",function(){
     pipOpen=!pipOpen;
     var c=$("#pipChat");
+    /* Keep the two floating panels mutually exclusive on narrow and desktop layouts. */
+    if(pipOpen){var inv=$("#inventario");if(inv&&inv.classList.contains("visible")){inv.classList.remove("visible");state.invOpen=false;save();}}
     if(c)c.classList.toggle("open",pipOpen);
     if(pipOpen){pipDefaultSugs();showPipCapability();try{notifyParentHeight()}catch(e){}}
   });
@@ -3675,6 +3678,7 @@ function bindUI(){
     var inv=$("#inventario");
     if(!inv)return;
     var open=inv.classList.toggle("visible");
+    if(open){pipOpen=false;var chat=$("#pipChat");if(chat)chat.classList.remove("open");var notice=$("#pipCapability");if(notice)notice.classList.remove("visible");}
     state.invOpen=open;
     save();
     try{notifyParentHeight()}catch(e){}
