@@ -1,0 +1,86 @@
+/* Aventuras & Python v1.8.4 · campaign-safe responsive visual layer · CC BY 4.0 */
+
+/* All sprite cards use one square frame.  Portraits are pre-normalised to 200×200
+   so transparent margins cannot make one hero appear shorter than another. */
+.landing-page main{width:min(1180px,calc(100% - 24px))!important}
+.landing-page .campaign-cards{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.landing-page .campaign-card{min-height:360px!important;padding:202px 20px 20px!important;overflow:hidden}
+.landing-page .campaign-card:before{height:190px!important;inset:0 0 auto!important;background-size:200px 200px!important;background-position:50% 100%!important;background-repeat:no-repeat!important;filter:drop-shadow(0 8px 9px rgba(0,0,0,.32));z-index:0!important}
+.landing-page .campaign-card:after{content:"";position:absolute;inset:0 0 auto;height:190px;background:linear-gradient(180deg,rgba(6,20,38,.02),rgba(6,20,38,.72));pointer-events:none;z-index:0}
+.landing-page .campaign-card>*{position:relative;z-index:1}
+.landing-page .campaign-card:nth-child(1):before{background-image:url('campaigns/calabozos/portraits/mago.png')!important}
+.landing-page .campaign-card.jjk:before{background-image:url('campaigns/arcana/portraits/arquero.png')!important}
+.landing-page .campaign-card.multiverso:before{background-image:url('campaigns/multiverso/portraits/explorador.png')!important}
+
+/* The four party slots have fixed aspect ratios, so a sprite sheet is never stretched. */
+.briefing-party{height:132px!important;max-width:520px!important;align-items:flex-end!important}
+.briefing-party .party-hero{height:128px!important;aspect-ratio:1/1;width:25%!important;flex:1 1 25%;background-size:600% 100%!important;background-position:0 50%!important;transform-origin:50% 100%;}
+.briefing-party .party-guerrero{transform:scale(1.12)}
+html[data-campaign="jujutsu"] .party-mago{background-image:url('campaigns/arcana/sprites/mago.png')!important}
+html[data-campaign="jujutsu"] .party-guerrero{background-image:url('campaigns/arcana/sprites/guerrero.png')!important}
+html[data-campaign="jujutsu"] .party-arquero{background-image:url('campaigns/arcana/sprites/arquero.png')!important}
+html[data-campaign="jujutsu"] .party-explorador{background-image:url('campaigns/arcana/sprites/explorador.png')!important}
+html[data-campaign="multiverso"] .party-mago{background-image:url('campaigns/multiverso/sprites/mago.png')!important}
+html[data-campaign="multiverso"] .party-guerrero{background-image:url('campaigns/multiverso/sprites/guerrero.png')!important}
+html[data-campaign="multiverso"] .party-arquero{background-image:url('campaigns/multiverso/sprites/arquero.png')!important}
+html[data-campaign="multiverso"] .party-explorador{background-image:url('campaigns/multiverso/sprites/explorador.png')!important}
+
+/* Campaign landing casts use the campaign's own animated sheet. */
+.campaign-landing .cast{height:154px!important;background-size:600% 154px!important;background-position:0 100%!important}
+.campaign-landing.calabozos .cast{background-image:url('hero-sprites/mago-veterano.png')!important}
+.campaign-landing.arcana .cast{background-image:url('campaigns/arcana/sprites/arquero.png')!important}
+.campaign-landing.multiverso .cast{background-image:url('campaigns/multiverso/sprites/explorador.png')!important}
+.campaign-landing.calabozos main:after{background-image:url('campaigns/calabozos/portraits/mago.png')!important;background-size:contain!important;background-position:center bottom!important}
+.campaign-landing.arcana main:after{background-image:url('campaigns/arcana/portraits/arquero.png')!important;background-size:contain!important;background-position:center bottom!important}
+.campaign-landing.multiverso main:after{background-image:url('campaigns/multiverso/portraits/explorador.png')!important;background-size:contain!important;background-position:center bottom!important}
+
+/* Ficha: portrait is open artwork, with a predictable footprint and a modest idle sway. */
+.inventario{width:min(344px,calc(100vw - 28px))!important;right:14px!important;left:auto!important;top:auto!important;bottom:14px!important}
+.inventario .pj-row{grid-template-columns:118px minmax(0,1fr)!important;min-height:144px!important}
+.inventario .pj-av{width:118px!important;height:132px!important}
+.inventario .hero-sprite-frame{width:132px!important;height:132px!important;animation:hero-idle-v184 4.8s ease-in-out infinite;}
+.inventario .pj-av[data-clase="Guerrero"] .hero-sprite-frame{transform:scale(1.16);}
+.inventario .pj-av[data-clase="Guerrero"] .hero-sprite-frame{animation-name:hero-idle-warrior-v184}
+@keyframes hero-idle-v184{0%,100%{transform:translateY(0) rotate(-.4deg)}50%{transform:translateY(-3px) rotate(.4deg)}}
+@keyframes hero-idle-warrior-v184{0%,100%{transform:translateY(0) rotate(-.3deg) scale(1.16)}50%{transform:translateY(-3px) rotate(.3deg) scale(1.18)}}
+
+/* Pip and menus share one anchor system, preventing panels from opening away from buttons. */
+.pip-chat{width:min(372px,calc(100vw - 28px))!important;right:14px!important;left:auto!important;top:auto!important;bottom:86px!important;max-height:min(560px,calc(100vh - 120px))!important}
+.side{top:66px!important;right:14px!important;left:auto!important;bottom:auto!important;width:min(304px,calc(100vw - 28px))!important;max-height:calc(100vh - 82px)!important;overflow:auto!important}
+.pip-fab{right:14px!important;bottom:14px!important}
+.pip-capability.visible{max-height:70px!important;padding:7px 11px!important;border-bottom:1px solid var(--cp-edge)!important;opacity:1!important}
+html.pip-only .pip-chat{position:relative!important;inset:auto!important;width:100%!important;max-width:920px!important;max-height:none!important;margin:0 auto!important}
+html.pip-only .pip-capability.visible{max-height:70px!important}
+
+/* Keep the same rhythm on the game, manual and teacher pages at 1366×768. */
+.game-page main,.manual-page main,.guide-page main,.resource-page main{width:min(1120px,calc(100% - 24px))!important}
+.guide-page .topbar,.manual-page header{min-height:54px}
+.manual-page .wrap,.guide-page .topbar{padding-left:clamp(12px,3vw,28px)!important;padding-right:clamp(12px,3vw,28px)!important}
+.topbtns{gap:6px!important}
+
+@media(max-width:900px){
+  .landing-page .campaign-cards{grid-template-columns:1fr 1fr}
+  .landing-page .campaign-card{min-height:326px!important;padding-top:172px!important}
+  .landing-page .campaign-card:before,.landing-page .campaign-card:after{height:164px!important}
+  .briefing-party{height:108px!important}.briefing-party .party-hero{height:106px!important}
+  .campaign-landing{padding:20px 12px!important}.campaign-landing main{width:min(720px,100%)!important;padding:30px 32px!important;min-height:0!important}.campaign-landing main:after{opacity:.22;width:56%}
+}
+@media(max-width:760px){
+  .landing-page main,.game-page main,.manual-page main,.guide-page main,.resource-page main{width:calc(100% - 16px)!important}
+  .landing-page .campaign-cards{grid-template-columns:1fr;gap:12px}
+  .landing-page .campaign-card{min-height:300px!important;padding-top:156px!important}
+  .landing-page .campaign-card:before,.landing-page .campaign-card:after{height:148px!important}
+  .briefing-party{height:92px!important;max-width:none!important}.briefing-party .party-hero{height:90px!important}
+  .inventario,.side{left:8px!important;right:8px!important;width:auto!important;max-width:none!important}
+  .inventario{bottom:8px!important;max-height:calc(100dvh - 16px)!important}
+  .side{top:58px!important;bottom:auto!important;max-height:calc(100dvh - 70px)!important}
+  .pip-chat{left:8px!important;right:8px!important;top:8px!important;bottom:8px!important;width:auto!important;max-height:none!important}
+  .pip-fab{right:10px!important;bottom:10px!important}
+  .campaign-landing main{padding:25px 20px!important}.campaign-landing main:after{display:none}
+}
+@media(max-width:480px){
+  .landing-page .campaign-card{padding-top:142px!important}.landing-page .campaign-card:before,.landing-page .campaign-card:after{height:134px!important}
+  .briefing-party{height:78px!important}.briefing-party .party-hero{height:76px!important}
+  .inventario .pj-row{grid-template-columns:92px minmax(0,1fr)!important}.inventario .pj-av{width:92px!important;height:104px!important}.inventario .hero-sprite-frame{width:104px!important;height:104px!important}
+}
+@media(prefers-reduced-motion:reduce){.inventario .hero-sprite-frame{animation:none!important}.landing-page .campaign-card{transition:none!important}}

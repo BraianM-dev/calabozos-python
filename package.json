@@ -1,7 +1,7 @@
 {
   "name": "aventuras-python",
   "private": true,
-  "version": "1.8.3",
+  "version": "1.8.4",
   "scripts": {
     "dev": "node scripts/serve.cjs",
     "test": "node tests/verificar.js && node tests/verificar-visual-v183.js",

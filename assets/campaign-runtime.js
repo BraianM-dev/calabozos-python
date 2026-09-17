@@ -54,6 +54,13 @@ function drawHero(doc,x,y,t,clase){
   pixel(doc,x+9,y+2,14,4,hair);pixel(doc,x+6,y+6,20,12,hair);pixel(doc,x+9,y+7,14,11,skin);pixel(doc,x+11,y+10,3,2,t.dark);pixel(doc,x+19,y+10,3,2,t.dark);
   pixel(doc,x+9,y+18,14,5,hi);pixel(doc,x+7,y+23,18,15,body);pixel(doc,x+3,y+25,4,12,body);pixel(doc,x+25,y+25,4,12,body);pixel(doc,x+9,y+38,6,9,boot);pixel(doc,x+18,y+38,6,9,boot);
 }
+function drawD20(doc,cx,cy,r,outer,facet,numberColor){
+  var a=[cx,cy-r],b=[cx+r*.84,cy-r*.42],c=[cx+r*.72,cy+r*.55],d=[cx,cy+r],e=[cx-r*.72,cy+r*.55],f=[cx-r*.84,cy-r*.42];
+  var p=[cx-r*.43,cy-r*.22],q=[cx+r*.43,cy-r*.22],s=[cx,cy+r*.5];
+  setFill(doc,outer);setDraw(doc,facet);doc.setLineWidth(.45);doc.polygon([a,b,c,d,e,f],'both');
+  doc.line(a[0],a[1],p[0],p[1]);doc.line(a[0],a[1],q[0],q[1]);doc.line(b[0],b[1],q[0],q[1]);doc.line(b[0],b[1],c[0],c[1]);doc.line(c[0],c[1],s[0],s[1]);doc.line(d[0],d[1],s[0],s[1]);doc.line(e[0],e[1],s[0],s[1]);doc.line(e[0],e[1],f[0],f[1]);doc.line(f[0],f[1],p[0],p[1]);
+  txt(doc,'20',cx-3.2,cy+2.2,5,true,numberColor,'times');
+}
 function decorate(doc,t){
   setFill(doc,t.paper);doc.rect(0,0,210,297);setFill(doc,t.paper2);doc.rect(0,0,210,13);doc.rect(0,284,210,13);
   setDraw(doc,t.accent);doc.setLineWidth(1);doc.strokeRect(8,8,194,281);doc.setLineWidth(.35);doc.strokeRect(11,11,188,275);
@@ -71,9 +78,12 @@ function themedExportPDF(){
   doc.setProperties({title:t.pdfTitle+' - '+t.label,author:'Braian Mosqueira',subject:'Ficha de progreso educativo de Python',keywords:'Python, educación, DUA, progreso, '+t.label,creator:'Aventuras & Python'});
   decorate(doc,t);
   var classKey=String(clase||'mago').toLowerCase(),stageKey=done>=26?'legendario':done>=13?'veterano':'inicial';
-  var group=root.CALABOZOS_HEROES_JPEG&&root.CALABOZOS_HEROES_JPEG[classKey],hero=group&&group[stageKey];
+  var campaignGroup=root.CALABOZOS_CAMPAIGN_HEROES_JPEG&&root.CALABOZOS_CAMPAIGN_HEROES_JPEG[campaignId()];
+  var group=root.CALABOZOS_HEROES_JPEG&&root.CALABOZOS_HEROES_JPEG[classKey],hero=campaignGroup&&campaignGroup[classKey];
+  if(!hero)hero=group&&group[stageKey];
   if(!hero&&root.CALABOZOS_HEROES_JPEG&&root.CALABOZOS_HEROES_JPEG.mago)hero=root.CALABOZOS_HEROES_JPEG.mago.inicial;
   if(root.CALABOZOS_LOGO_JPEG)doc.addImageJPEG(root.CALABOZOS_LOGO_JPEG.data,root.CALABOZOS_LOGO_JPEG.width,root.CALABOZOS_LOGO_JPEG.height,165,18,25,25);
+  drawD20(doc,153,30,10,t.accent,t.accent2,[255,255,255]);
   if(hero){box(doc,149,47,43,48,[255,255,255],t.accent);doc.addImageJPEG(hero.data,hero.width,hero.height,150,48,41,46);}
   txt(doc,t.pdfTitle,18,27,19,true,t.dark,'times');txt(doc,t.pdfSub,18,35,8,true,t.accent,'helvetica');
   box(doc,18,45,124,39,[255,255,255],t.accent);txt(doc,'AVENTURERO/A',23,53,6,true,[98,91,83]);fit(doc,name,23,62,78,16,t.dark,true,2);txt(doc,'CLASE',104,53,6,true,[98,91,83]);fit(doc,clase,104,62,33,9,t.accent,true,2);
@@ -89,6 +99,7 @@ function themedExportPDF(){
     var ok=tt&&td===tt;box(doc,18,yy,174,10,ok?t.paper2:[255,255,255],ok?t.accent2:t.accent);txt(doc,(i+1<10?'0':'')+(i+1),22,yy+6.8,6,true,t.accent);fit(doc,tp.title||tp.id,34,yy+6.8,105,6.8,t.dark,true,1);txt(doc,td+' / '+tt,164,yy+6.8,7,true,ok?t.accent:t.dark);yy+=11.2;}
   }else{fit(doc,'Ruta curricular disponible dentro del juego.',22,yy+7,160,8,t.dark,false,2);yy+=18;}
   var noteY=Math.min(262,yy+5);box(doc,18,noteY,174,17,[255,255,255],t.accent);fit(doc,t.pipLine,23,noteY+7,164,7.5,t.dark,true,2);
+  if(root.CALABOZOS_QR_JPEG){box(doc,173,267,23,23,[255,255,255],t.accent,.35);doc.addImageJPEG(root.CALABOZOS_QR_JPEG.data,root.CALABOZOS_QR_JPEG.width,root.CALABOZOS_QR_JPEG.height,175,269,19,19);}
   txt(doc,'CC BY 4.0 · Aventuras & Python · Recurso educativo',105,290,6,false,[100,94,86]);
   var safeName=String(name).replace(/[^a-z0-9áéíóúüñ_-]+/gi,'-').replace(/^-+|-+$/g,'')||'estudiante';doc.save('ficha-'+campaignId()+'-'+safeName+'.pdf');
 }

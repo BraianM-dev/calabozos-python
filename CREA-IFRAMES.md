@@ -70,7 +70,7 @@ En los modos embebidos se oculta el enlace de inicio. Tema y accesibilidad conti
 
 1. Abrir el enlace publicado fuera de CREA.
 2. Probarlo después dentro del iframe de CREA.
-3. Confirmar que el navegador admite almacenamiento local. Si CREA lo limita, abrir el juego desde su enlace de GitHub Pages. Descargar la ficha PDF al finalizar: el sello recupera temas completos, no todos los borradores.
+3. Confirmar que el navegador admite almacenamiento local. Si CREA lo limita, abrir el juego desde su enlace de GitHub Pages. Descargar la ficha PDF al finalizar: el sello `PY2` recupera misiones completas y parciales; los borradores siguen guardados localmente.
 4. Mantener sin cambios las carpetas `assets/` y `niveles/`; contienen el ejecutor de Python, el editor, los retratos y los recursos offline.
 5. Si CREA filtra el elemento `iframe`, compartir el enlace de GitHub Pages como actividad externa.
 
@@ -91,3 +91,5 @@ La ambientación se selecciona con `campana` y puede combinarse con el filtro cu
 ```
 
 También se mantiene la forma compatible `juego.html?campana=...&tema=...`. El avance se conserva al alternar entre `calabozos`, `jujutsu` y `multiverso`, porque las tres carpetas cargan el mismo motor y el mismo itinerario educativo.
+
+La interfaz se adapta a 1366×768, tablets y celulares. En móviles los paneles se abren ocupando el ancho útil, el menú no queda separado de su botón y `?vista=pip` conserva la cabecera del chat. Los nombres Python con `ñ` se mantienen en el editor; la equivalencia temporal solo se usa si el intérprete local antiguo la necesita.

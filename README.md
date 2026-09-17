@@ -9,7 +9,7 @@
 ![Licencia](https://img.shields.io/badge/Licencia-CC%20BY%204.0-lightgrey)
 
 
-> **v1.8.3 · Identidad ilustrada:** el mismo motor curricular puede jugarse desde `calabozos/`, `jujutsu/` o `multiverso/`. Las campañas comparten progreso, validadores, Pip, accesibilidad, héroes ilustrados animados y los 39 desafíos.
+> **v1.8.4 · Identidad ilustrada:** el mismo motor curricular puede jugarse desde `calabozos/`, `jujutsu/` o `multiverso/`. Las campañas comparten progreso, validadores, Pip, accesibilidad, héroes ilustrados animados, QR en el PDF y los 39 desafíos.
 
 ---
 
@@ -297,14 +297,14 @@ CodeMirror y Skulpt se incluyen dentro de `assets/vendor/`, por lo que la ejecuc
 
 Los respaldos CSS favorecen navegadores antiguos; no garantizan compatibilidad con cualquier versión obsoleta. Verificar la versión real del aula. Las preferencias visuales basadas en variables CSS pueden tener efecto limitado donde el navegador no las implemente.
 
-El sello de la ficha PDF restaura los temas completos al escribir el mismo nombre. No incluye todos los borradores ni las misiones parciales. El progreso detallado se guarda automáticamente en este navegador; cambiar de equipo, borrar los datos del sitio o cambiar de dominio puede impedir recuperarlo. Se retiraron los controles visibles de respaldo JSON, conservando sus rutinas internas.
+El sello de la ficha PDF usa el formato `PY2` y restaura misiones completas y parciales al escribir el mismo nombre; los borradores de código permanecen en el almacenamiento local del navegador y no se muestran como un archivo de importación. El progreso detallado se guarda automáticamente en este navegador; cambiar de equipo, borrar los datos del sitio o cambiar de dominio puede impedir recuperar esos borradores. Se retiraron los controles visibles de respaldo JSON, conservando las rutinas internas por compatibilidad.
 
 ### Comprobación de lógica para colaboradores
 
-Con Node.js: `node tests/verificar.js`. Comprueba 28 situaciones conversacionales de Pip y genera dos PDF de prueba —avance parcial y campaña completa— en la carpeta temporal del sistema; no sustituye las pruebas en navegadores.
+Con Node.js: `npm test`. Comprueba las situaciones conversacionales de Pip, los sellos `PY2`, las tres campañas, los sprites normalizados, el QR y genera dos PDF de prueba —avance parcial y campaña completa— en la carpeta temporal del sistema; no sustituye las pruebas en navegadores.
 
 
-## Arquitectura multitema v1.8.3
+## Arquitectura multitema v1.8.4
 
 - `/calabozos/` — campaña RPG clásica.
 - `/jujutsu/` — Academia Arcana original; la ruta se conserva por compatibilidad.
@@ -312,7 +312,16 @@ Con Node.js: `node tests/verificar.js`. Comprueba 28 situaciones conversacionale
 - `/juego.html` — motor canónico compartido.
 - `/assets/campaigns.js` — textos y nombres narrativos por campaña.
 - `/assets/campaigns.css` — identidad visual por campaña.
-- `/assets/premium-v183.css` — sistema visual ilustrado compartido.
+- `/assets/premium-v184.css` — sistema visual ilustrado compartido, con paneles responsivos y proporciones normalizadas.
+- `/assets/campaigns/*/sprites/` — hojas de seis fotogramas propias de Academia Arcana y Multiverso; Calabozos conserva sus hojas originales.
+- `/assets/campaigns/*/portraits/` — primer fotograma normalizado para portada, fichas y PDF.
+- `/assets/campaign-heroes-pdf-data.js` y `/assets/qr-pdf-data.js` — personaje de la campaña y QR embebidos en la ficha A4 sin conexión.
 - `/shared/README.md` — documentación de la arquitectura común.
 
 El progreso se almacena de forma compartida. Cambiar de ambientación no reinicia XP ni actividades.
+
+### Pantallas, iframes y compatibilidad
+
+La interfaz se prueba como objetivo principal en 1366×768 y se reorganiza desde 760 px hasta teléfonos pequeños. Los paneles de Pip, ficha y menú se anclan al borde visible, sin aparecer desplazados respecto del botón que los abre. En `?vista=pip` el chat ocupa el área disponible y conserva su cabecera completa. En CREA usá `width="100%"`; para el juego se recomienda una altura de 900–1100 px y para Pip independiente 620–720 px.
+
+La `ñ` está permitida en textos, comentarios e identificadores Python. Python admite nombres Unicode; si el Skulpt incluido en un navegador antiguo no los procesa, el motor aplica una equivalencia temporal solo durante la ejecución y conserva intacto el código del estudiante en el editor.

@@ -4,8 +4,12 @@
 - `hero-evolution/*.jpg`: doce retratos ilustrados originales que conservan la identidad de las cuatro clases en sus etapas inicial, veterana y legendaria.
 - `hero-sprites/*.png`: doce hojas ilustradas de seis fotogramas cada una para los estados del personaje. El primer fotograma funciona como respaldo cuando está activado **Reducir movimiento**.
 - `party-heroes.jpg`: composición optimizada de las clases y el dragón original para la portada.
-- `premium-v183.css`: sistema visual compartido por portada, juego, manual, guía, campañas e iframes.
+- `premium-v184.css`: sistema visual compartido por portada, juego, manual, guía, campañas e iframes; fija el tamaño de cada cuadro y ancla los paneles responsivos.
+- `campaigns/*/sprites/*.png`: hojas propias de seis fotogramas para Academia Arcana y Multiverso; cada campaña conserva su identidad.
+- `campaigns/*/portraits/*.png`: retratos normalizados a 200×200 para evitar que la guerrera u otra clase parezcan más pequeñas.
 - `heroes-pdf-data.js`: copia técnica embebida de los doce retratos para que la ficha PDF funcione sin conexión.
+- `campaign-heroes-pdf-data.js`: retratos JPEG embebidos por campaña para que la ficha PDF use el personaje seleccionado.
+- `qr-pdf-data.js` y `qr-juego.jpg`: QR al recurso publicado, embebido en el PDF sin depender de una red externa.
 - `logo-pdf-data.js`: emblema embebido utilizado por el generador PDF local.
 - `vendor/`: copias locales de CodeMirror y Skulpt para no depender de servicios externos durante la clase.
 - `journey.css` y `journey.js`: recorrido inferior que representa el avance real del héroe por las misiones.

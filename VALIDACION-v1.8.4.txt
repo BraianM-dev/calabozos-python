@@ -1,0 +1,19 @@
+Aventuras & Python v1.8.4 — revisión visual y compatibilidad
+
+Cambios verificados:
+- Sprites de seis fotogramas propios para Academia Arcana y Multiverso.
+- Retratos normalizados a 200×200; la guerrera conserva una altura visual comparable.
+- Portada, campañas, ficha, Pip y guía cargan la misma capa premium-v184.
+- Paneles Pip, ficha y menú anclados para 1366×768, teléfonos e iframes.
+- `?vista=pip` conserva cabecera, mensajes y entrada sin recortes.
+- PDF vectorial de una página A4 con D20 de 20 caras, personaje de la campaña, QR y pie centrado.
+- Sello `PY2` con misiones completas y parciales; sin controles de importar/guardar visibles.
+- `ñ` permitida en identificadores; equivalencia temporal solo para el motor local si es necesaria.
+- Caché offline v1.8.4 incluye sprites, retratos, QR, PDF y campañas.
+
+Pruebas:
+- `npm test`
+- Navegador moderno en 1366×768, móvil y modo `?vista=pip`.
+- Tres rutas de campaña y dos estados de progreso para PDF.
+
+La validación local no sustituye las pruebas con las versiones exactas de Firefox/Chromium disponibles en cada aula de CREA.
